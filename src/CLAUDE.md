@@ -1,0 +1,173 @@
+@AGENTS.md
+
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+Frontend guidelines for the **Maison Legit** website. Inherits and extends the repo root [../CLAUDE.md](../CLAUDE.md) (§1 Think Before Coding, §2 Simplicity First, §3 Surgical Changes, §4 Goal-Driven Execution).
+
+> **Read `AGENTS.md` first** (imported above): this is Next.js 16 — APIs and conventions differ from older versions. Consult `node_modules/next/dist/docs/` before using unfamiliar Next APIs.
+
+## Project Overview
+
+Maison Legit is a homemade *lapis legit* (Indonesian thousand-layer cake) brand in Jakarta. This is its public marketing + pre-order site, rebuilt from a Claude Design handoff. It is **mobile-first** (most visitors are on phones) and **SEO-focused**.
+
+It is a content site with **no backend and no database**. Everything is static, server-rendered marketing pages plus one client-side flow: the pre-order dialog composes a WhatsApp message and opens `wa.me` — there is no API call, cart, payment, or auth. This project is deliberately much simpler than a typical app dashboard; keep it that way.
+
+Pages: landing (`/`), Our Story (`/story`), and one static page per lapis (`/lapis/[slug]`). All are built and reviewed.
+
+## Commands
+
+Run from this repo root (`maison-legit-web/`).
+
+```bash
+npm run dev        # Next dev server (Turbopack) → http://localhost:3000
+npm run build      # Production build (static / SSG)
+npm run start      # Serve the production build
+npm run lint       # ESLint
+npm run typecheck  # tsc --noEmit
+```
+
+No test runner is configured — verify changes with `typecheck`, `lint`, and `build`, and by running the app.
+
+## Environment
+
+In `.env.local` (copy from `.env.example`; never commit):
+- `NEXT_PUBLIC_ADMIN_WHATSAPP` — the number that receives pre-orders, with country code (e.g. `+62 812 3456 7890`). Defaults to a placeholder; **orders go nowhere until it is set**, and the JSON-LD `telephone` is omitted until then.
+- `NEXT_PUBLIC_SITE_URL` — canonical absolute site URL (no trailing slash), used for metadata / canonicals / sitemap / JSON-LD. Defaults to `https://maisonlegit.com`.
+
+Don't add a new env var without asking.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router, Turbopack, RSC) · React 19 · TypeScript (strict).
+- **Styling:** Tailwind CSS **v4** (CSS-first, no `tailwind.config.js`) + shadcn/ui (**Base UI** variant) → see [UI and Design Rules](#ui-and-design-rules).
+- **Fonts:** `next/font` — Cormorant Garamond (display serif), Hanken Grotesk (UI/body), Yellowtail (script wordmark).
+- **Icons:** `lucide-react`.
+- **State:** local `useState` + one React Context (`OrderProvider`) for the shared pre-order dialog → see [Data Fetching & Services](#data-fetching--services).
+- **Data:** static TypeScript in [lib/](lib) — no server data layer → see [Data Fetching & Services](#data-fetching--services).
+- **Testing:** none configured.
+
+**Do NOT use without asking:**
+- CSS modules, styled-components, emotion, or any non-Tailwind styling. No hardcoded hex in components — use the brand token utilities / semantic classes (raw hex lives **only** in the token definitions in [app/globals.css](app/globals.css)).
+- Redux/Zustand/Jotai, or a new app-level Context beyond `OrderProvider` — local `useState`/`useEffect` is for ephemeral UI state.
+- A data-fetching library (TanStack Query, SWR) or HTTP client (Axios/`fetch`-in-component) — there is no backend. If server data is ever needed, use Next.js full-stack primitives (see [Data Fetching & Services](#data-fetching--services)).
+- A form/validation library — the one form uses local state today; propose `react-hook-form` + `zod` first if forms grow.
+- New scattered copy/prices in components — catalogue and brand content live in [lib/products.ts](lib/products.ts) / [lib/site.ts](lib/site.ts).
+
+## Architecture
+
+```
+src/
+  app/                       App Router routes
+    layout.tsx               Root layout — next/font, sitewide Metadata + Viewport, sitewide JSON-LD
+                             (bakery + website), wraps chrome in <OrderProvider>: AnnouncementBar,
+                             SiteHeader, <main>{children}</main>, SiteFooter
+    page.tsx                 Landing — Hero, Collection, FeatureBand + collection JSON-LD
+    story/page.tsx           Our Story — prose, occasions list, photo suggestions, CTA band + breadcrumb JSON-LD
+    lapis/[slug]/page.tsx    Per-product page (generateStaticParams, generateMetadata, Product + breadcrumb JSON-LD)
+    globals.css              Tailwind v4 theme: brand tokens, shadcn semantic mapping, base layer, brand utilities
+    sitemap.ts robots.ts manifest.ts opengraph-image.tsx   SEO route handlers / generated OG image
+  components/
+    ui/                      shadcn primitives (Base UI) — do not hand-edit (CLI-regenerated); button.tsx is the
+                             one intentional brand restyle (see Gotchas)
+    site/                    Domain components — announcement-bar, site-header, site-footer, hero, collection,
+                             product-carousel, product-badge, price-tag, feature-band, cta-band,
+                             photo-suggestion, order-dialog, order-provider, product-detail
+    seo/json-ld.tsx          <JsonLd> — renders a structured-data <script>
+  lib/                       App + domain data (no server layer):
+    site.ts                  siteConfig — name, url, adminWhatsApp, location, social
+    products.ts              PRODUCTS, SIZES, OCCASIONS, CURRENT_OCCASION, SITE_IMAGES, fmtK,
+                             normalizeWaNational, buildOrderMessage, buildWaLink
+    schema.ts                JSON-LD builders (bakery, website, collection, single product, breadcrumb)
+    utils.ts                 cn() helper
+```
+
+Structural rules:
+- Path alias `@/*` → `./src/*`. Always use it.
+- `lib/` holds the static catalogue/config, the WhatsApp + SEO helpers, and `cn()` — no React, no server I/O.
+- Domain components in `components/site/` (kebab-case files); shadcn primitives in `components/ui/`. Route-specific code co-locates under its `app/<route>/`.
+- For exports, components, styling, and data conventions, see the sections below.
+
+## Coding Conventions
+
+**TypeScript**
+- Strict mode on. No `any`. Avoid the non-null assertion `!` — handle `null`/`undefined` explicitly (early return, guard, default — see `getProduct`).
+- Prefer inferred types; annotate at module boundaries. Domain types live in [lib/products.ts](lib/products.ts) (`Product`, `SizeKey`, `ProductKey`, `BadgeTone`, `OccasionKey`).
+- `type` for unions/aliases; **no `I` prefix**. Use `import type { … }` for type-only imports.
+
+**Component patterns**
+- Functional components only.
+- Compose shadcn primitives (`Button`, `Dialog`, `Input`, `Select`, `Label`, `Badge`) — wrap, don't rewrite. The `ui/` primitives use `cva` + `VariantProps` with `defaultVariants` and a `data-slot` attribute (Base UI) — match that if you extend one.
+- Add `"use client"` only when needed (interactivity / hooks) and keep it as deep in the tree as possible. Pages stay server components; the interactive bits (`order-*`, `hero`, `collection`, `cta-band`, `product-detail`, `product-carousel`, `site-header`) are client.
+- Presentational components don't hold business logic — static data comes from `lib/`, dialog actions come from `useOrder()`.
+- Module-level `const` for static data (e.g. `POINTS` in `feature-band.tsx`, `OCCASION_ROWS` in `story/page.tsx`); the real catalogue is in `lib/products.ts`.
+
+**Naming**
+- `components/ui/` primitives: **lowercase** files (`button.tsx`) — shadcn CLI convention; don't rename.
+- `components/site/` & `lib/` & route helpers: **kebab-case** (`order-dialog.tsx`, `products.ts`). Functions/hooks: `camelCase`. Route files: `page.tsx` / `layout.tsx` (Next convention).
+
+**Exports**
+- `page.tsx` / `layout.tsx` and the SEO route files (`sitemap.ts`, `robots.ts`, `manifest.ts`, `opengraph-image.tsx`) use **default exports** (Next requires it). Every other file uses **named exports**.
+
+**Async & error handling**
+- `async`/`await` only — no `.then()` chains. (Async surface here is just Next's `generateMetadata`/`params`.)
+- There are no network errors to handle (no backend). Keep validation user-facing and inline (see the pre-order form's `aria-invalid` + `role="alert"` messages).
+
+**Comments** — short, purpose-stating comments where intent isn't obvious (match existing density). No dead or commented-out code.
+
+## UI and Design Rules
+
+**Design system — brand tokens + Tailwind v4**
+- The theme is **CSS-first** in [app/globals.css](app/globals.css). `:root` holds the raw brand palette (Legit Blue, Almond Cream, Gilded Gold, Lacquer Red, Heritage Green, Spice Burgundy, Lapis Amber, warm Ink neutrals) and maps the **shadcn semantic tokens** (`--background`, `--primary`, `--ring`, `--destructive`, …) onto it. The `@theme inline` block exposes brand scales as Tailwind utilities and overrides the radius/shadow scales. Fonts come from `next/font` variables (`--font-cormorant`/`--font-hanken`/`--font-yellowtail`).
+- There is **no `tailwind.config.js`** (Tailwind v4 is CSS-first); theme changes go in the `@theme` block, not a JS config.
+- **Rule:** don't edit the `@theme` block / token `:root` / base layers in `globals.css` without asking (see [Safety Rules](#safety-rules)). Use the brand utilities everywhere — never hardcode hex in a component.
+
+**Components**
+- **Prefer shadcn/ui over custom components.** Check [components/ui/](components/ui/) first. If a needed primitive isn't installed, add it with `npx shadcn@latest add <component>` (**Base UI** variant, not Radix — see [Gotchas](#project-specific-gotchas-read-before-coding)) — don't hand-roll a substitute. Don't hand-edit `components/ui/` (CLI-regenerated) **except** `button.tsx`, which is intentionally restyled to the brand.
+- Domain components live in `components/site/`.
+
+**Styling**
+- Tailwind utilities in JSX; use `cn()` from [lib/utils.ts](lib/utils.ts) for conditional/merged classes. No inline `style={}` unless the value is dynamic (e.g. the carousel `translateX`).
+- Brand color utilities only — `bg-cream-100`, `text-ink-800`, `bg-blue-500`, `text-gold-800`, `bg-feature`, etc. — plus the shadcn semantic classes the primitives use. Raw hex appears only in the token definitions in `globals.css`.
+
+**Icons & assets** — Icons: `lucide-react` only (`size-4`, etc.). All imagery goes through `next/image`; product photos live in [public/assets/photography/](../public/assets/photography). Keep `alt` text descriptive (SEO + a11y).
+
+**Accessibility** — Semantic HTML and a single `<h1>` per page; labelled inputs (`<Label htmlFor>`), errors wired with `aria-describedby` + `role="alert"`; visible focus rings (the brand ring is `--ring` = blue, ≥3:1 — don't strip outlines); the carousel and stepper are keyboard-operable; `prefers-reduced-motion` is honored in `globals.css`. Preserve these when editing.
+
+## Data Fetching & Services
+
+**There is no backend, database, HTTP client, auth, or server state library — and there shouldn't be one without asking.** This site is full-stack Next.js, but the only "stack" today is static rendering.
+
+- **Domain data is static TypeScript.** The catalogue (products, sizes, prices, photos, seasonal occasions) is in [lib/products.ts](lib/products.ts); brand/site config is in [lib/site.ts](lib/site.ts). Components import these directly — there is nothing to fetch.
+- **The one "service" is WhatsApp order composition** in [lib/products.ts](lib/products.ts): `normalizeWaNational` (cleans the customer number — strips a leading `0`/`62`/`00`), `buildOrderMessage`, and `buildWaLink`. The pre-order dialog composes the message and opens `wa.me` in a new tab — no server round-trip.
+- **SEO structured data** is built in [lib/schema.ts](lib/schema.ts) and rendered via `<JsonLd>` ([components/seo/json-ld.tsx](components/seo/json-ld.tsx)). Keep schema in `lib/schema.ts`, not inline.
+- **Shared client state = one context.** Opening the pre-order dialog from the header / hero / product cards / CTA bands goes through `OrderProvider` ([components/site/order-provider.tsx](components/site/order-provider.tsx)): call `useOrder().open(productKey?)`. Don't add more global contexts or mount a second dialog.
+- **Forms** use local React state with inline validation (one simple form — see [components/site/order-dialog.tsx](components/site/order-dialog.tsx)). If forms grow in number or complexity, adopt `react-hook-form` + `zod` (ask first) rather than expanding ad-hoc state.
+- **If real server data is ever needed** (persisting orders, inventory, a contact endpoint), use **full-stack Next.js** — Route Handlers under `src/app/api/` or Server Actions — **not** a separate backend service or a client-side HTTP layer. Update this section when you do.
+
+## Project-specific gotchas (read before coding)
+
+- **shadcn here is the Base UI variant, not Radix.** Primitives in `components/ui/` import from `@base-ui/react`. Match that when adding components, and note Base UI prop names differ (`Dialog` uses `open`/`onOpenChange`; `Select` uses `value`/`onValueChange` + `items`, and `Select.Value` can take a function child).
+- **Tailwind v4 is CSS-first — there is no `tailwind.config.js`.** Theme customization lives in the `@theme` block in [app/globals.css](app/globals.css).
+- **Brand color scales intentionally override Tailwind defaults.** `bg-blue-500`, `bg-red-500`, `bg-green-800`, `bg-amber-500` are the Maison Legit palette, not Tailwind's. New brand scales are added too: `cream-*`, `gold-*`, `ink-*`, `burgundy-*`, plus `bg-canvas` / `bg-feature`. Use **`gold-800`** (not `gold-500`/`600`) for small text on light surfaces — it's the AA-contrast gilded tone.
+- **`components/ui/button.tsx` is hand-restyled to the brand** (pill shape; variants `primary`/`cta`/`gold`/`secondary`/`ghost`/`outline`; sizes `sm`/`md`/`lg`/`icon`/`icon-sm`). It's the one `ui/` primitive that deviates from CLI output — preserve its variants; if you ever re-add it via the CLI, re-apply them.
+- **The pre-order dialog resets via remount.** `order-provider.tsx` passes a changing `key` to `<OrderDialog>` on each open so the form re-initializes — don't reintroduce a `useEffect` reset (it trips the React 19 set-state-in-effect lint).
+- **Seasonal hero eyebrow** is `CURRENT_OCCASION` in [lib/products.ts](lib/products.ts) (`"None"` by default).
+- **Our Story uses `<PhotoSuggestion>` placeholders** (dashed-gold frames) for photos not yet shot — replace with `next/image` when available.
+
+## Safety Rules
+
+Do NOT change without explicit instruction:
+- Files in [components/ui/](components/ui/) — shadcn primitives, CLI-regenerated. **Exception:** `button.tsx` is the documented brand restyle.
+- The brand tokens / `@theme` block / base layer in [app/globals.css](app/globals.css) — they define the whole palette and the dark-safe semantics.
+- [next.config.ts](../next.config.ts), `tsconfig.json`, `components.json`, `eslint.config.mjs`, `postcss.config.mjs` — config changes need approval.
+- `.env` / any `.env*` — never commit or echo; don't add vars without asking, and never hardcode the real admin WhatsApp number or site URL (they're env-driven).
+
+## Keeping This File Current
+
+**Whenever the stack or conventions change, update this CLAUDE.md in the same change.** Specifically: adding/removing/upgrading a dependency, changing a build/run command, adding an env var, installing a shadcn component pattern, adding a product field, or shifting an architectural pattern (introducing server data, a form library, or new shared state). A stale CLAUDE.md misleads future work — treat it as part of the change, not a follow-up.
+
+## When in Doubt
+
+Stop and ask (root §1). When a needed component, token, dependency, or env var doesn't exist, propose options before writing code. Default to the simpler path (root §2) — this site should stay small.

@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Maison Legit
 
-## Getting Started
+Marketing + pre-order site for **Maison Legit**, a homemade *lapis legit* (Indonesian
+thousand-layer cake) brand in Jakarta. Built from the Claude Design handoff as a
+mobile-first, SEO-friendly **Next.js + Tailwind + shadcn/ui** app.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, React Server Components, Turbopack), code under [`src/`](src)
+- **Tailwind CSS v4** — brand design tokens live in [`src/app/globals.css`](src/app/globals.css)
+- **shadcn/ui** (base-nova / Base UI primitives) — Button, Dialog, Input, Select, Label, Badge
+- **TypeScript**
+- Fonts via `next/font/google`: Cormorant Garamond (display), Hanken Grotesk (UI/body), Yellowtail (script wordmark)
+
+Coding conventions for the app live in [`src/CLAUDE.md`](src/CLAUDE.md); general principles in [`CLAUDE.md`](CLAUDE.md).
+
+## Pages
+
+- `/` — landing: hero, the four-lapis collection (swipe carousels), the "made with care" feature band
+- `/story` — Our Story: mom's thirty-year recipe, the tasting-menu occasions list, photo suggestions
+- `/lapis/[slug]` — a static page per lapis (original, plum, chocolate, cheese)
+
+Pre-ordering uses **WhatsApp** (no backend): any "Pre-order" button opens a dialog that
+collects the order, composes a message, and opens `wa.me/<admin>` with it pre-filled.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Configuration
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `.env.example` to `.env.local` and set:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Purpose | Default |
+| --- | --- | --- |
+| `NEXT_PUBLIC_ADMIN_WHATSAPP` | Number that receives pre-orders (with country code) | `+62 812 3456 7890` (placeholder — **set this**) |
+| `NEXT_PUBLIC_SITE_URL` | Canonical absolute URL, used for metadata / sitemap / JSON-LD | `https://maisonlegit.com` |
 
-## Learn More
+Other content lives in plain TypeScript:
 
-To learn more about Next.js, take a look at the following resources:
+- **Products, prices, sizes, photos** — [`src/lib/products.ts`](src/lib/products.ts)
+- **Seasonal occasion** — set `CURRENT_OCCASION` in [`src/lib/products.ts`](src/lib/products.ts)
+  (`"Eid Al-Fitr" | "Lunar New Year" | "Christmas" | "None"`); drives the hero eyebrow
+- **Brand / location / socials** — [`src/lib/site.ts`](src/lib/site.ts)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Photography
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Product photos are in [`public/assets/photography/`](public/assets/photography). The Our Story
+page intentionally uses dashed-gold **photo-suggestion placeholders** for shots that still need
+to be taken (mom at the griddle, the family table, an old family photo) — replace
+`<PhotoSuggestion>` with a `next/image` once you have them.
 
-## Deploy on Vercel
+## SEO
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Per-page metadata + canonicals, Open Graph / Twitter cards, a generated OG image
+(`src/app/opengraph-image.tsx`), `sitemap.xml`, `robots.txt`, a web manifest, semantic HTML,
+and JSON-LD structured data (`Bakery`, `WebSite`, product `ItemList`, per-product `Product`,
+`BreadcrumbList`) in [`src/lib/schema.ts`](src/lib/schema.ts).

@@ -1,0 +1,313 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   Maison Legit — brand palette (raw tokens)
+   Derived from the identity assets: cream-on-blue script wordmark,
+   warm golden lapis layers, festive lacquer-red / pine-green
+   packaging, tied together with gilded gold.
+   ============================================================ */
+:root {
+  /* Legit Blue (primary brand) */
+  --blue-900: #1b2c4a;
+  --blue-800: #25395e;
+  --blue-700: #2e466f;
+  --blue-600: #375384;
+  --blue-500: #3f5e96;
+  --blue-400: #5b77a8;
+  --blue-300: #8398be;
+  --blue-200: #b3c0d7;
+  --blue-100: #dbe2ec;
+  --blue-50: #eef2f7;
+
+  /* Almond Cream (canvas / paper / wordmark ink) */
+  --cream-700: #c9b488;
+  --cream-600: #dfcb9d;
+  --cream-500: #ecddb8;
+  --cream-400: #f3e8cc;
+  --cream-300: #f7efda;
+  --cream-200: #faf5e8;
+  --cream-100: #fcf9f1;
+  --cream-50: #fefcf7;
+
+  /* Gilded Gold (luxury metallic accent) */
+  --gold-800: #7a601f; /* AA-contrast gilded tone for small text on cream */
+  --gold-700: #8c6e2a;
+  --gold-600: #a9853a;
+  --gold-500: #c2a04c;
+  --gold-400: #d2b567;
+  --gold-300: #e2cd8e;
+  --gold-200: #efe0ba;
+
+  /* Lacquer Red (festive accent / CTA) */
+  --red-800: #7e2018;
+  --red-700: #9a271d;
+  --red-600: #b23123;
+  --red-500: #c23a2b;
+  --red-400: #d2584a;
+  --red-200: #ebb6af;
+  --red-100: #f6deda;
+
+  /* Heritage Green (feature surface) */
+  --green-900: #16241c;
+  --green-800: #1e2e25;
+  --green-700: #28402f;
+  --green-500: #46624b;
+  --green-300: #8aa189;
+
+  /* Spice Burgundy (seasonal) */
+  --burgundy-800: #5e2127;
+  --burgundy-700: #6f262c;
+  --burgundy-600: #7e2d33;
+  --burgundy-400: #a05158;
+
+  /* Lapis Amber (the cake itself) */
+  --amber-700: #a8691e;
+  --amber-600: #c67e26;
+  --amber-500: #d89b36;
+  --amber-400: #e6b25a;
+  --amber-200: #f4dba6;
+
+  /* Warm neutrals (espresso-toned) */
+  --ink-900: #1e1710;
+  --ink-800: #2c231a;
+  --ink-700: #463a2e;
+  --ink-600: #5f5142;
+  --ink-500: #7c6e5d;
+  --ink-400: #9c8e7c;
+  --ink-300: #c0b4a2;
+  --ink-200: #ded5c5;
+  --ink-100: #efe9dd;
+
+  --white: #ffffff;
+  --black: #120d08;
+
+  /* Semantic surfaces */
+  --surface-canvas: var(--cream-200);
+  --surface-feature: var(--green-800);
+  --surface-inverse: var(--blue-500);
+
+  /* Hairlines */
+  --border-soft: color-mix(in srgb, var(--ink-900) 8%, transparent);
+  --border-default: color-mix(in srgb, var(--ink-900) 14%, transparent);
+  --border-strong: color-mix(in srgb, var(--ink-900) 24%, transparent);
+  --hairline-on-dark: color-mix(in srgb, var(--cream-300) 18%, transparent);
+
+  /* Motion */
+  --ease-gentle: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ---- shadcn semantic tokens mapped to the brand ---- */
+  --radius: 0.75rem;
+  --background: var(--cream-200);
+  --foreground: var(--ink-800);
+  --card: var(--white);
+  --card-foreground: var(--ink-800);
+  --popover: var(--cream-100);
+  --popover-foreground: var(--ink-800);
+  --primary: var(--blue-500);
+  --primary-foreground: var(--cream-100);
+  --secondary: var(--cream-200);
+  --secondary-foreground: var(--blue-700);
+  --muted: var(--cream-300);
+  --muted-foreground: var(--ink-500);
+  --accent: var(--cream-300);
+  --accent-foreground: var(--ink-900);
+  --destructive: var(--red-600);
+  --border: var(--border-default);
+  --input: var(--border-default);
+  --ring: var(--blue-700); /* high-contrast focus ring on cream + white */
+}
+
+/* ============================================================
+   Expose brand tokens to Tailwind utilities
+   ============================================================ */
+@theme inline {
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cormorant), "Times New Roman", serif;
+  --font-script: var(--font-yellowtail), "Brush Script MT", cursive;
+  --font-heading: var(--font-display);
+
+  /* shadcn semantic tokens → Tailwind utilities */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand color ramps */
+  --color-blue-900: var(--blue-900);
+  --color-blue-800: var(--blue-800);
+  --color-blue-700: var(--blue-700);
+  --color-blue-600: var(--blue-600);
+  --color-blue-500: var(--blue-500);
+  --color-blue-400: var(--blue-400);
+  --color-blue-300: var(--blue-300);
+  --color-blue-200: var(--blue-200);
+  --color-blue-100: var(--blue-100);
+  --color-blue-50: var(--blue-50);
+
+  --color-cream-700: var(--cream-700);
+  --color-cream-600: var(--cream-600);
+  --color-cream-500: var(--cream-500);
+  --color-cream-400: var(--cream-400);
+  --color-cream-300: var(--cream-300);
+  --color-cream-200: var(--cream-200);
+  --color-cream-100: var(--cream-100);
+  --color-cream-50: var(--cream-50);
+
+  --color-gold-800: var(--gold-800);
+  --color-gold-700: var(--gold-700);
+  --color-gold-600: var(--gold-600);
+  --color-gold-500: var(--gold-500);
+  --color-gold-400: var(--gold-400);
+  --color-gold-300: var(--gold-300);
+  --color-gold-200: var(--gold-200);
+
+  --color-red-800: var(--red-800);
+  --color-red-700: var(--red-700);
+  --color-red-600: var(--red-600);
+  --color-red-500: var(--red-500);
+  --color-red-400: var(--red-400);
+  --color-red-200: var(--red-200);
+  --color-red-100: var(--red-100);
+
+  --color-green-900: var(--green-900);
+  --color-green-800: var(--green-800);
+  --color-green-700: var(--green-700);
+  --color-green-500: var(--green-500);
+  --color-green-300: var(--green-300);
+
+  --color-burgundy-800: var(--burgundy-800);
+  --color-burgundy-700: var(--burgundy-700);
+  --color-burgundy-600: var(--burgundy-600);
+  --color-burgundy-400: var(--burgundy-400);
+
+  --color-amber-700: var(--amber-700);
+  --color-amber-600: var(--amber-600);
+  --color-amber-500: var(--amber-500);
+  --color-amber-400: var(--amber-400);
+  --color-amber-200: var(--amber-200);
+
+  --color-ink-900: var(--ink-900);
+  --color-ink-800: var(--ink-800);
+  --color-ink-700: var(--ink-700);
+  --color-ink-600: var(--ink-600);
+  --color-ink-500: var(--ink-500);
+  --color-ink-400: var(--ink-400);
+  --color-ink-300: var(--ink-300);
+  --color-ink-200: var(--ink-200);
+  --color-ink-100: var(--ink-100);
+
+  --color-canvas: var(--surface-canvas);
+  --color-feature: var(--surface-feature);
+
+  /* Brand radii (also drives shadcn primitives) */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+  --radius-2xl: 36px;
+  --radius-3xl: 44px;
+  --radius-4xl: 52px;
+
+  /* Warm elevation shadows (espresso-tinted, never pure black) */
+  --shadow-xs: 0 1px 2px color-mix(in srgb, var(--ink-900) 8%, transparent);
+  --shadow-sm: 0 2px 6px color-mix(in srgb, var(--ink-900) 9%, transparent);
+  --shadow-md: 0 8px 22px color-mix(in srgb, var(--ink-900) 12%, transparent);
+  --shadow-lg: 0 18px 44px color-mix(in srgb, var(--ink-900) 16%, transparent);
+  --shadow-xl: 0 32px 70px color-mix(in srgb, var(--ink-900) 22%, transparent);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+  }
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display font-semibold tracking-tight text-ink-900;
+    text-wrap: balance;
+  }
+  ::selection {
+    background: var(--gold-300);
+    color: var(--ink-900);
+  }
+}
+
+/* ============================================================
+   Small brand utilities for effects that need real CSS
+   ============================================================ */
+@layer components {
+  /* italic display caption */
+  .text-fine {
+    font-family: var(--font-display);
+    font-style: italic;
+  }
+  /* dotted gold leader for the tasting-menu occasion rows */
+  .occ-leader {
+    flex: 1 1 auto;
+    min-width: 28px;
+    border-bottom: 1.5px dotted var(--gold-400);
+    transform: translateY(-4px);
+  }
+  /* gold-leaf seam */
+  .gold-seam {
+    background: linear-gradient(90deg, var(--gold-300), var(--gold-500), var(--gold-300));
+  }
+
+  /* hero photo blend — fades down into the canvas on mobile,
+     left into the text panel on desktop */
+  .hero-fade {
+    background: linear-gradient(
+      to bottom,
+      transparent 34%,
+      color-mix(in srgb, var(--surface-canvas) 55%, transparent) 68%,
+      var(--surface-canvas) 100%
+    );
+  }
+  @media (min-width: 768px) {
+    .hero-fade {
+      background: linear-gradient(
+        to right,
+        var(--surface-canvas) 0%,
+        color-mix(in srgb, var(--surface-canvas) 45%, transparent) 20%,
+        transparent 48%
+      );
+    }
+  }
+}
