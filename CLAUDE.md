@@ -67,3 +67,11 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 ## Project Layout
 
 This repo is the **Maison Legit** website — a mobile-first, SEO-focused Next.js app. All application code lives under [src/](src/), which has its own [src/CLAUDE.md](src/CLAUDE.md) with the stack-specific conventions (Next.js 16, Tailwind v4, shadcn/ui, data, UI rules). Read that file before working on frontend code; it inherits and extends the four principles above.
+
+## Design System
+
+Always read [DESIGN.md](DESIGN.md) before making any visual or UI decision. Fonts, colors, spacing, radius, motion and copy rules are defined there. Do not deviate without explicit user approval; when a change needs to, update `DESIGN.md` first (with a Decisions Log line). In review or QA, flag any code that doesn't match it.
+
+## Workflow
+
+The repo sits inside an un-versioned workspace (`../`). Its [CLAUDE.md](../CLAUDE.md) holds the development lifecycle (obra/superpowers), branch naming (`feature/`, `bugfix/`, `refactor/`, `design/`), ponytail and design reviews, PR templates ([../docs/agents/](../docs/agents/)) and post-merge cleanup. Specs and plans live in `../docs/superpowers/`. Follow it for any change beyond a one-line fix.
