@@ -111,6 +111,7 @@ export function getProduct(key: ProductKey): Product {
 /** Imagery for page sections outside the product carousels. */
 export const SITE_IMAGES = {
   hero: { src: `${PHOTO_BASE}/lapis-legit-christmas-hero.jpg`, alt: "Christmas lapis legit, pre-order yours now: a whole lapis legit topped with dark Christmas medallions, set among red-and-white stripes and baubles" },
+  heroTall: { src: `${PHOTO_BASE}/lapis-legit-christmas-hero-tall.jpg` },
   feature: { src: `${PHOTO_BASE}/lapis-legit-original-3.jpg`, alt: "A close cross-section of lapis legit showing its fine golden layers" },
   storyWhole: { src: `${PHOTO_BASE}/lapis-legit-original-2.jpg`, alt: "A whole lapis legit on the family serving tray" },
   storyLayers: { src: `${PHOTO_BASE}/lapis-legit-original-3.jpg`, alt: "The layers of a lapis legit up close, each one baked by hand" },

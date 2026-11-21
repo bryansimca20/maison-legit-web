@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { useOrder } from "@/components/site/order-provider";
@@ -16,6 +16,16 @@ import {
 // One entrance on load; reduced motion is handled globally in globals.css.
 const ENTER =
   "animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-500 ease-[var(--ease-out)]";
+
+const HERO_SIZES = "(min-width: 768px) 55vw, 100vw";
+
+// From md to lg the photo column is tall and narrow, so the landscape crop cuts the poster's lettering.
+const { srcSet: TALL_SRCSET } = getImageProps({
+  src: SITE_IMAGES.heroTall.src,
+  alt: "",
+  fill: true,
+  sizes: HERO_SIZES,
+}).props;
 
 export function Hero() {
   const { open } = useOrder();
@@ -55,14 +65,21 @@ export function Hero() {
       </div>
 
       <div className="relative h-[370px] md:h-auto">
-        <Image
-          src={SITE_IMAGES.hero.src}
-          alt={SITE_IMAGES.hero.alt}
-          fill
-          priority
-          sizes="(min-width: 768px) 55vw, 100vw"
-          className="object-cover"
-        />
+        <picture>
+          <source
+            media="(min-width: 768px) and (max-width: 1023px)"
+            srcSet={TALL_SRCSET}
+            sizes={HERO_SIZES}
+          />
+          <Image
+            src={SITE_IMAGES.hero.src}
+            alt={SITE_IMAGES.hero.alt}
+            fill
+            priority
+            sizes={HERO_SIZES}
+            className="object-cover"
+          />
+        </picture>
         {/* -bottom-px: the frame sits on a fractional y, so the photo's last row can peek out as a line */}
         <div className="hero-fade pointer-events-none absolute inset-x-0 top-0 -bottom-px" />
       </div>
