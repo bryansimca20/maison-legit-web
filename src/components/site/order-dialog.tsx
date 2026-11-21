@@ -30,8 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PriceTag } from "@/components/site/price-tag";
-
-type Step = "lapis" | "details" | "review" | "sent";
+import { OrderProgress, type OrderStep } from "@/components/site/order-progress";
 
 const FIELD_LABEL =
   "text-sm font-semibold text-ink-800";
@@ -51,7 +50,7 @@ export function OrderDialog({
 }: OrderDialogProps) {
   // The provider remounts this component (via `key`) on every open, so these
   // initializers reset the form each time it is opened.
-  const [step, setStep] = React.useState<Step>("lapis");
+  const [step, setStep] = React.useState<OrderStep>("lapis");
   const [name, setName] = React.useState("");
   const [customerWa, setCustomerWa] = React.useState("");
   const [address, setAddress] = React.useState("");
@@ -114,7 +113,7 @@ export function OrderDialog({
             "data-closed:opacity-0 data-closed:translate-y-3 sm:data-closed:translate-y-3 sm:data-closed:-translate-x-1/2",
           )}
         >
-          <div className="mb-2 flex items-start justify-between gap-3 sm:mb-[18px]">
+          <div className="flex items-start justify-between gap-3">
             <div>
               <DialogPrimitive.Title
                 render={<h2 />}
@@ -122,12 +121,11 @@ export function OrderDialog({
               >
                 {step === "details" ? "Delivery details" : "Reserve your lapis"}
               </DialogPrimitive.Title>
-              <DialogPrimitive.Description className="mt-1.5 text-sm text-ink-600">
-                {step === "lapis" && "Step 1 of 2"}
-                {step === "details" && "Step 2 of 2"}
-                {(step === "review" || step === "sent") &&
-                  "We confirm every order on WhatsApp."}
-              </DialogPrimitive.Description>
+              {(step === "review" || step === "sent") && (
+                <DialogPrimitive.Description className="mt-1.5 text-sm text-ink-600">
+                  We confirm every order on WhatsApp.
+                </DialogPrimitive.Description>
+              )}
             </div>
             <DialogPrimitive.Close
               aria-label="Close"
@@ -135,6 +133,9 @@ export function OrderDialog({
             >
               <X className="size-4" />
             </DialogPrimitive.Close>
+          </div>
+          <div className="mb-3 sm:mb-[18px]">
+            <OrderProgress step={step} />
           </div>
 
           {step === "lapis" ? (
