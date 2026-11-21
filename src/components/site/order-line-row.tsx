@@ -133,8 +133,14 @@ export function OrderLineRow({
                   aria-label={`${sizeName(s.label)}, ${s.dimensions}, IDR ${fmtK(prod.prices[s.k])}`}
                   className="peer sr-only"
                 />
-                <span className="flex h-11 items-center justify-center rounded-sm border-[1.5px] border-[var(--border-default)] text-[15px] font-semibold text-ink-700 transition-colors hover:bg-cream-200 peer-checked:border-ink-800 peer-checked:bg-ink-800 peer-checked:text-cream-100 peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-cream-100">
-                  {sizeName(s.label)}
+                <span className="flex min-h-12 flex-col items-center justify-center rounded-sm border-[1.5px] border-[var(--border-default)] px-1 py-1.5 text-ink-700 transition-colors hover:bg-cream-200 peer-checked:border-ink-800 peer-checked:bg-ink-800 peer-checked:text-cream-100 peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-cream-100">
+                  <span className="text-[15px] leading-tight font-semibold">
+                    {sizeName(s.label)}
+                  </span>
+                  {/* Dimensions in the quieter ink-600; cream on the chosen size. */}
+                  <span className="mt-0.5 text-sm leading-tight whitespace-nowrap text-ink-600 [.peer:checked~*_&]:text-cream-200">
+                    {s.dimensions}
+                  </span>
                 </span>
               </label>
             ))}

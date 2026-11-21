@@ -83,9 +83,13 @@ export function OrderDialog({
     };
     // Render the row now so focus can move into it: the add button may unmount at the cap.
     flushSync(() => setLines((ls) => [...ls, line]));
-    popup.current
+    const sheet = popup.current;
+    sheet
       ?.querySelector<HTMLElement>(`[aria-label="Lapis, line ${lines.length + 1}"]`)
-      ?.focus();
+      ?.focus({ preventScroll: true });
+    // Scroll to the end of the list so the new line and the add button sit above the pinned total.
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    sheet?.scrollTo({ top: sheet.scrollHeight, behavior: still ? "auto" : "smooth" });
   };
   const removeLine = (id: number) => {
     // Commit the removal first so the add button exists (it hides at the cap), then keep focus in the form.
