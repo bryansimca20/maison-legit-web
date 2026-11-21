@@ -37,6 +37,14 @@ import {
 const FIELD_LABEL =
   "text-sm font-semibold text-ink-800";
 
+// The title names the step the progress bar shows; "sent" means WhatsApp is open, not yet sent.
+const TITLES: Record<OrderStep, string> = {
+  lapis: "Reserve your lapis",
+  details: "Delivery details",
+  review: "Review your order",
+  sent: "Finish in WhatsApp",
+};
+
 const CONTROL = "h-11 w-full rounded-sm text-base md:text-base";
 
 export interface OrderDialogProps {
@@ -175,9 +183,9 @@ export function OrderDialog({
                 render={<h2 />}
                 className="font-display text-[26px] font-semibold leading-[1.1] text-ink-900"
               >
-                {step === "details" ? "Delivery details" : "Reserve your lapis"}
+                {TITLES[step]}
               </DialogPrimitive.Title>
-              {(step === "review" || step === "sent") && (
+              {step === "review" && (
                 <DialogPrimitive.Description className="mt-1.5 text-sm text-ink-600">
                   We confirm every order on WhatsApp.
                 </DialogPrimitive.Description>
