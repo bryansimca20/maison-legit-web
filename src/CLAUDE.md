@@ -26,9 +26,11 @@ npm run build      # Production build (static / SSG)
 npm run start      # Serve the production build
 npm run lint       # ESLint
 npm run typecheck  # tsc --noEmit
+npm test           # Vitest unit tests (lib/)
 ```
 
-No test runner is configured — verify changes with `typecheck`, `lint`, and `build`, and by running the app.
+Verify changes with `npm test`, `typecheck`, `lint` and `build`, and by running the app. `npm run lint` also scans the
+gitignored `.design-extract/` folder and reports errors there; `npx eslint src` checks only the app.
 
 ## Environment
 
@@ -46,7 +48,7 @@ Don't add a new env var without asking.
 - **Icons:** `lucide-react`.
 - **State:** local `useState` + one React Context (`OrderProvider`) for the shared pre-order dialog → see [Data Fetching & Services](#data-fetching--services).
 - **Data:** static TypeScript in [lib/](lib) — no server data layer → see [Data Fetching & Services](#data-fetching--services).
-- **Testing:** none configured.
+- **Testing:** Vitest (`npm test`) for the pure helpers in `lib/`; tests sit next to the file as `*.test.ts`. No component tests: UI is checked in the browser at 390px and 1440px.
 
 **Do NOT use without asking:**
 - CSS modules, styled-components, emotion, or any non-Tailwind styling. No hardcoded hex in components — use the brand token utilities / semantic classes (raw hex lives **only** in the token definitions in [app/globals.css](app/globals.css)).
@@ -78,7 +80,10 @@ src/
   lib/                       App + domain data (no server layer):
     site.ts                  siteConfig — name, url, adminWhatsApp, location, social
     products.ts              PRODUCTS, SIZES, OCCASIONS, CURRENT_OCCASION, PRICE_FROM, SITE_IMAGES, fmtK,
-                             normalizeWaNational, buildOrderMessage, buildWaLink
+                             normalizeWaNational, OrderLine, orderTotal, nextProductKey, MAX_ORDER_LINES,
+                             buildOrderMessage, buildWaLink (tested in products.test.ts)
+    order-draft.ts           The unfinished pre-order in sessionStorage: parseOrderDraft (validates; tested in
+                             order-draft.test.ts), loadOrderDraft, saveOrderDraft, clearOrderDraft
     schema.ts                JSON-LD builders (bakery, website, collection, single product, breadcrumb)
     utils.ts                 cn() helper
 ```
@@ -154,7 +159,7 @@ Structural rules:
 - **Tailwind v4 is CSS-first — there is no `tailwind.config.js`.** Theme customization lives in the `@theme` block in [app/globals.css](app/globals.css).
 - **Brand color scales intentionally override Tailwind defaults.** `bg-blue-500`, `bg-red-500`, `bg-green-800`, `bg-amber-500` are the Maison Legit palette, not Tailwind's. New brand scales are added too: `cream-*`, `gold-*`, `ink-*`, `burgundy-*`, plus `bg-canvas` / `bg-feature`. Use **`gold-800`** (not `gold-500`/`600`) for small text on light surfaces — it's the AA-contrast gilded tone.
 - **`components/ui/button.tsx` is hand-restyled to the brand** (8px radius, `active:scale-[0.97]` press; variants `primary`/`cta`/`gold`/`secondary`/`ghost`/`outline`; sizes `sm`/`md`/`lg`/`icon`/`icon-sm`). It's the one `ui/` primitive that deviates from CLI output — preserve its variants; if you ever re-add it via the CLI, re-apply them.
-- **The pre-order dialog resets via remount.** `order-provider.tsx` passes a changing `key` to `<OrderDialog>` on each open so the form re-initializes — don't reintroduce a `useEffect` reset (it trips the React 19 set-state-in-effect lint).
+- **The pre-order dialog re-initializes via remount.** `order-provider.tsx` passes a changing `key` to `<OrderDialog>` on each open, so its `useState` initializers run per open — don't reintroduce a `useEffect` reset (it trips the React 19 set-state-in-effect lint). The initializers read the unfinished order from `sessionStorage` (`lib/order-draft.ts`) first: a saved order reopens as it was, ignoring the product pressed; with none, the product preselects. The dialog saves the draft once the customer changes something and clears it on send.
 - **Seasonal hero line** is `CURRENT_OCCASION` in [lib/products.ts](lib/products.ts) (`"None"` by default, which shows no line).
 - **Our Story uses product close-ups** (`SITE_IMAGES.story*`) where the family photos will go; swap the entries in `lib/products.ts` when the shots exist. Never ship a placeholder frame (`DESIGN.md`).
 
