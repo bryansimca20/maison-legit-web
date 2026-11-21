@@ -248,7 +248,36 @@ export function OrderDialog({
               </div>
             </div>
           ) : (
-            <OrderSummary lines={orderLines} />
+            <>
+              {step === "sent" && (
+                // Leads the sheet so the confirmation and its actions are the first thing seen after Send.
+                <div className="mb-3 sm:mb-[18px]">
+                  <div className="rounded-sm border border-[color-mix(in_srgb,var(--green-500)_35%,transparent)] bg-[color-mix(in_srgb,var(--green-500)_12%,var(--cream-100))] px-3.5 py-3 text-sm leading-[1.6] text-green-700">
+                    Terima kasih, {firstName}. WhatsApp opens with your order
+                    written out. Press send and we reply to confirm your date.
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2.5">
+                    <Button
+                      variant="secondary"
+                      size="md"
+                      className="min-h-11"
+                      onClick={() => onOpenChange(false)}
+                    >
+                      Done
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="md"
+                      className="min-h-11"
+                      onClick={() => goTo("details")}
+                    >
+                      Edit order
+                    </Button>
+                  </div>
+                </div>
+              )}
+              <OrderSummary lines={orderLines} />
+            </>
           )}
 
           {step === "details" && (
@@ -366,52 +395,25 @@ export function OrderDialog({
             </div>
           )}
 
-          {(step === "review" || step === "sent") && (
+          {step === "review" && (
             <div>
               <pre className="rounded-sm border border-[var(--border-soft)] bg-card px-[18px] py-4 font-sans text-sm leading-[1.7] whitespace-pre-wrap text-ink-800">
                 {message}
               </pre>
 
-              {step === "review" && (
-                // Pinned on phones like steps 1 and 2, so Send never sits below the fold.
-                <div className="sticky -bottom-7 -mx-5 -mb-7 mt-[18px] flex flex-wrap gap-2.5 bg-cream-100 px-5 pt-3 pb-7 sm:static sm:m-0 sm:mt-[18px] sm:p-0">
-                  <Button variant="cta" size="lg" onClick={send}>
-                    Send via WhatsApp
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="lg"
-                    onClick={() => goTo("details")}
-                  >
-                    Back
-                  </Button>
-                </div>
-              )}
-
-              {step === "sent" && (
-                <div>
-                  <div className="mt-3.5 flex items-start gap-2.5 rounded-sm border border-[color-mix(in_srgb,var(--green-500)_35%,transparent)] bg-[color-mix(in_srgb,var(--green-500)_12%,var(--cream-100))] px-3.5 py-3 text-sm leading-[1.6] text-green-700">
-                    Terima kasih, {firstName}. WhatsApp opens with your order
-                    written out. Press send and we reply to confirm your date.
-                  </div>
-                  <div className="mt-[18px] flex flex-wrap gap-2.5">
-                    <Button
-                      variant="secondary"
-                      size="md"
-                      onClick={() => onOpenChange(false)}
-                    >
-                      Done
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="md"
-                      onClick={() => goTo("details")}
-                    >
-                      Edit order
-                    </Button>
-                  </div>
-                </div>
-              )}
+              {/* Pinned on phones like steps 1 and 2, so Send never sits below the fold. */}
+              <div className="sticky -bottom-7 -mx-5 -mb-7 mt-[18px] flex flex-wrap gap-2.5 bg-cream-100 px-5 pt-3 pb-7 sm:static sm:m-0 sm:mt-[18px] sm:p-0">
+                <Button variant="cta" size="lg" onClick={send}>
+                  Send via WhatsApp
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="lg"
+                  onClick={() => goTo("details")}
+                >
+                  Back
+                </Button>
+              </div>
             </div>
           )}
         </DialogPrimitive.Popup>
