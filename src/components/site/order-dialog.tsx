@@ -28,6 +28,11 @@ import { PriceTag } from "@/components/site/price-tag";
 import { OrderProgress, type OrderStep } from "@/components/site/order-progress";
 import { OrderLineRow, type DraftLine } from "@/components/site/order-line-row";
 import { OrderSummary } from "@/components/site/order-summary";
+import {
+  loadOrderDraft,
+  saveOrderDraft,
+  clearOrderDraft,
+} from "@/lib/order-draft";
 
 const FIELD_LABEL =
   "text-sm font-semibold text-ink-800";
@@ -45,17 +50,36 @@ export function OrderDialog({
   onOpenChange,
   initialProduct,
 }: OrderDialogProps) {
-  // The provider remounts this component (via `key`) on every open, so these
-  // initializers reset the form each time it is opened.
-  const [step, setStep] = React.useState<OrderStep>("lapis");
-  const [name, setName] = React.useState("");
-  const [customerWa, setCustomerWa] = React.useState("");
-  const [address, setAddress] = React.useState("");
-  const [lines, setLines] = React.useState<DraftLine[]>([
-    { id: 0, product: initialProduct ?? "original", size: "whole", qty: 1 },
-  ]);
+  // The provider remounts this component (via `key`) on every open, so these initializers run per open.
+  // An unfinished order saved in this tab wins over the product that was pressed (owner's call).
+  const [saved] = React.useState(loadOrderDraft);
+  const [step, setStep] = React.useState<OrderStep>(saved?.step ?? "lapis");
+  const [name, setName] = React.useState(saved?.name ?? "");
+  const [customerWa, setCustomerWa] = React.useState(saved?.customerWa ?? "");
+  const [address, setAddress] = React.useState(saved?.address ?? "");
+  const [lines, setLines] = React.useState<DraftLine[]>(() =>
+    saved
+      ? saved.lines.map((l, i) => ({ ...l, id: i }))
+      : [{ id: 0, product: initialProduct ?? "original", size: "whole", qty: 1 }],
+  );
   const [tried, setTried] = React.useState(false);
-  const nextId = React.useRef(1);
+  const nextId = React.useRef(lines.length);
+
+  // Keep the unfinished order in this tab, once the customer has changed something; clear it once sent.
+  const draftJson = JSON.stringify({
+    lines: lines.map(({ product, size, qty }) => ({ product, size, qty })),
+    name,
+    customerWa,
+    address,
+    step,
+  });
+  const openedWith = React.useRef(draftJson);
+  const dirty = React.useRef(saved !== null);
+  React.useEffect(() => {
+    if (step === "sent") return clearOrderDraft();
+    if (draftJson !== openedWith.current) dirty.current = true;
+    if (dirty.current) saveOrderDraft(draftJson);
+  }, [draftJson, step]);
   const popup = React.useRef<HTMLDivElement>(null);
   // Each step starts at the top of the sheet, not where the last one was scrolled to.
   const goTo = (next: OrderStep) => {
