@@ -60,6 +60,8 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 - **Retired from page use:** `green-*` (feature band), `burgundy-*`. Keep the tokens, stop using them on pages.
   The feature band moves to `ink-900` or `blue-500`.
 - **One accent per screen:** red appears only on buttons. Blue appears only as the logo, one band, and links.
+- **Progress:** `ink-800` fills the order form's progress bar (upcoming steps `--border-default`). It is not an action,
+  so it is not red, and not a link, so it is not blue.
 - **Semantic:** error `red-600` (`--destructive`) with a text message, success `green-700` on the order
   confirmation only. Never colour alone.
 - **Contrast:** body 4.5:1 minimum. On `blue-500`, text is `cream-100` (not `blue-200`).
@@ -156,3 +158,4 @@ Full findings: `~/.gstack/projects/maison-legit/designs/design-audit-20261117/de
 | 2026-11-17 | Radius drops from pills/18px to 4-8px (dialog 16px) | Uniform bubbly radius read as a shop template |
 | 2026-11-17 | Light theme only | Bakery site, daytime use; dark mode adds work without a reader asking for it |
 | 2026-11-21 | Delivery only, within Jakarta; fee confirmed on WhatsApp; no payments on the site | Owners' call; the order form requires an address |
+| 2026-11-21 | Pre-orders hold several lapis lines; a three-step progress bar replaces "Step N of 2" | Gift buyers order for several people in one message; the bar shows how far through the form they are |
