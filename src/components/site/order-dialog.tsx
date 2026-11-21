@@ -276,7 +276,8 @@ export function OrderDialog({
                   </div>
                 </div>
               )}
-              <OrderSummary lines={orderLines} />
+              {/* Review shows the message itself, which already lists every line and the total. */}
+              {step !== "review" && <OrderSummary lines={orderLines} />}
             </>
           )}
 
