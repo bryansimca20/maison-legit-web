@@ -35,7 +35,7 @@ export function SiteHeader() {
           <Link
             href="/story"
             className={cn(
-              "py-3.5 text-[13px] font-semibold tracking-[0.01em] transition-colors hover:text-blue-700",
+              "py-3.5 text-sm font-semibold transition-colors hover:text-blue-700",
               storyActive
                 ? "border-b-2 border-gold-500 pb-[3px] text-blue-700"
                 : "text-foreground",

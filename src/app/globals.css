@@ -274,20 +274,12 @@
    ============================================================ */
 @layer components {
   /* italic display caption */
-  .text-fine {
-    font-family: var(--font-display);
-    font-style: italic;
-  }
   /* dotted gold leader for the tasting-menu occasion rows */
   .occ-leader {
     flex: 1 1 auto;
     min-width: 28px;
     border-bottom: 1.5px dotted var(--gold-400);
     transform: translateY(-4px);
-  }
-  /* gold-leaf seam */
-  .gold-seam {
-    background: linear-gradient(90deg, var(--gold-300), var(--gold-500), var(--gold-300));
   }
 
   /* hero photo blend — fades down into the canvas on mobile,

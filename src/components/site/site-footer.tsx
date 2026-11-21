@@ -11,8 +11,8 @@ export function SiteFooter() {
         {siteConfig.name}
       </div>
       <p className="mx-auto mt-4 max-w-md text-sm leading-[1.7]">
-        Pre-orders on WhatsApp · {siteConfig.location.city},{" "}
-        {siteConfig.location.country}
+        Baked in {siteConfig.location.city}, {siteConfig.location.country}.
+        Pre-orders on WhatsApp.
         <br />
         {PREORDER.season} orders ship from {PREORDER.shipsFrom}.
       </p>

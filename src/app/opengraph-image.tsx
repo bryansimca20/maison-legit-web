@@ -1,10 +1,18 @@
 import { ImageResponse } from "next/og";
+import { join } from "node:path";
+import { readFile } from "node:fs/promises";
 
-export const alt = "Maison Legit — Homemade Lapis Legit, baked by hand in Jakarta";
+export const alt = "Maison Legit: lapis legit, baked by hand in Jakarta";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpengraphImage() {
+export default async function OpengraphImage() {
+  // The cross-section is the brand's signature photograph (DESIGN.md).
+  const photo = await readFile(
+    join(process.cwd(), "public/assets/photography/lapis-legit-original-3.jpg"),
+    "base64",
+  );
+
   return new ImageResponse(
     (
       <div
@@ -12,58 +20,42 @@ export default function OpengraphImage() {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          padding: "80px",
-          background:
-            "linear-gradient(150deg, #3f5e96 0%, #2e466f 55%, #25395e 100%)",
-          color: "#faf5e8",
-          fontFamily: "Georgia, 'Times New Roman', serif",
+          background: "#faf5e8",
+          color: "#1e1710",
         }}
       >
         <div
           style={{
-            fontSize: 22,
-            letterSpacing: 8,
-            textTransform: "uppercase",
-            color: "#e2cd8e",
-            fontFamily: "Helvetica, Arial, sans-serif",
-            fontWeight: 700,
+            width: 640,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-end",
+            padding: "72px",
           }}
         >
-          Homemade Lapis Legit · Jakarta
+          <div style={{ fontSize: 96, lineHeight: 1, fontWeight: 600 }}>
+            Maison Legit
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 36,
+              marginTop: 24,
+              color: "#5f5142",
+            }}
+          >
+            <span>Lapis legit, baked by hand</span>
+            <span>in Jakarta.</span>
+          </div>
         </div>
-        <div
-          style={{
-            fontSize: 132,
-            lineHeight: 1,
-            marginTop: 28,
-            fontWeight: 600,
-            color: "#fcf9f1",
-          }}
-        >
-          Maison Legit
-        </div>
-        <div
-          style={{
-            width: 90,
-            height: 3,
-            marginTop: 36,
-            background: "linear-gradient(90deg, #e2cd8e, #c2a04c, #e2cd8e)",
-          }}
+        <img
+          src={`data:image/jpeg;base64,${photo}`}
+          width={560}
+          height={630}
+          style={{ objectFit: "cover" }}
+          alt=""
         />
-        <div
-          style={{
-            fontSize: 40,
-            marginTop: 36,
-            fontStyle: "italic",
-            color: "#f3e8cc",
-          }}
-        >
-          A family recipe, baked in layers.
-        </div>
       </div>
     ),
     { ...size },

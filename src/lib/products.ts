@@ -34,9 +34,9 @@ export interface Product {
 }
 
 export const SIZES: Size[] = [
-  { k: "whole", label: "Whole · 20 × 20 cm", dimensions: "20 × 20 cm" },
-  { k: "half", label: "Half · 10 × 20 cm", dimensions: "10 × 20 cm" },
-  { k: "small", label: "Small · 6 × 20 cm", dimensions: "6 × 20 cm" },
+  { k: "whole", label: "Whole (20 × 20 cm)", dimensions: "20 × 20 cm" },
+  { k: "half", label: "Half (10 × 20 cm)", dimensions: "10 × 20 cm" },
+  { k: "small", label: "Small (6 × 20 cm)", dimensions: "6 × 20 cm" },
 ];
 
 const PHOTO_BASE = "/assets/photography";
@@ -48,7 +48,7 @@ export const PRODUCTS: Product[] = [
     fullName: "Lapis Legit Original",
     tag: "The house classic: forty layers of butter and warm spice.",
     description:
-      "Our signature lapis legit — forty-plus layers of butter, egg yolk and warm spice, griddled and pressed one ribbon at a time. Patient, rich, unmistakably ours.",
+      "Our house lapis legit: forty-plus layers of butter, egg yolk and warm spice, each one griddled and pressed by hand.",
     badge: null,
     prices: { whole: 890, half: 530, small: 325 },
     photos: [
@@ -63,7 +63,7 @@ export const PRODUCTS: Product[] = [
     fullName: "Lapis Legit Plum",
     tag: "Whole prunes, set into the layers.",
     description:
-      "The festive favourite. Whole prunes suspended between the layers, with a deep, jammy sweetness that has graced Indonesian celebration tables for generations.",
+      "The Original's layers with whole prunes set between them, for a deep, jammy sweetness.",
     badge: null,
     prices: { whole: 1100, half: 660, small: 400 },
     photos: [
@@ -78,7 +78,7 @@ export const PRODUCTS: Product[] = [
     fullName: "Lapis Legit Valrhona Chocolate",
     tag: "Deep Valrhona chocolate, griddled layer by layer.",
     description:
-      "Layers brushed with Valrhona dark couverture for a grown-up, cocoa-deep take on the classic — bittersweet, glossy and intensely layered.",
+      "Each layer brushed with Valrhona dark couverture. Bittersweet, and still griddled one layer at a time.",
     badge: null,
     prices: { whole: 1200, half: 720, small: 480 },
     photos: [
@@ -93,7 +93,7 @@ export const PRODUCTS: Product[] = [
     fullName: "Lapis Legit Cheesecake",
     tag: "Cream-laced, finished with a lattice top.",
     description:
-      "A modern hybrid — our buttery layers laced with a tangy baked cheesecake cream and finished with a golden lattice top. Indulgent and quietly showy.",
+      "Our buttery layers with a tangy baked cheesecake cream between them, finished with a golden lattice top.",
     badge: null,
     prices: { whole: 1200, half: 720, small: 480 },
     photos: [
@@ -184,7 +184,7 @@ export function buildOrderMessage({
   return [
     "Hello Maison Legit, I would like to pre-order:",
     "",
-    `${product.fullName} — ${size.label}`,
+    `${product.fullName}, ${size.label}`,
     `Quantity: ${qty}`,
     `Total: IDR ${fmtK(total)}`,
     "",

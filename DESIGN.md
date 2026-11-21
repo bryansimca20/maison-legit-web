@@ -140,8 +140,9 @@ design backlog; strike each when fixed.
 13. ~~Pill buttons and badges.~~ 8px buttons, 4px badges.
 14. ~~Button press and easing; no hero entrance.~~
 
-Not in this list but still differing from the rules above: centred hero text on `/story`, em dashes in the product
-descriptions (`src/lib/products.ts`), the order dialog's 26px radius and pill stepper.
+15. ~~Centred hero text on `/story`; em dashes in product descriptions; the order dialog's 26px radius, pill
+    stepper, gold gradient seam and tracked all-caps field labels.~~ Swept 2026-11-21 with the other leftover tells:
+    middot-joined fact lines, italic small text, sub-14px text, the centred CTA band, the gold left border on the order review, and the gradient OG image (now the cross-section photo).
 
 Full findings: `~/.gstack/projects/maison-legit/designs/design-audit-20261117/design-audit-localhost.md`.
 

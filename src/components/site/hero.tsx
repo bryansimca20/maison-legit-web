@@ -43,7 +43,7 @@ export function Hero() {
         <p
           className={`mt-3 text-sm font-semibold text-ink-800 ${ENTER} delay-[60ms]`}
         >
-          From IDR {fmtK(PRICE_FROM)} · ships from {PREORDER.shipsFrom}
+          From IDR {fmtK(PRICE_FROM)}. Ships from {PREORDER.shipsFrom}.
         </p>
         <div
           className={`mt-7 flex flex-wrap items-center gap-4 ${ENTER} delay-[120ms]`}

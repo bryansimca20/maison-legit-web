@@ -14,7 +14,7 @@ export function ProductDetail({ product }: { product: Product }) {
 
   return (
     <div className="mx-auto max-w-[1200px] px-5 pt-6 pb-14 md:px-12 md:pt-10 md:pb-18">
-      <nav aria-label="Breadcrumb" className="text-xs text-ink-500">
+      <nav aria-label="Breadcrumb" className="text-sm text-ink-600">
         <ol className="flex flex-wrap items-center gap-2">
           <li>
             <Link href="/" className="transition-colors hover:text-blue-700">
@@ -79,8 +79,8 @@ export function ProductDetail({ product }: { product: Product }) {
             <Button variant="cta" size="lg" onClick={() => open(product.k)}>
               Pre-order now
             </Button>
-            <span className="text-fine text-[15px] text-ink-500">
-              we confirm your slot on WhatsApp
+            <span className="text-[15px] text-ink-600">
+              We confirm your date on WhatsApp.
             </span>
           </div>
         </div>

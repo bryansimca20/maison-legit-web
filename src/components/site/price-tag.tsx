@@ -15,7 +15,7 @@ interface PriceTagProps {
   className?: string;
 }
 
-/** "IDR 890k" in the house style — small caps currency, heavy amount. */
+/** "IDR 890k" in the house style: small currency code, heavy amount. */
 export function PriceTag({
   amount,
   currency = "IDR",
@@ -36,14 +36,14 @@ export function PriceTag({
       <span
         className={cn(
           "text-[0.62em] font-bold tracking-[0.08em] -translate-y-[0.1em]",
-          tone === "onDark" ? "text-gold-400" : "text-ink-500",
+          tone === "onDark" ? "text-gold-400" : "text-ink-600",
         )}
       >
         {currency}
       </span>
       <span className="font-extrabold tracking-[-0.01em]">{amount}</span>
       {note ? (
-        <span className="text-[0.6em] font-semibold text-ink-500">{note}</span>
+        <span className="text-[0.6em] font-semibold text-ink-600">{note}</span>
       ) : null}
     </span>
   );

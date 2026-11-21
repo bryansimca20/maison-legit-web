@@ -34,9 +34,9 @@ import { PriceTag } from "@/components/site/price-tag";
 type Step = "lapis" | "details" | "review" | "sent";
 
 const FIELD_LABEL =
-  "text-[12px] font-bold uppercase tracking-[0.08em] text-ink-500";
+  "text-sm font-semibold text-ink-800";
 
-const CONTROL = "h-11 w-full rounded-md text-base md:text-base";
+const CONTROL = "h-11 w-full rounded-sm text-base md:text-base";
 
 export interface OrderDialogProps {
   open: boolean;
@@ -108,18 +108,15 @@ export function OrderDialog({
           className={cn(
             // mobile: bottom sheet
             "fixed inset-x-0 bottom-0 z-50 mx-auto flex max-h-[94dvh] w-full flex-col overflow-y-auto",
-            "rounded-t-[26px] bg-cream-100 px-5 pt-6 pb-7 shadow-xl outline-none",
+            "rounded-t-[16px] bg-cream-100 px-5 pt-6 pb-7 shadow-xl outline-none",
             // desktop: centered dialog
             "sm:inset-x-auto sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:max-h-[88vh] sm:w-[560px] sm:max-w-[calc(100vw-2rem)]",
-            "sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-[26px] sm:px-8 sm:pt-7 sm:pb-8",
+            "sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-[16px] sm:px-8 sm:pt-7 sm:pb-8",
             // motion
             "transition-[transform,opacity] duration-200 ease-[var(--ease-out)]",
             "data-closed:opacity-0 data-closed:translate-y-3 sm:data-closed:translate-y-3 sm:data-closed:-translate-x-1/2",
           )}
         >
-          {/* gold-leaf seam */}
-          <div className="gold-seam pointer-events-none absolute inset-x-0 top-0 h-[3px] rounded-t-[26px]" />
-
           <div className="mb-3 flex items-start justify-between gap-3 sm:mb-[18px]">
             <div>
               <DialogPrimitive.Title
@@ -128,15 +125,15 @@ export function OrderDialog({
               >
                 {step === "details" ? "Delivery details" : "Reserve your lapis"}
               </DialogPrimitive.Title>
-              <DialogPrimitive.Description className="mt-1.5 text-fine text-sm text-ink-500">
-                {step === "lapis" && "Step 1 of 2 · "}
-                {step === "details" && "Step 2 of 2 · "}
+              <DialogPrimitive.Description className="mt-1.5 text-sm text-ink-600">
+                {step === "lapis" && "Step 1 of 2. "}
+                {step === "details" && "Step 2 of 2. "}
                 We confirm every order on WhatsApp.
               </DialogPrimitive.Description>
             </div>
             <DialogPrimitive.Close
               aria-label="Close"
-              className="-mr-1 inline-flex size-8 shrink-0 items-center justify-center rounded-full text-ink-700 transition-colors hover:bg-cream-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              className="-mt-2 -mr-3 inline-flex size-11 shrink-0 items-center justify-center rounded-sm text-ink-700 transition-colors hover:bg-cream-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
             >
               <X className="size-4" />
             </DialogPrimitive.Close>
@@ -176,7 +173,8 @@ export function OrderDialog({
                   {prod.fullName}
                 </p>
                 <p className="mt-0.5 text-sm text-ink-600">
-                  {sizeDef.label} · Qty {qty}
+                  {sizeDef.label}
+                  <span className="block">Quantity {qty}</span>
                 </p>
               </div>
               <PriceTag amount={fmtK(total)} size="sm" />
@@ -221,7 +219,7 @@ export function OrderDialog({
                       <SelectValue>
                         {(v: string | null) => {
                           const s = SIZES.find((x) => x.k === v) ?? SIZES[0];
-                          return `${s.label} · IDR ${fmtK(prod.prices[s.k])}`;
+                          return `${s.label}, IDR ${fmtK(prod.prices[s.k])}`;
                         }}
                       </SelectValue>
                     </SelectTrigger>
@@ -230,7 +228,7 @@ export function OrderDialog({
                     <SelectContent alignItemWithTrigger={false}>
                       {SIZES.map((s) => (
                         <SelectItem key={s.k} value={s.k}>
-                          {s.label} · IDR {fmtK(prod.prices[s.k])}
+                          {s.label}, IDR {fmtK(prod.prices[s.k])}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -246,14 +244,14 @@ export function OrderDialog({
                   <div
                     role="group"
                     aria-labelledby="ml-qty-label"
-                    className="inline-flex w-max items-center rounded-full border-[1.5px] border-[var(--border-default)] bg-card"
+                    className="inline-flex w-max items-center rounded-sm border-[1.5px] border-[var(--border-default)] bg-card"
                   >
                     <button
                       type="button"
                       aria-label="Decrease quantity"
                       disabled={qty <= 1}
                       onClick={() => setQty((q) => Math.max(1, q - 1))}
-                      className="flex size-11 items-center justify-center rounded-full text-ink-700 transition-colors hover:bg-cream-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-35 disabled:hover:bg-transparent"
+                      className="flex size-11 items-center justify-center rounded-xs text-ink-700 transition-colors hover:bg-cream-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-35 disabled:hover:bg-transparent"
                     >
                       <Minus className="size-4" />
                     </button>
@@ -269,7 +267,7 @@ export function OrderDialog({
                       aria-label="Increase quantity"
                       disabled={qty >= 10}
                       onClick={() => setQty((q) => Math.min(10, q + 1))}
-                      className="flex size-11 items-center justify-center rounded-full text-ink-700 transition-colors hover:bg-cream-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-35 disabled:hover:bg-transparent"
+                      className="flex size-11 items-center justify-center rounded-xs text-ink-700 transition-colors hover:bg-cream-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-35 disabled:hover:bg-transparent"
                     >
                       <Plus className="size-4" />
                     </button>
@@ -319,7 +317,7 @@ export function OrderDialog({
                     <span
                       id="ml-name-error"
                       role="alert"
-                      className="text-xs text-destructive"
+                      className="text-sm text-destructive"
                     >
                       Please tell us your name.
                     </span>
@@ -353,7 +351,7 @@ export function OrderDialog({
                     <span
                       id="ml-wa-error"
                       role="alert"
-                      className="text-xs text-destructive"
+                      className="text-sm text-destructive"
                     >
                       We need a valid number to confirm your order.
                     </span>
@@ -376,13 +374,13 @@ export function OrderDialog({
                     tried && !addressOk ? "ml-address-error" : undefined
                   }
                   onChange={(e) => setAddress(e.target.value)}
-                  className="field-sizing-fixed resize-none rounded-md text-base focus-visible:ring-ring md:text-base"
+                  className="field-sizing-fixed resize-none rounded-sm text-base focus-visible:ring-ring md:text-base"
                 />
                 {tried && !addressOk && (
                   <span
                     id="ml-address-error"
                     role="alert"
-                    className="text-xs text-destructive"
+                    className="text-sm text-destructive"
                   >
                     Please add your full address: street, area and city.
                   </span>
@@ -407,7 +405,7 @@ export function OrderDialog({
 
           {(step === "review" || step === "sent") && (
             <div>
-              <pre className="rounded-md border border-[var(--border-soft)] border-l-[3px] border-l-gold-400 bg-card px-[18px] py-4 font-sans text-sm leading-[1.7] whitespace-pre-wrap text-ink-800">
+              <pre className="rounded-sm border border-[var(--border-soft)] bg-card px-[18px] py-4 font-sans text-sm leading-[1.7] whitespace-pre-wrap text-ink-800">
                 {message}
               </pre>
 
@@ -429,10 +427,9 @@ export function OrderDialog({
 
               {step === "sent" && (
                 <div>
-                  <div className="mt-3.5 flex items-start gap-2.5 rounded-md border border-[color-mix(in_srgb,var(--green-500)_35%,transparent)] bg-[color-mix(in_srgb,var(--green-500)_12%,var(--cream-100))] px-3.5 py-3 text-[13.5px] leading-[1.6] text-green-700">
-                    Terima kasih, {firstName} — WhatsApp should now open with
-                    your order ready. Just press send, and we will confirm your
-                    slot.
+                  <div className="mt-3.5 flex items-start gap-2.5 rounded-sm border border-[color-mix(in_srgb,var(--green-500)_35%,transparent)] bg-[color-mix(in_srgb,var(--green-500)_12%,var(--cream-100))] px-3.5 py-3 text-sm leading-[1.6] text-green-700">
+                    Terima kasih, {firstName}. WhatsApp opens with your order
+                    written out. Press send and we reply to confirm your date.
                   </div>
                   <div className="mt-[18px] flex flex-wrap gap-2.5">
                     <Button

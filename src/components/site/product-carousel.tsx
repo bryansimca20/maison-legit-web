@@ -64,7 +64,7 @@ export function ProductCarousel({
       ref={ref}
       role="group"
       aria-roledescription="carousel"
-      aria-label={label ? `${label} — photo gallery` : "Product photos"}
+      aria-label={label ? `${label} photos` : "Product photos"}
       tabIndex={0}
       onKeyDown={onKeyDown}
       onPointerDown={onDown}
