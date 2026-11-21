@@ -118,6 +118,8 @@ Structural rules:
 
 ## UI and Design Rules
 
+**[DESIGN.md](../DESIGN.md) decides which tokens to use and where** (red for actions only, blue for brand only, roman display type, 4-8px radius, motion timings). Read it before any visual change; its "Gaps to close" list is where the current code still differs.
+
 **Design system — brand tokens + Tailwind v4**
 - The theme is **CSS-first** in [app/globals.css](app/globals.css). `:root` holds the raw brand palette (Legit Blue, Almond Cream, Gilded Gold, Lacquer Red, Heritage Green, Spice Burgundy, Lapis Amber, warm Ink neutrals) and maps the **shadcn semantic tokens** (`--background`, `--primary`, `--ring`, `--destructive`, …) onto it. The `@theme inline` block exposes brand scales as Tailwind utilities and overrides the radius/shadow scales. Fonts come from `next/font` variables (`--font-cormorant`/`--font-hanken`/`--font-yellowtail`).
 - There is **no `tailwind.config.js`** (Tailwind v4 is CSS-first); theme changes go in the `@theme` block, not a JS config.
@@ -151,7 +153,7 @@ Structural rules:
 - **shadcn here is the Base UI variant, not Radix.** Primitives in `components/ui/` import from `@base-ui/react`. Match that when adding components, and note Base UI prop names differ (`Dialog` uses `open`/`onOpenChange`; `Select` uses `value`/`onValueChange` + `items`, and `Select.Value` can take a function child).
 - **Tailwind v4 is CSS-first — there is no `tailwind.config.js`.** Theme customization lives in the `@theme` block in [app/globals.css](app/globals.css).
 - **Brand color scales intentionally override Tailwind defaults.** `bg-blue-500`, `bg-red-500`, `bg-green-800`, `bg-amber-500` are the Maison Legit palette, not Tailwind's. New brand scales are added too: `cream-*`, `gold-*`, `ink-*`, `burgundy-*`, plus `bg-canvas` / `bg-feature`. Use **`gold-800`** (not `gold-500`/`600`) for small text on light surfaces — it's the AA-contrast gilded tone.
-- **`components/ui/button.tsx` is hand-restyled to the brand** (pill shape; variants `primary`/`cta`/`gold`/`secondary`/`ghost`/`outline`; sizes `sm`/`md`/`lg`/`icon`/`icon-sm`). It's the one `ui/` primitive that deviates from CLI output — preserve its variants; if you ever re-add it via the CLI, re-apply them.
+- **`components/ui/button.tsx` is hand-restyled to the brand** (pill shape; variants `primary`/`cta`/`gold`/`secondary`/`ghost`/`outline`; sizes `sm`/`md`/`lg`/`icon`/`icon-sm`). It's the one `ui/` primitive that deviates from CLI output — preserve its variants; if you ever re-add it via the CLI, re-apply them. `DESIGN.md` moves buttons from pill to 8px radius (gap 13); until that lands, the pill is current.
 - **The pre-order dialog resets via remount.** `order-provider.tsx` passes a changing `key` to `<OrderDialog>` on each open so the form re-initializes — don't reintroduce a `useEffect` reset (it trips the React 19 set-state-in-effect lint).
 - **Seasonal hero eyebrow** is `CURRENT_OCCASION` in [lib/products.ts](lib/products.ts) (`"None"` by default).
 - **Our Story uses `<PhotoSuggestion>` placeholders** (dashed-gold frames) for photos not yet shot — replace with `next/image` when available.
