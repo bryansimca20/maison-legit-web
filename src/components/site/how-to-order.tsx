@@ -1,4 +1,5 @@
 import { PREORDER } from "@/lib/products";
+import { siteConfig } from "@/lib/site";
 
 const STEPS = [
   {
@@ -11,7 +12,7 @@ const STEPS = [
   },
   {
     h: `Ships from ${PREORDER.shipsFrom}`,
-    p: `${PREORDER.season} orders are baked to order, and the first ones ship out that day.`,
+    p: `${PREORDER.season} orders are baked to order, and the first ones ship out that day. We deliver within ${siteConfig.deliveryArea}; the fee is confirmed on WhatsApp.`,
   },
 ];
 

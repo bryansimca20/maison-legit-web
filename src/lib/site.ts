@@ -23,6 +23,8 @@ export const siteConfig = {
     country: "Indonesia",
     countryCode: "ID",
   },
+  /** Delivery only, within this area. The fee depends on the address and is confirmed on WhatsApp. */
+  deliveryArea: "Jakarta",
   /** Admin WhatsApp number that receives pre-orders. Digits + country code. */
   adminWhatsApp: process.env.NEXT_PUBLIC_ADMIN_WHATSAPP ?? "+62 812 3456 7890",
   /** True only when a real admin number is configured (not the placeholder). */

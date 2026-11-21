@@ -14,7 +14,8 @@ export function SiteFooter() {
         Baked in {siteConfig.location.city}, {siteConfig.location.country}.
         Pre-orders on WhatsApp.
         <br />
-        {PREORDER.season} orders ship from {PREORDER.shipsFrom}.
+        Delivery within {siteConfig.deliveryArea}. {PREORDER.season} orders
+        ship from {PREORDER.shipsFrom}.
       </p>
       <p className="mt-2 flex justify-center gap-6 text-sm font-semibold text-cream-200">
         {/* Hidden until the real admin number is set; the placeholder would send orders nowhere. */}

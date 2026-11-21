@@ -79,8 +79,8 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 - **Grid:** 1 column under 640px, 2 columns from 640px, 4 product columns from 1280px.
 - **Hero:** full-height photo of the cake, h1 names the product and the city, one fact line (price from, lead
   time), one button. Nothing else.
-- **Order of the home page:** hero → how ordering works (pick, confirm on WhatsApp, when it ships, pickup
-  or delivery area) → the collection → the craft (one large type moment over the cross-section) → footer.
+- **Order of the home page:** hero → how ordering works (pick, confirm on WhatsApp, when it ships, delivery
+  within Jakarta) → the collection → the craft (one large type moment over the cross-section) → footer.
 - **Products:** photo on the cream ground, name, one factual line, price, button. No white box, no shadow
   around the product. The whole tile is one link to `/lapis/[slug]`; the button opens the dialog.
 - **Cards:** only where the card is the thing you click. No decorative card grids.
@@ -88,7 +88,7 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 - **Border radius:** photos 4px, buttons 8px, inputs 8px, dialog 16px, badges 4px. No pill shapes on new work.
 - **Shadows:** none on photos or products. `shadow-xl` on the dialog only.
 - **Touch targets:** 44px minimum for every link and control outside running text (carousel dots included, via the hit area).
-- **Footer:** wordmark, WhatsApp link, lead time, pickup district or delivery area, Instagram. Facts, not a tagline.
+- **Footer:** wordmark, WhatsApp link, lead time, delivery area, Instagram. Facts, not a tagline.
 
 ## Photography
 
@@ -128,8 +128,8 @@ design backlog; strike each when fixed.
 2. ~~Blue italic word in headings.~~
 3. ~~Uppercase gold labels above headings.~~ The seasonal hero line remains, sentence case, only when an occasion is set.
 4. ~~"Small batch" repeated.~~ Once, in the hero.
-5. "How ordering works" block added (home, plus the footer). **Still open:** delivery area, delivery fee and payment
-   method (delivery only; the order form collects the address).
+5. ~~No ordering or delivery info.~~ "How ordering works" block, footer and the address field say it: delivery
+   only, within Jakarta (`siteConfig.deliveryArea`), fee confirmed on WhatsApp. No payments on the site.
 6. ~~Placeholder frames on `/story`.~~ Product close-ups stand in until the family photos exist.
 7. ~~Invented badges.~~ No product carries a badge now.
 8. ~~H1 does not name the product or Jakarta; brand name not shown as text.~~ Wordmark text shows from 640px up.
@@ -155,3 +155,4 @@ Full findings: `~/.gstack/projects/maison-legit/designs/design-audit-20261117/de
 | 2026-11-17 | Display serif stays Cormorant Garamond, roman; Yellowtail limited to the wordmark | Keeps the brand's existing voice without the italic-accent and script-heading habits |
 | 2026-11-17 | Radius drops from pills/18px to 4-8px (dialog 16px) | Uniform bubbly radius read as a shop template |
 | 2026-11-17 | Light theme only | Bakery site, daytime use; dark mode adds work without a reader asking for it |
+| 2026-11-21 | Delivery only, within Jakarta; fee confirmed on WhatsApp; no payments on the site | Owners' call; the order form requires an address |

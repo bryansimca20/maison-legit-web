@@ -117,7 +117,7 @@ export function OrderDialog({
             "data-closed:opacity-0 data-closed:translate-y-3 sm:data-closed:translate-y-3 sm:data-closed:-translate-x-1/2",
           )}
         >
-          <div className="mb-3 flex items-start justify-between gap-3 sm:mb-[18px]">
+          <div className="mb-2 flex items-start justify-between gap-3 sm:mb-[18px]">
             <div>
               <DialogPrimitive.Title
                 render={<h2 />}
@@ -126,9 +126,10 @@ export function OrderDialog({
                 {step === "details" ? "Delivery details" : "Reserve your lapis"}
               </DialogPrimitive.Title>
               <DialogPrimitive.Description className="mt-1.5 text-sm text-ink-600">
-                {step === "lapis" && "Step 1 of 2. "}
-                {step === "details" && "Step 2 of 2. "}
-                We confirm every order on WhatsApp.
+                {step === "lapis" && "Step 1 of 2"}
+                {step === "details" && "Step 2 of 2"}
+                {(step === "review" || step === "sent") &&
+                  "We confirm every order on WhatsApp."}
               </DialogPrimitive.Description>
             </div>
             <DialogPrimitive.Close
@@ -158,7 +159,7 @@ export function OrderDialog({
             </div>
           ) : (
             // Later steps keep a small reference of what is being ordered.
-            <div className="mb-[18px] flex items-center gap-3 rounded-xs border border-[var(--border-soft)] bg-card p-2.5">
+            <div className="mb-3 flex items-center gap-3 rounded-xs border border-[var(--border-soft)] bg-card p-2.5 sm:mb-[18px]">
               <div className="relative size-16 shrink-0 overflow-hidden rounded-xs bg-amber-200">
                 <Image
                   src={prod.photos[0].src}
@@ -295,7 +296,7 @@ export function OrderDialog({
           )}
 
           {step === "details" && (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3 sm:gap-4">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="flex flex-col gap-1.5">
                   <Label htmlFor="ml-name" className={FIELD_LABEL}>
@@ -371,11 +372,17 @@ export function OrderDialog({
                   value={address}
                   aria-invalid={tried && !addressOk}
                   aria-describedby={
-                    tried && !addressOk ? "ml-address-error" : undefined
+                    tried && !addressOk
+                      ? "ml-address-hint ml-address-error"
+                      : "ml-address-hint"
                   }
                   onChange={(e) => setAddress(e.target.value)}
                   className="field-sizing-fixed resize-none rounded-sm text-base focus-visible:ring-ring md:text-base"
                 />
+                <span id="ml-address-hint" className="text-sm text-ink-600">
+                  We deliver within {siteConfig.deliveryArea}. The fee depends
+                  on your address, and we confirm it on WhatsApp.
+                </span>
                 {tried && !addressOk && (
                   <span
                     id="ml-address-error"
