@@ -73,20 +73,20 @@ export function OrderDialog({
 
   const updateLine = (id: number, patch: Partial<Omit<DraftLine, "id">>) =>
     setLines((ls) => ls.map((l) => (l.id === id ? { ...l, ...patch } : l)));
-  const addLine = () =>
-    setLines((ls) =>
-      ls.length >= MAX_ORDER_LINES
-        ? ls
-        : [
-            ...ls,
-            {
-              id: nextId.current++,
-              product: nextProductKey(ls.map((l) => l.product)),
-              size: "whole",
-              qty: 1,
-            },
-          ],
-    );
+  const addLine = () => {
+    if (lines.length >= MAX_ORDER_LINES) return;
+    const line: DraftLine = {
+      id: nextId.current++,
+      product: nextProductKey(lines.map((l) => l.product)),
+      size: "whole",
+      qty: 1,
+    };
+    // Render the row now so focus can move into it: the add button may unmount at the cap.
+    flushSync(() => setLines((ls) => [...ls, line]));
+    popup.current
+      ?.querySelector<HTMLElement>(`[aria-label="Lapis ${lines.length + 1}"]`)
+      ?.focus();
+  };
   const removeLine = (id: number) => {
     // Commit the removal first so the add button exists (it hides at the cap), then keep focus in the form.
     flushSync(() => setLines((ls) => ls.filter((l) => l.id !== id)));

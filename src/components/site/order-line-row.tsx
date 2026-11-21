@@ -182,7 +182,7 @@ export function OrderLineRow({
       {canRemove && (
         <button
           type="button"
-          aria-label={`Remove ${prod.fullName}`}
+          aria-label={`Remove line ${number}, ${prod.fullName}`}
           onClick={onRemove}
           className="-mt-1 -mr-3 inline-flex size-11 shrink-0 items-center justify-center rounded-sm text-ink-700 transition-colors hover:bg-cream-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
