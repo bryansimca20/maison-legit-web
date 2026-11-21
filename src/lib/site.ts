@@ -10,7 +10,7 @@ export const siteConfig = {
   legalName: "Maison Legit",
   tagline: "A family recipe, baked in layers.",
   description:
-    "Homemade lapis legit from a thirty-year family recipe — the Indonesian thousand-layer cake, hand-griddled in small batches with no preservatives. Pre-order in Jakarta via WhatsApp.",
+    "Homemade lapis legit from a thirty-year family recipe: the Indonesian thousand-layer cake, hand-griddled in small batches with no preservatives. Pre-order in Jakarta via WhatsApp.",
   /** Canonical, absolute base URL (no trailing slash). */
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://maisonlegit.com").replace(
     /\/$/,
@@ -23,6 +23,8 @@ export const siteConfig = {
     country: "Indonesia",
     countryCode: "ID",
   },
+  /** Delivery only, within this area. The fee depends on the address and is confirmed on WhatsApp. */
+  deliveryArea: "Jakarta",
   /** Admin WhatsApp number that receives pre-orders. Digits + country code. */
   adminWhatsApp: process.env.NEXT_PUBLIC_ADMIN_WHATSAPP ?? "+62 812 3456 7890",
   /** True only when a real admin number is configured (not the placeholder). */

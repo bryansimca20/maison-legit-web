@@ -29,7 +29,7 @@ export function bakerySchema() {
     servesCuisine: "Indonesian",
     currenciesAccepted: "IDR",
     paymentAccepted: "Bank transfer, QRIS, Cash",
-    areaServed: { "@type": "City", name: siteConfig.location.city },
+    areaServed: { "@type": "City", name: siteConfig.deliveryArea },
     address: {
       "@type": "PostalAddress",
       addressLocality: siteConfig.location.city,

@@ -14,7 +14,7 @@ export function ProductDetail({ product }: { product: Product }) {
 
   return (
     <div className="mx-auto max-w-[1200px] px-5 pt-6 pb-14 md:px-12 md:pt-10 md:pb-18">
-      <nav aria-label="Breadcrumb" className="text-xs text-ink-500">
+      <nav aria-label="Breadcrumb" className="text-sm text-ink-600">
         <ol className="flex flex-wrap items-center gap-2">
           <li>
             <Link href="/" className="transition-colors hover:text-blue-700">
@@ -42,10 +42,10 @@ export function ProductDetail({ product }: { product: Product }) {
       </nav>
 
       <div className="mt-6 grid grid-cols-1 gap-8 md:mt-8 md:grid-cols-2 md:gap-12">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-cream-300 shadow-lg md:aspect-square">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-xs bg-amber-200 md:aspect-square">
           <ProductCarousel photos={product.photos} label={product.fullName} priority />
           {product.badge && (
-            <div className="absolute left-3 top-3 z-[2] inline-flex rounded-full bg-[color-mix(in_srgb,var(--cream-50)_94%,transparent)] shadow-sm">
+            <div className="absolute left-3 top-3 z-[2] inline-flex rounded-xs bg-cream-50">
               <ProductBadge tone={product.badge.tone}>
                 {product.badge.label}
               </ProductBadge>
@@ -54,11 +54,8 @@ export function ProductDetail({ product }: { product: Product }) {
         </div>
 
         <div className="md:self-center">
-          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-gold-800">
-            Lapis Legit
-          </p>
-          <h1 className="mt-2 font-display text-[40px] leading-[1.05] font-semibold tracking-[-0.02em] text-ink-900 md:text-[52px]">
-            <em className="text-blue-500">{product.name}</em>
+          <h1 className="font-display text-[40px] leading-[1.05] font-semibold tracking-[-0.02em] text-ink-900 md:text-[52px]">
+            {product.fullName}
           </h1>
           <p className="mt-3 max-w-[46ch] text-base leading-[1.7] text-ink-600">
             {product.description}
@@ -82,8 +79,8 @@ export function ProductDetail({ product }: { product: Product }) {
             <Button variant="cta" size="lg" onClick={() => open(product.k)}>
               Pre-order now
             </Button>
-            <span className="text-fine text-[15px] text-ink-500">
-              we confirm your slot on WhatsApp
+            <span className="text-[15px] text-ink-600">
+              We confirm your date on WhatsApp.
             </span>
           </div>
         </div>
