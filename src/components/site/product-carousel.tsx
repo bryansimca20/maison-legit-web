@@ -78,7 +78,7 @@ export function ProductCarousel({
           "flex h-full",
           drag
             ? ""
-            : "transition-transform duration-[260ms] ease-[var(--ease-gentle)]",
+            : "transition-transform duration-200 ease-[var(--ease-out)]",
         )}
         style={{ transform: `translateX(${offset}%)` }}
       >
@@ -94,14 +94,14 @@ export function ProductCarousel({
               fill
               draggable={false}
               priority={priority && k === 0}
-              sizes="(min-width: 1100px) 25vw, (min-width: 700px) 50vw, 100vw"
+              sizes="(min-width: 1200px) 552px, (min-width: 768px) 50vw, 100vw"
               className="pointer-events-none object-cover select-none"
             />
           </div>
         ))}
       </div>
 
-      <div className="absolute inset-x-0 bottom-2.5 flex justify-center gap-[18px]">
+      <div className="absolute inset-x-0 bottom-2.5 flex justify-center gap-7">
         {photos.map((p, k) => (
           <button
             key={p.src}
@@ -113,9 +113,9 @@ export function ProductCarousel({
               go(k);
             }}
             className={cn(
-              // 24px transparent hit area around the small visible pill
-              "relative h-1.5 rounded-full outline-none transition-[width,background] duration-150 ease-[var(--ease-gentle)]",
-              "before:absolute before:left-1/2 before:top-1/2 before:size-6 before:-translate-x-1/2 before:-translate-y-1/2 before:content-['']",
+              // 44px transparent hit area around the small visible pill
+              "relative h-1.5 rounded-full outline-none transition-[width,background-color] duration-150 ease-[var(--ease-out)]",
+              "before:absolute before:left-1/2 before:top-1/2 before:size-11 before:-translate-x-1/2 before:-translate-y-1/2 before:content-['']",
               "focus-visible:ring-2 focus-visible:ring-cream-100",
               k === i
                 ? "w-4 bg-cream-100"

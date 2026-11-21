@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useOrder } from "@/components/site/order-provider";
+import { PREORDER } from "@/lib/products";
 
 export function CtaBand() {
   const { open } = useOrder();
@@ -10,9 +11,10 @@ export function CtaBand() {
       <h2 className="font-display text-[30px] leading-[1.1] font-semibold tracking-[-0.015em] text-cream-200 md:text-[40px]">
         Taste it for yourself.
       </h2>
-      <span className="text-fine mt-2.5 block text-[15px] text-blue-200">
-        Pre-orders open for the season — we confirm every slot on WhatsApp.
-      </span>
+      <p className="mt-2.5 text-base text-cream-100">
+        {PREORDER.season} orders ship from {PREORDER.shipsFrom}. We confirm
+        every order on WhatsApp.
+      </p>
       <div className="mt-6 flex justify-center">
         <Button variant="cta" size="lg" onClick={() => open()}>
           Pre-order now

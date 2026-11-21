@@ -4,14 +4,14 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "group/button relative inline-flex shrink-0 items-center justify-center gap-2 rounded-full border font-sans font-bold whitespace-nowrap leading-none transition-[transform,background,box-shadow,filter,color] duration-150 ease-[var(--ease-gentle)] outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:translate-y-px disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-[1.1em]",
+  "group/button relative inline-flex shrink-0 items-center justify-center gap-2 rounded-sm border font-sans font-bold whitespace-nowrap leading-none transition-[transform,background-color,box-shadow,color] duration-150 ease-[var(--ease-out)] outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.97] disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-[1.1em]",
   {
     variants: {
       variant: {
         primary:
-          "border-transparent bg-primary text-cream-100 shadow-xs hover:brightness-95 hover:shadow-sm",
-        cta: "border-transparent bg-[var(--red-500)] text-cream-100 shadow-xs hover:brightness-95 hover:shadow-sm",
-        gold: "border-transparent bg-gold-500 text-ink-900 shadow-xs hover:brightness-95 hover:shadow-sm",
+          "border-transparent bg-primary text-cream-100 shadow-xs hover:bg-blue-600 hover:shadow-sm",
+        cta: "border-transparent bg-red-500 text-cream-100 shadow-xs hover:bg-red-600 hover:shadow-sm",
+        gold: "border-transparent bg-gold-500 text-ink-900 shadow-xs hover:bg-gold-600 hover:shadow-sm",
         secondary:
           "border-[var(--border-strong)] bg-transparent text-blue-700 hover:bg-cream-200",
         ghost:
@@ -20,7 +20,7 @@ const buttonVariants = cva(
           "border-[var(--border-strong)] bg-card text-foreground hover:bg-cream-200",
       },
       size: {
-        sm: "px-4 py-2 text-[13px]",
+        sm: "min-h-11 px-4 py-2 text-[13px]",
         md: "px-[22px] py-[11px] text-sm",
         lg: "px-[30px] py-[15px] text-base",
         icon: "size-[42px] p-0",

@@ -63,21 +63,21 @@ src/
     layout.tsx               Root layout — next/font, sitewide Metadata + Viewport, sitewide JSON-LD
                              (bakery + website), wraps chrome in <OrderProvider>: AnnouncementBar,
                              SiteHeader, <main>{children}</main>, SiteFooter
-    page.tsx                 Landing — Hero, Collection, FeatureBand + collection JSON-LD
-    story/page.tsx           Our Story — prose, occasions list, photo suggestions, CTA band + breadcrumb JSON-LD
+    page.tsx                 Landing — Hero, HowToOrder, Collection, FeatureBand + collection JSON-LD
+    story/page.tsx           Our Story — prose, occasions list, close-up photos, CTA band + breadcrumb JSON-LD
     lapis/[slug]/page.tsx    Per-product page (generateStaticParams, generateMetadata, Product + breadcrumb JSON-LD)
     globals.css              Tailwind v4 theme: brand tokens, shadcn semantic mapping, base layer, brand utilities
     sitemap.ts robots.ts manifest.ts opengraph-image.tsx   SEO route handlers / generated OG image
   components/
     ui/                      shadcn primitives (Base UI) — do not hand-edit (CLI-regenerated); button.tsx is the
                              one intentional brand restyle (see Gotchas)
-    site/                    Domain components — announcement-bar, site-header, site-footer, hero, collection,
-                             product-carousel, product-badge, price-tag, feature-band, cta-band,
-                             photo-suggestion, order-dialog, order-provider, product-detail
+    site/                    Domain components — announcement-bar, site-header, site-footer, hero, how-to-order,
+                             collection, product-carousel (product page only), product-badge, price-tag,
+                             feature-band, cta-band, order-dialog, order-provider, product-detail
     seo/json-ld.tsx          <JsonLd> — renders a structured-data <script>
   lib/                       App + domain data (no server layer):
     site.ts                  siteConfig — name, url, adminWhatsApp, location, social
-    products.ts              PRODUCTS, SIZES, OCCASIONS, CURRENT_OCCASION, SITE_IMAGES, fmtK,
+    products.ts              PRODUCTS, SIZES, OCCASIONS, CURRENT_OCCASION, PRICE_FROM, SITE_IMAGES, fmtK,
                              normalizeWaNational, buildOrderMessage, buildWaLink
     schema.ts                JSON-LD builders (bakery, website, collection, single product, breadcrumb)
     utils.ts                 cn() helper
@@ -98,7 +98,7 @@ Structural rules:
 
 **Component patterns**
 - Functional components only.
-- Compose shadcn primitives (`Button`, `Dialog`, `Input`, `Select`, `Label`, `Badge`) — wrap, don't rewrite. The `ui/` primitives use `cva` + `VariantProps` with `defaultVariants` and a `data-slot` attribute (Base UI) — match that if you extend one.
+- Compose shadcn primitives (`Button`, `Dialog`, `Input`, `Select`, `Label`, `Badge`, `Textarea`) — wrap, don't rewrite. The `ui/` primitives use `cva` + `VariantProps` with `defaultVariants` and a `data-slot` attribute (Base UI) — match that if you extend one.
 - Add `"use client"` only when needed (interactivity / hooks) and keep it as deep in the tree as possible. Pages stay server components; the interactive bits (`order-*`, `hero`, `collection`, `cta-band`, `product-detail`, `product-carousel`, `site-header`) are client.
 - Presentational components don't hold business logic — static data comes from `lib/`, dialog actions come from `useOrder()`.
 - Module-level `const` for static data (e.g. `POINTS` in `feature-band.tsx`, `OCCASION_ROWS` in `story/page.tsx`); the real catalogue is in `lib/products.ts`.
@@ -153,10 +153,10 @@ Structural rules:
 - **shadcn here is the Base UI variant, not Radix.** Primitives in `components/ui/` import from `@base-ui/react`. Match that when adding components, and note Base UI prop names differ (`Dialog` uses `open`/`onOpenChange`; `Select` uses `value`/`onValueChange` + `items`, and `Select.Value` can take a function child).
 - **Tailwind v4 is CSS-first — there is no `tailwind.config.js`.** Theme customization lives in the `@theme` block in [app/globals.css](app/globals.css).
 - **Brand color scales intentionally override Tailwind defaults.** `bg-blue-500`, `bg-red-500`, `bg-green-800`, `bg-amber-500` are the Maison Legit palette, not Tailwind's. New brand scales are added too: `cream-*`, `gold-*`, `ink-*`, `burgundy-*`, plus `bg-canvas` / `bg-feature`. Use **`gold-800`** (not `gold-500`/`600`) for small text on light surfaces — it's the AA-contrast gilded tone.
-- **`components/ui/button.tsx` is hand-restyled to the brand** (pill shape; variants `primary`/`cta`/`gold`/`secondary`/`ghost`/`outline`; sizes `sm`/`md`/`lg`/`icon`/`icon-sm`). It's the one `ui/` primitive that deviates from CLI output — preserve its variants; if you ever re-add it via the CLI, re-apply them. `DESIGN.md` moves buttons from pill to 8px radius (gap 13); until that lands, the pill is current.
+- **`components/ui/button.tsx` is hand-restyled to the brand** (8px radius, `active:scale-[0.97]` press; variants `primary`/`cta`/`gold`/`secondary`/`ghost`/`outline`; sizes `sm`/`md`/`lg`/`icon`/`icon-sm`). It's the one `ui/` primitive that deviates from CLI output — preserve its variants; if you ever re-add it via the CLI, re-apply them.
 - **The pre-order dialog resets via remount.** `order-provider.tsx` passes a changing `key` to `<OrderDialog>` on each open so the form re-initializes — don't reintroduce a `useEffect` reset (it trips the React 19 set-state-in-effect lint).
-- **Seasonal hero eyebrow** is `CURRENT_OCCASION` in [lib/products.ts](lib/products.ts) (`"None"` by default).
-- **Our Story uses `<PhotoSuggestion>` placeholders** (dashed-gold frames) for photos not yet shot — replace with `next/image` when available.
+- **Seasonal hero line** is `CURRENT_OCCASION` in [lib/products.ts](lib/products.ts) (`"None"` by default, which shows no line).
+- **Our Story uses product close-ups** (`SITE_IMAGES.story*`) where the family photos will go; swap the entries in `lib/products.ts` when the shots exist. Never ship a placeholder frame (`DESIGN.md`).
 
 ## Safety Rules
 

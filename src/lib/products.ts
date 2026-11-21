@@ -49,7 +49,7 @@ export const PRODUCTS: Product[] = [
     tag: "The house classic: forty layers of butter and warm spice.",
     description:
       "Our signature lapis legit — forty-plus layers of butter, egg yolk and warm spice, griddled and pressed one ribbon at a time. Patient, rich, unmistakably ours.",
-    badge: { tone: "gold", label: "Best seller" },
+    badge: null,
     prices: { whole: 890, half: 530, small: 325 },
     photos: [
       { src: `${PHOTO_BASE}/lapis-legit-original-2.jpg`, alt: "A whole Lapis Legit Original on a serving tray" },
@@ -61,13 +61,13 @@ export const PRODUCTS: Product[] = [
     k: "plum",
     name: "Plum",
     fullName: "Lapis Legit Plum",
-    tag: "Brandied prunes, set into the layers.",
+    tag: "Whole prunes, set into the layers.",
     description:
-      "The festive favourite. Whole brandied prunes suspended between the layers, with a deep, jammy sweetness that has graced Indonesian celebration tables for generations.",
-    badge: { tone: "red", label: "Limited slot" },
+      "The festive favourite. Whole prunes suspended between the layers, with a deep, jammy sweetness that has graced Indonesian celebration tables for generations.",
+    badge: null,
     prices: { whole: 1100, half: 660, small: 400 },
     photos: [
-      { src: `${PHOTO_BASE}/lapis-legit-plum-1.jpg`, alt: "Lapis Legit Plum with brandied prunes set into the layers" },
+      { src: `${PHOTO_BASE}/lapis-legit-plum-1.jpg`, alt: "Lapis Legit Plum with whole prunes set into the layers" },
       { src: `${PHOTO_BASE}/lapis-legit-plum-2.jpg`, alt: "A slice of Lapis Legit Plum on a plate" },
       { src: `${PHOTO_BASE}/lapis-legit-plum-3.jpg`, alt: "Close detail of the prunes between the layers of Lapis Legit Plum" },
     ],
@@ -94,7 +94,7 @@ export const PRODUCTS: Product[] = [
     tag: "Cream-laced, finished with a lattice top.",
     description:
       "A modern hybrid — our buttery layers laced with a tangy baked cheesecake cream and finished with a golden lattice top. Indulgent and quietly showy.",
-    badge: { tone: "solid", label: "New" },
+    badge: null,
     prices: { whole: 1200, half: 720, small: 480 },
     photos: [
       { src: `${PHOTO_BASE}/lapis-legit-cheese-3.jpg`, alt: "A whole Lapis Legit Cheesecake with a golden lattice top" },
@@ -108,24 +108,33 @@ export function getProduct(key: ProductKey): Product {
   return PRODUCTS.find((p) => p.k === key) ?? PRODUCTS[0];
 }
 
-/** Imagery reused across page sections (kept out of the carousels). */
+/** Imagery for page sections outside the product carousels. */
 export const SITE_IMAGES = {
   hero: { src: `${PHOTO_BASE}/lapis-legit-original-1.jpg`, alt: "A forkful of Lapis Legit Original lifted from a freshly baked slab, showing its fine golden layers" },
-  feature: { src: `${PHOTO_BASE}/lapis-legit-cheese-2.jpg`, alt: "A Maison Legit lapis legit, framed by its lattice packaging" },
+  feature: { src: `${PHOTO_BASE}/lapis-legit-original-3.jpg`, alt: "A close cross-section of lapis legit showing its fine golden layers" },
   storyWhole: { src: `${PHOTO_BASE}/lapis-legit-original-2.jpg`, alt: "A whole lapis legit on the family serving tray" },
+  storyLayers: { src: `${PHOTO_BASE}/lapis-legit-original-3.jpg`, alt: "The layers of a lapis legit up close, each one griddled by hand" },
+  storyPlum: { src: `${PHOTO_BASE}/lapis-legit-plum-3.jpg`, alt: "Prunes set between the layers of a plum lapis" },
+  storyChocolate: { src: `${PHOTO_BASE}/lapis-legit-chocolate-3.jpg`, alt: "Alternating chocolate and butter layers of a chocolate lapis" },
 } as const;
 
-/** Seasonal occasion copy. Switch CURRENT_OCCASION to change the hero eyebrow. */
+/** Seasonal occasion copy. Switch CURRENT_OCCASION to show a line above the hero heading. */
 export type OccasionKey = "Eid Al-Fitr" | "Lunar New Year" | "Christmas" | "None";
 
-export const OCCASIONS: Record<OccasionKey, { eyebrow: string }> = {
+export const OCCASIONS: Record<OccasionKey, { eyebrow: string | null }> = {
   "Eid Al-Fitr": { eyebrow: "Welcoming Eid Al-Fitr" },
   "Lunar New Year": { eyebrow: "Welcoming the Year of the Fire Horse" },
   Christmas: { eyebrow: "Welcoming Christmas" },
-  None: { eyebrow: "Small batch — limited slot" },
+  None: { eyebrow: null },
 };
 
 export const CURRENT_OCCASION: OccasionKey = "None";
+
+/** The open pre-order window, shown in the banner, hero, how-to-order steps, CTA band and footer. */
+export const PREORDER = { season: "Holiday Season", shipsFrom: "December 5, 2026" } as const;
+
+/** Lowest price on the menu, in thousands of IDR (shown as "from"). */
+export const PRICE_FROM = Math.min(...PRODUCTS.flatMap((p) => Object.values(p.prices)));
 
 /** Format a thousands value as the house price string, e.g. 1100 → "1.100k". */
 export function fmtK(thousands: number): string {
@@ -157,6 +166,7 @@ interface OrderDetails {
   qty: number;
   name: string;
   customerWa: string;
+  address: string;
   total: number;
 }
 
@@ -167,6 +177,7 @@ export function buildOrderMessage({
   qty,
   name,
   customerWa,
+  address,
   total,
 }: OrderDetails): string {
   const digits = normalizeWaNational(customerWa);
@@ -179,6 +190,9 @@ export function buildOrderMessage({
     "",
     `Name: ${name.trim()}`,
     `WhatsApp: +62 ${digits}`,
+    "",
+    "Delivery address:",
+    address.trim(),
     "",
     "Thank you.",
   ].join("\n");

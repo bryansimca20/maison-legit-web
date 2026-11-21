@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { X, Minus, Plus } from "lucide-react";
 
@@ -20,6 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -29,7 +31,7 @@ import {
 } from "@/components/ui/select";
 import { PriceTag } from "@/components/site/price-tag";
 
-type Step = "form" | "review" | "sent";
+type Step = "lapis" | "details" | "review" | "sent";
 
 const FIELD_LABEL =
   "text-[12px] font-bold uppercase tracking-[0.08em] text-ink-500";
@@ -49,9 +51,10 @@ export function OrderDialog({
 }: OrderDialogProps) {
   // The provider remounts this component (via `key`) on every open, so these
   // initializers reset the form each time it is opened.
-  const [step, setStep] = React.useState<Step>("form");
+  const [step, setStep] = React.useState<Step>("lapis");
   const [name, setName] = React.useState("");
   const [customerWa, setCustomerWa] = React.useState("");
+  const [address, setAddress] = React.useState("");
   const [product, setProduct] = React.useState<ProductKey>(
     initialProduct ?? "original",
   );
@@ -67,6 +70,8 @@ export function OrderDialog({
   const digits = normalizeWaNational(customerWa);
   const nameOk = name.trim().length > 1;
   const waOk = digits.length >= 8 && digits.length <= 13;
+  // Delivery only: we need enough of an address to send the lapis to.
+  const addressOk = address.trim().length >= 10;
 
   const message = buildOrderMessage({
     product: prod,
@@ -74,13 +79,14 @@ export function OrderDialog({
     qty,
     name,
     customerWa,
+    address,
     total,
   });
   const waLink = buildWaLink(siteConfig.adminWhatsApp, message);
 
   const review = () => {
     setTried(true);
-    if (nameOk && waOk) setStep("review");
+    if (nameOk && waOk && addressOk) setStep("review");
   };
   const send = () => {
     window.open(waLink, "_blank", "noopener,noreferrer");
@@ -114,19 +120,18 @@ export function OrderDialog({
           {/* gold-leaf seam */}
           <div className="gold-seam pointer-events-none absolute inset-x-0 top-0 h-[3px] rounded-t-[26px]" />
 
-          <div className="mb-[18px] flex items-start justify-between gap-3">
+          <div className="mb-3 flex items-start justify-between gap-3 sm:mb-[18px]">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-gold-800">
-                Pre-order
-              </p>
               <DialogPrimitive.Title
                 render={<h2 />}
-                className="mt-1.5 font-display text-[26px] font-semibold leading-[1.1] text-ink-900"
+                className="font-display text-[26px] font-semibold leading-[1.1] text-ink-900"
               >
-                Reserve your lapis
+                {step === "details" ? "Delivery details" : "Reserve your lapis"}
               </DialogPrimitive.Title>
               <DialogPrimitive.Description className="mt-1.5 text-fine text-sm text-ink-500">
-                Small batch — limited slot · we confirm your slot on WhatsApp
+                {step === "lapis" && "Step 1 of 2 · "}
+                {step === "details" && "Step 2 of 2 · "}
+                We confirm every order on WhatsApp.
               </DialogPrimitive.Description>
             </div>
             <DialogPrimitive.Close
@@ -137,7 +142,161 @@ export function OrderDialog({
             </DialogPrimitive.Close>
           </div>
 
-          {step === "form" && (
+          {step === "lapis" ? (
+            // 4:3 on phones and 16:9 from sm, so the whole cake shows. Capped at 34% of the
+            // visible height (31dvh = 262px at 844) so step 1 still fits on short phone screens.
+            <div className="relative mb-3 aspect-[4/3] max-h-[31dvh] w-full shrink-0 overflow-hidden rounded-xs bg-amber-200 sm:mb-4 sm:aspect-video sm:max-h-none">
+              {/* All four stay mounted so switching lapis swaps instantly, with no refetch or blank frame. */}
+              {PRODUCTS.map((p) => (
+                <Image
+                  key={p.k}
+                  src={p.photos[0].src}
+                  alt={p.k === prod.k ? p.photos[0].alt : ""}
+                  aria-hidden={p.k !== prod.k}
+                  fill
+                  sizes="(min-width: 640px) 496px, 100vw"
+                  className={cn("object-cover", p.k !== prod.k && "opacity-0")}
+                />
+              ))}
+            </div>
+          ) : (
+            // Later steps keep a small reference of what is being ordered.
+            <div className="mb-[18px] flex items-center gap-3 rounded-xs border border-[var(--border-soft)] bg-card p-2.5">
+              <div className="relative size-16 shrink-0 overflow-hidden rounded-xs bg-amber-200">
+                <Image
+                  src={prod.photos[0].src}
+                  alt=""
+                  fill
+                  sizes="64px"
+                  className="object-cover"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-display text-[18px] font-semibold leading-[1.15] text-ink-900">
+                  {prod.fullName}
+                </p>
+                <p className="mt-0.5 text-sm text-ink-600">
+                  {sizeDef.label} · Qty {qty}
+                </p>
+              </div>
+              <PriceTag amount={fmtK(total)} size="sm" />
+            </div>
+          )}
+
+          {step === "lapis" && (
+            <div className="flex flex-col gap-3 sm:gap-4">
+              <div className="grid grid-cols-1 gap-3 sm:gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <Label className={FIELD_LABEL}>Lapis</Label>
+                  <Select
+                    value={product}
+                    onValueChange={(v) => setProduct(v as ProductKey)}
+                  >
+                    <SelectTrigger className={CONTROL}>
+                      <SelectValue>
+                        {(v: string | null) =>
+                          v ? getProduct(v as ProductKey).fullName : ""
+                        }
+                      </SelectValue>
+                    </SelectTrigger>
+                    {/* Plain dropdown below the field: Base UI's align-with-trigger mode can place the
+                        list past the screen edge on phones, which widens the page and makes the form grow. */}
+                    <SelectContent alignItemWithTrigger={false}>
+                      {PRODUCTS.map((p) => (
+                        <SelectItem key={p.k} value={p.k}>
+                          {p.fullName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label className={FIELD_LABEL}>Size</Label>
+                  <Select
+                    value={size}
+                    onValueChange={(v) => setSize(v as SizeKey)}
+                  >
+                    <SelectTrigger className={CONTROL}>
+                      <SelectValue>
+                        {(v: string | null) => {
+                          const s = SIZES.find((x) => x.k === v) ?? SIZES[0];
+                          return `${s.label} · IDR ${fmtK(prod.prices[s.k])}`;
+                        }}
+                      </SelectValue>
+                    </SelectTrigger>
+                    {/* Plain dropdown below the field: Base UI's align-with-trigger mode can place the
+                        list past the screen edge on phones, which widens the page and makes the form grow. */}
+                    <SelectContent alignItemWithTrigger={false}>
+                      {SIZES.map((s) => (
+                        <SelectItem key={s.k} value={s.k}>
+                          {s.label} · IDR {fmtK(prod.prices[s.k])}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="flex items-end justify-between gap-3">
+                <div className="flex flex-col gap-1.5">
+                  <span id="ml-qty-label" className={FIELD_LABEL}>
+                    Quantity
+                  </span>
+                  <div
+                    role="group"
+                    aria-labelledby="ml-qty-label"
+                    className="inline-flex w-max items-center rounded-full border-[1.5px] border-[var(--border-default)] bg-card"
+                  >
+                    <button
+                      type="button"
+                      aria-label="Decrease quantity"
+                      disabled={qty <= 1}
+                      onClick={() => setQty((q) => Math.max(1, q - 1))}
+                      className="flex size-11 items-center justify-center rounded-full text-ink-700 transition-colors hover:bg-cream-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-35 disabled:hover:bg-transparent"
+                    >
+                      <Minus className="size-4" />
+                    </button>
+                    <span
+                      aria-live="polite"
+                      aria-atomic="true"
+                      className="min-w-10 text-center text-base font-bold text-ink-900"
+                    >
+                      {qty}
+                    </span>
+                    <button
+                      type="button"
+                      aria-label="Increase quantity"
+                      disabled={qty >= 10}
+                      onClick={() => setQty((q) => Math.min(10, q + 1))}
+                      className="flex size-11 items-center justify-center rounded-full text-ink-700 transition-colors hover:bg-cream-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-35 disabled:hover:bg-transparent"
+                    >
+                      <Plus className="size-4" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-end gap-1.5">
+                  <span className={FIELD_LABEL}>Total</span>
+                  <PriceTag amount={fmtK(total)} size="lg" />
+                </div>
+              </div>
+
+              {/* Pinned to the bottom of the sheet on phones so the action never scrolls away. */}
+              <div className="sticky -bottom-7 -mx-5 -mb-7 bg-cream-100 px-5 pt-3 pb-7 sm:static sm:m-0 sm:p-0">
+                <Button
+                  variant="cta"
+                  size="lg"
+                  fullWidth
+                  onClick={() => setStep("details")}
+                >
+                  Next: delivery details
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {step === "details" && (
             <div className="flex flex-col gap-4">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="flex flex-col gap-1.5">
@@ -202,121 +361,66 @@ export function OrderDialog({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="flex flex-col gap-1.5">
-                  <Label className={FIELD_LABEL}>Lapis</Label>
-                  <Select
-                    value={product}
-                    onValueChange={(v) => setProduct(v as ProductKey)}
-                  >
-                    <SelectTrigger className={CONTROL}>
-                      <SelectValue>
-                        {(v: string | null) =>
-                          v ? getProduct(v as ProductKey).fullName : ""
-                        }
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      {PRODUCTS.map((p) => (
-                        <SelectItem key={p.k} value={p.k}>
-                          {p.fullName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label className={FIELD_LABEL}>Size</Label>
-                  <Select
-                    value={size}
-                    onValueChange={(v) => setSize(v as SizeKey)}
-                  >
-                    <SelectTrigger className={CONTROL}>
-                      <SelectValue>
-                        {(v: string | null) => {
-                          const s =
-                            SIZES.find((x) => x.k === v) ?? SIZES[0];
-                          return `${s.label} — IDR ${fmtK(prod.prices[s.k])}`;
-                        }}
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      {SIZES.map((s) => (
-                        <SelectItem key={s.k} value={s.k}>
-                          {s.label} — IDR {fmtK(prod.prices[s.k])}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
               <div className="flex flex-col gap-1.5">
-                <span id="ml-qty-label" className={FIELD_LABEL}>
-                  Quantity
-                </span>
-                <div
-                  role="group"
-                  aria-labelledby="ml-qty-label"
-                  className="inline-flex w-max items-center rounded-full border-[1.5px] border-[var(--border-default)] bg-card"
-                >
-                  <button
-                    type="button"
-                    aria-label="Decrease quantity"
-                    disabled={qty <= 1}
-                    onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    className="flex size-11 items-center justify-center rounded-full text-ink-700 transition-colors hover:bg-cream-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-35 disabled:hover:bg-transparent"
-                  >
-                    <Minus className="size-4" />
-                  </button>
+                <Label htmlFor="ml-address" className={FIELD_LABEL}>
+                  Delivery address
+                </Label>
+                <Textarea
+                  id="ml-address"
+                  rows={3}
+                  autoComplete="street-address"
+                  placeholder="Street, building, area, city"
+                  value={address}
+                  aria-invalid={tried && !addressOk}
+                  aria-describedby={
+                    tried && !addressOk ? "ml-address-error" : undefined
+                  }
+                  onChange={(e) => setAddress(e.target.value)}
+                  className="field-sizing-fixed resize-none rounded-md text-base focus-visible:ring-ring md:text-base"
+                />
+                {tried && !addressOk && (
                   <span
-                    aria-live="polite"
-                    aria-atomic="true"
-                    className="min-w-10 text-center text-base font-bold text-ink-900"
+                    id="ml-address-error"
+                    role="alert"
+                    className="text-xs text-destructive"
                   >
-                    {qty}
+                    Please add your full address: street, area and city.
                   </span>
-                  <button
-                    type="button"
-                    aria-label="Increase quantity"
-                    disabled={qty >= 10}
-                    onClick={() => setQty((q) => Math.min(10, q + 1))}
-                    className="flex size-11 items-center justify-center rounded-full text-ink-700 transition-colors hover:bg-cream-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-35 disabled:hover:bg-transparent"
-                  >
-                    <Plus className="size-4" />
-                  </button>
-                </div>
+                )}
               </div>
 
-              <div className="mt-0.5 flex items-center justify-between gap-3 border-t border-[var(--border-soft)] pt-4">
-                <span className="text-[12px] font-bold uppercase tracking-[0.12em] text-ink-500">
-                  Total
-                </span>
-                <PriceTag amount={fmtK(total)} size="lg" />
+              {/* Pinned to the bottom of the sheet on phones so the actions never scroll away. */}
+              <div className="sticky -bottom-7 -mx-5 -mb-7 flex gap-2.5 bg-cream-100 px-5 pt-3 pb-7 sm:static sm:m-0 sm:p-0">
+                <Button
+                  variant="ghost"
+                  size="lg"
+                  onClick={() => setStep("lapis")}
+                >
+                  Back
+                </Button>
+                <Button variant="cta" size="lg" className="flex-1" onClick={review}>
+                  Review order
+                </Button>
               </div>
-
-              <Button variant="cta" size="lg" fullWidth onClick={review}>
-                Review order
-              </Button>
             </div>
           )}
 
-          {step !== "form" && (
+          {(step === "review" || step === "sent") && (
             <div>
               <pre className="rounded-md border border-[var(--border-soft)] border-l-[3px] border-l-gold-400 bg-card px-[18px] py-4 font-sans text-sm leading-[1.7] whitespace-pre-wrap text-ink-800">
                 {message}
               </pre>
 
               {step === "review" && (
-                <div className="mt-[18px] flex flex-wrap gap-2.5">
+                // Pinned on phones like steps 1 and 2, so Send never sits below the fold.
+                <div className="sticky -bottom-7 -mx-5 -mb-7 mt-[18px] flex flex-wrap gap-2.5 bg-cream-100 px-5 pt-3 pb-7 sm:static sm:m-0 sm:mt-[18px] sm:p-0">
                   <Button variant="cta" size="lg" onClick={send}>
                     Send via WhatsApp
                   </Button>
                   <Button
                     variant="ghost"
                     size="lg"
-                    onClick={() => setStep("form")}
+                    onClick={() => setStep("details")}
                   >
                     Back
                   </Button>
@@ -326,8 +430,9 @@ export function OrderDialog({
               {step === "sent" && (
                 <div>
                   <div className="mt-3.5 flex items-start gap-2.5 rounded-md border border-[color-mix(in_srgb,var(--green-500)_35%,transparent)] bg-[color-mix(in_srgb,var(--green-500)_12%,var(--cream-100))] px-3.5 py-3 text-[13.5px] leading-[1.6] text-green-700">
-                    Terima kasih, {firstName} — WhatsApp should now open with your
-                    order ready. Just press send, and we will confirm your slot.
+                    Terima kasih, {firstName} — WhatsApp should now open with
+                    your order ready. Just press send, and we will confirm your
+                    slot.
                   </div>
                   <div className="mt-[18px] flex flex-wrap gap-2.5">
                     <Button
@@ -340,7 +445,7 @@ export function OrderDialog({
                     <Button
                       variant="ghost"
                       size="md"
-                      onClick={() => setStep("form")}
+                      onClick={() => setStep("details")}
                     >
                       Edit order
                     </Button>

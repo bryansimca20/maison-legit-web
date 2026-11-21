@@ -79,7 +79,7 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 - **Grid:** 1 column under 640px, 2 columns from 640px, 4 product columns from 1280px.
 - **Hero:** full-height photo of the cake, h1 names the product and the city, one fact line (price from, lead
   time), one button. Nothing else.
-- **Order of the home page:** hero → how ordering works (pick, confirm on WhatsApp, ready in 3 days, pickup
+- **Order of the home page:** hero → how ordering works (pick, confirm on WhatsApp, when it ships, pickup
   or delivery area) → the collection → the craft (one large type moment over the cross-section) → footer.
 - **Products:** photo on the cream ground, name, one factual line, price, button. No white box, no shadow
   around the product. The whole tile is one link to `/lapis/[slug]`; the button opens the dialog.
@@ -115,7 +115,7 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 - **Durations:** press 120-160ms · hover 150-200ms · carousel slide 200ms · dialog 200ms · hero entrance 400-700ms.
 - **Buttons:** `active:scale-[0.97]`.
 - **Product tile (linked):** photo `scale-[1.03]` inside its frame on hover, no lift.
-- **Hero entrance:** h1, text, button fade in with an 8px rise, 60ms apart, once on load (`@starting-style`).
+- **Hero entrance:** h1, text, button fade in with an 8px rise, 60ms apart, once on load (`animate-in` from tw-animate-css).
 - Animate `transform` and `opacity` only. No `transition: all`, no scroll-triggered fades, no parallax.
 - `prefers-reduced-motion` is honoured globally in `globals.css`; keep it.
 
@@ -124,20 +124,24 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 The audit of 2026-11-17 found these differences between the code and this file. Treat them as the
 design backlog; strike each when fixed.
 
-1. Feature-band photo is a social export (`lapis-legit-cheese-2.jpg`), `src/lib/products.ts` `SITE_IMAGES.feature`.
-2. Blue italic word in headings: `hero.tsx`, `collection.tsx`, `product-detail.tsx`.
-3. Uppercase gold labels above headings: hero, collection, feature band, story, product detail.
-4. "Small batch" repeated in announcement bar, hero, feature band, story, CTA band, footer.
-5. No "how ordering works" block and no pickup/delivery info.
-6. Placeholder frames on `/story` (`PhotoSuggestion`).
-7. Invented badges in `src/lib/products.ts` (`Best seller`, `Limited slot`, `New`).
-8. H1 does not name the product or Jakarta; brand name not shown as text in the header.
-9. Product tiles are white cards with shadow; card lifts but is not a link.
-10. Green feature band; four accents on the home page.
-11. CTA band subtitle `blue-200` on `blue-500` (≈3.5:1); 13px product blurbs.
-12. `ProductCarousel` hard-codes the grid's `sizes`; detail page photo is soft and loads into an empty frame.
-13. Pill buttons and badges (`components/ui/button.tsx`, `product-badge.tsx`) vs the 8px / 4px radius above.
-14. Buttons use `active:translate-y-px` and `--ease-gentle`; no hero entrance.
+1. ~~Feature-band photo is a social export.~~ Now the cross-section (`lapis-legit-original-3.jpg`).
+2. ~~Blue italic word in headings.~~
+3. ~~Uppercase gold labels above headings.~~ The seasonal hero line remains, sentence case, only when an occasion is set.
+4. ~~"Small batch" repeated.~~ Once, in the hero.
+5. "How ordering works" block added (home, plus the footer). **Still open:** delivery area, delivery fee and payment
+   method (delivery only; the order form collects the address).
+6. ~~Placeholder frames on `/story`.~~ Product close-ups stand in until the family photos exist.
+7. ~~Invented badges.~~ No product carries a badge now.
+8. ~~H1 does not name the product or Jakarta; brand name not shown as text.~~ Wordmark text shows from 640px up.
+9. ~~White product cards; lift without a link.~~ Tiles show one photo; the carousel stays on the product page.
+10. ~~Green feature band; four accents.~~ Feature band is `blue-500`.
+11. ~~Low-contrast CTA subtitle; 13px blurbs.~~
+12. ~~Carousel `sizes`; empty frame while loading.~~ Frames load on `amber-200`.
+13. ~~Pill buttons and badges.~~ 8px buttons, 4px badges.
+14. ~~Button press and easing; no hero entrance.~~
+
+Not in this list but still differing from the rules above: centred hero text on `/story`, em dashes in the product
+descriptions (`src/lib/products.ts`), the order dialog's 26px radius and pill stepper.
 
 Full findings: `~/.gstack/projects/maison-legit/designs/design-audit-20261117/design-audit-localhost.md`.
 

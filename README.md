@@ -16,7 +16,7 @@ Coding conventions for the app live in [`src/CLAUDE.md`](src/CLAUDE.md); general
 
 ## Pages
 
-- `/` — landing: hero, the four-lapis collection (swipe carousels), the "made with care" feature band
+- `/` — landing: hero, how ordering works, the four-lapis collection, the "made with care" feature band
 - `/story` — Our Story: mom's thirty-year recipe, the tasting-menu occasions list, photo suggestions
 - `/lapis/[slug]` — a static page per lapis (original, plum, chocolate, cheese)
 
@@ -45,15 +45,15 @@ Other content lives in plain TypeScript:
 
 - **Products, prices, sizes, photos** — [`src/lib/products.ts`](src/lib/products.ts)
 - **Seasonal occasion** — set `CURRENT_OCCASION` in [`src/lib/products.ts`](src/lib/products.ts)
-  (`"Eid Al-Fitr" | "Lunar New Year" | "Christmas" | "None"`); drives the hero eyebrow
+  (`"Eid Al-Fitr" | "Lunar New Year" | "Christmas" | "None"`); shows a line above the hero heading (none for `"None"`)
 - **Brand / location / socials** — [`src/lib/site.ts`](src/lib/site.ts)
 
 ## Photography
 
 Product photos are in [`public/assets/photography/`](public/assets/photography). The Our Story
-page intentionally uses dashed-gold **photo-suggestion placeholders** for shots that still need
-to be taken (mom at the griddle, the family table, an old family photo) — replace
-`<PhotoSuggestion>` with a `next/image` once you have them.
+page uses close-up product shots (`SITE_IMAGES.story*` in `src/lib/products.ts`) until the
+family photos are taken (Mom at the griddle, the family table, an old family photo); swap the
+entries when they exist. Photo rules are in [`DESIGN.md`](DESIGN.md).
 
 ## SEO
 

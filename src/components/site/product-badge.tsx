@@ -20,7 +20,7 @@ export function ProductBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-[0.4em] rounded-full border px-[11px] py-1.5 text-[11px] font-bold uppercase leading-none tracking-[0.12em]",
+        "inline-flex items-center gap-[0.4em] rounded-xs border px-[11px] py-1.5 text-[11px] font-bold uppercase leading-none tracking-[0.12em]",
         TONE[tone],
       )}
     >
