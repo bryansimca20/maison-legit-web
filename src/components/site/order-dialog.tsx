@@ -84,7 +84,7 @@ export function OrderDialog({
     // Render the row now so focus can move into it: the add button may unmount at the cap.
     flushSync(() => setLines((ls) => [...ls, line]));
     popup.current
-      ?.querySelector<HTMLElement>(`[aria-label="Lapis ${lines.length + 1}"]`)
+      ?.querySelector<HTMLElement>(`[aria-label="Lapis, line ${lines.length + 1}"]`)
       ?.focus();
   };
   const removeLine = (id: number) => {
@@ -174,7 +174,6 @@ export function OrderDialog({
                     key={l.id}
                     line={l}
                     number={i + 1}
-                    showLabels={i === 0}
                     canRemove={lines.length > 1}
                     onChange={(patch) => updateLine(l.id, patch)}
                     onRemove={() => removeLine(l.id)}

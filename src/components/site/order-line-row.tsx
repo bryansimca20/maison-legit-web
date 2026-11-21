@@ -29,26 +29,28 @@ export interface DraftLine {
   qty: number;
 }
 
-const LABEL = "text-sm font-semibold text-ink-800";
-const CONTROL = "h-11 w-full rounded-sm text-base md:text-base";
-const STEP_BUTTON =
-  "flex size-11 items-center justify-center rounded-xs text-ink-700 transition-colors hover:bg-cream-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-35 disabled:hover:bg-transparent";
+const ICON_BUTTON =
+  "flex size-11 shrink-0 items-center justify-center rounded-sm text-ink-700 transition-colors hover:bg-cream-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-35 disabled:hover:bg-transparent";
+
+/** "Whole (20 × 20 cm)" → "Whole": the segment shows the name, the accessible name keeps the rest. */
+const sizeName = (label: string) => label.split(" (")[0];
 
 interface OrderLineRowProps {
   line: DraftLine;
-  /** 1-based, used in accessible names ("Lapis 2"). */
+  /** 1-based, used in accessible names ("Lapis, line 2"). */
   number: number;
-  /** Visible "Lapis" / "Size" / "Quantity" labels, shown on the first row only. */
-  showLabels: boolean;
   canRemove: boolean;
   onChange: (patch: Partial<Omit<DraftLine, "id">>) => void;
   onRemove: () => void;
 }
 
+/**
+ * A line of the order, read like a line on an order slip: the lapis as its heading,
+ * the three sizes one tap each, then quantity and subtotal.
+ */
 export function OrderLineRow({
   line,
   number,
-  showLabels,
   canRemove,
   onChange,
   onRemove,
@@ -79,19 +81,17 @@ export function OrderLineRow({
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col gap-2">
-        <div className="flex flex-col gap-1.5">
-          {showLabels && (
-            <span aria-hidden className={LABEL}>
-              Lapis
-            </span>
-          )}
+        <div className="-mt-1.5 flex items-center justify-between gap-1">
+          {/* The lapis is the row's heading; it opens the same list a field would. */}
           <Select
             value={line.product}
             onValueChange={(v) => onChange({ product: v as ProductKey })}
           >
-            <SelectTrigger aria-label={`Lapis ${number}`} className={CONTROL}>
+            <SelectTrigger
+              aria-label={`Lapis, line ${number}`}
+              className="-ml-1.5 min-w-0 gap-1 rounded-sm border-transparent px-1.5 font-display text-[21px] font-semibold text-ink-900 hover:bg-cream-300 data-[size=default]:h-11 [&_svg]:text-ink-700"
+            >
               <SelectValue>
-                {/* Short name in the closed field so it fits beside the photo; the list shows full names. */}
                 {(v: string | null) =>
                   v ? getProduct(v as ProductKey).name : ""
                 }
@@ -106,89 +106,76 @@ export function OrderLineRow({
               ))}
             </SelectContent>
           </Select>
-        </div>
 
-        <div className="flex flex-col gap-1.5">
-          {showLabels && (
-            <span aria-hidden className={LABEL}>
-              Size
-            </span>
-          )}
-          <Select
-            value={line.size}
-            onValueChange={(v) => onChange({ size: v as SizeKey })}
-          >
-            <SelectTrigger aria-label={`Size ${number}`} className={CONTROL}>
-              <SelectValue>
-                {/* Price lives in the list and the line subtotal, so the closed field never truncates. */}
-                {(v: string | null) =>
-                  (SIZES.find((x) => x.k === v) ?? SIZES[0]).label
-                }
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent alignItemWithTrigger={false}>
-              {SIZES.map((s) => (
-                <SelectItem key={s.k} value={s.k}>
-                  {s.label}, IDR {fmtK(prod.prices[s.k])}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          {showLabels && (
-            <span aria-hidden className={LABEL}>
-              Quantity
-            </span>
-          )}
-          <div className="flex items-center justify-between gap-3">
-            <div
-              role="group"
-              aria-label={`Quantity ${number}`}
-              className="inline-flex w-max items-center rounded-sm border-[1.5px] border-[var(--border-default)] bg-card"
+          {canRemove && (
+            <button
+              type="button"
+              aria-label={`Remove line ${number}, ${prod.fullName}`}
+              onClick={onRemove}
+              className={cn(ICON_BUTTON, "-mr-3")}
             >
-              <button
-                type="button"
-                aria-label={`Decrease quantity ${number}`}
-                disabled={line.qty <= 1}
-                onClick={() => onChange({ qty: Math.max(1, line.qty - 1) })}
-                className={STEP_BUTTON}
-              >
-                <Minus className="size-4" />
-              </button>
-              <span
-                aria-live="polite"
-                aria-atomic="true"
-                className="min-w-10 text-center text-base font-bold text-ink-900"
-              >
-                {line.qty}
-              </span>
-              <button
-                type="button"
-                aria-label={`Increase quantity ${number}`}
-                disabled={line.qty >= 10}
-                onClick={() => onChange({ qty: Math.min(10, line.qty + 1) })}
-                className={STEP_BUTTON}
-              >
-                <Plus className="size-4" />
-              </button>
-            </div>
-            <PriceTag amount={fmtK(unit * line.qty)} size="sm" />
+              <X className="size-4" />
+            </button>
+          )}
+        </div>
+
+        <fieldset className="m-0 min-w-0 border-0 p-0">
+          <legend className="sr-only">Size, line {number}</legend>
+          <div className="grid grid-cols-3 gap-1.5">
+            {SIZES.map((s) => (
+              <label key={s.k} className="relative block cursor-pointer">
+                <input
+                  type="radio"
+                  name={`size-${line.id}`}
+                  value={s.k}
+                  checked={line.size === s.k}
+                  onChange={() => onChange({ size: s.k })}
+                  aria-label={`${sizeName(s.label)}, ${s.dimensions}, IDR ${fmtK(prod.prices[s.k])}`}
+                  className="peer sr-only"
+                />
+                <span className="flex h-11 items-center justify-center rounded-sm border-[1.5px] border-[var(--border-default)] bg-card text-[15px] font-semibold text-ink-700 transition-colors hover:bg-cream-200 peer-checked:border-ink-800 peer-checked:bg-ink-800 peer-checked:text-cream-100 peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-cream-100">
+                  {sizeName(s.label)}
+                </span>
+              </label>
+            ))}
           </div>
+        </fieldset>
+
+        <div className="flex items-center justify-between gap-3">
+          <div
+            role="group"
+            aria-label={`Quantity, line ${number}`}
+            className="inline-flex w-max items-center rounded-sm border-[1.5px] border-[var(--border-default)] bg-card"
+          >
+            <button
+              type="button"
+              aria-label={`Decrease quantity, line ${number}`}
+              disabled={line.qty <= 1}
+              onClick={() => onChange({ qty: Math.max(1, line.qty - 1) })}
+              className={cn(ICON_BUTTON, "rounded-xs")}
+            >
+              <Minus className="size-4" />
+            </button>
+            <span
+              aria-live="polite"
+              aria-atomic="true"
+              className="min-w-8 text-center text-base font-bold text-ink-900 tabular-nums"
+            >
+              {line.qty}
+            </span>
+            <button
+              type="button"
+              aria-label={`Increase quantity, line ${number}`}
+              disabled={line.qty >= 10}
+              onClick={() => onChange({ qty: Math.min(10, line.qty + 1) })}
+              className={cn(ICON_BUTTON, "rounded-xs")}
+            >
+              <Plus className="size-4" />
+            </button>
+          </div>
+          <PriceTag amount={fmtK(unit * line.qty)} size="md" />
         </div>
       </div>
-
-      {canRemove && (
-        <button
-          type="button"
-          aria-label={`Remove line ${number}, ${prod.fullName}`}
-          onClick={onRemove}
-          className="-mt-1 -mr-3 inline-flex size-11 shrink-0 items-center justify-center rounded-sm text-ink-700 transition-colors hover:bg-cream-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-        >
-          <X className="size-4" />
-        </button>
-      )}
     </li>
   );
 }

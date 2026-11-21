@@ -60,8 +60,8 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 - **Retired from page use:** `green-*` (feature band), `burgundy-*`. Keep the tokens, stop using them on pages.
   The feature band moves to `ink-900` or `blue-500`.
 - **One accent per screen:** red appears only on buttons. Blue appears only as the logo, one band, and links.
-- **Progress:** `ink-800` fills the order form's progress bar (upcoming steps `--border-default`). It is not an action,
-  so it is not red, and not a link, so it is not blue.
+- **Progress and choice:** `ink-800` fills the order form's progress bar (upcoming steps `--border-default`) and the
+  chosen size in an order line. Neither is an action, so neither is red, and neither is a link, so neither is blue.
 - **Semantic:** error `red-600` (`--destructive`) with a text message, success `green-700` on the order
   confirmation only. Never colour alone.
 - **Contrast:** body 4.5:1 minimum. On `blue-500`, text is `cream-100` (not `blue-200`).
