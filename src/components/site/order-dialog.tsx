@@ -182,12 +182,12 @@ export function OrderDialog({
               </ul>
 
               {lines.length < MAX_ORDER_LINES && (
+                // Sits in the rows' text column, like the next blank line on an order slip.
                 <Button
                   ref={addButton}
-                  variant="outline"
+                  variant="ghost"
                   size="md"
-                  fullWidth
-                  className="min-h-11"
+                  className="ml-16 min-h-11 self-start px-3 text-[15px] text-ink-700 hover:text-ink-900"
                   onClick={addLine}
                 >
                   <Plus className="size-4" />
