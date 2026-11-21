@@ -133,7 +133,7 @@ export function OrderLineRow({
                   aria-label={`${sizeName(s.label)}, ${s.dimensions}, IDR ${fmtK(prod.prices[s.k])}`}
                   className="peer sr-only"
                 />
-                <span className="flex h-11 items-center justify-center rounded-sm border-[1.5px] border-[var(--border-default)] bg-card text-[15px] font-semibold text-ink-700 transition-colors hover:bg-cream-200 peer-checked:border-ink-800 peer-checked:bg-ink-800 peer-checked:text-cream-100 peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-cream-100">
+                <span className="flex h-11 items-center justify-center rounded-sm border-[1.5px] border-[var(--border-default)] text-[15px] font-semibold text-ink-700 transition-colors hover:bg-cream-200 peer-checked:border-ink-800 peer-checked:bg-ink-800 peer-checked:text-cream-100 peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-cream-100">
                   {sizeName(s.label)}
                 </span>
               </label>
@@ -145,14 +145,14 @@ export function OrderLineRow({
           <div
             role="group"
             aria-label={`Quantity, line ${number}`}
-            className="inline-flex w-max items-center rounded-sm border-[1.5px] border-[var(--border-default)] bg-card"
+            className="-ml-3 inline-flex w-max items-center"
           >
             <button
               type="button"
               aria-label={`Decrease quantity, line ${number}`}
               disabled={line.qty <= 1}
               onClick={() => onChange({ qty: Math.max(1, line.qty - 1) })}
-              className={cn(ICON_BUTTON, "rounded-xs")}
+              className={cn(ICON_BUTTON, "text-ink-600 hover:text-ink-900")}
             >
               <Minus className="size-4" />
             </button>
@@ -168,7 +168,7 @@ export function OrderLineRow({
               aria-label={`Increase quantity, line ${number}`}
               disabled={line.qty >= 10}
               onClick={() => onChange({ qty: Math.min(10, line.qty + 1) })}
-              className={cn(ICON_BUTTON, "rounded-xs")}
+              className={cn(ICON_BUTTON, "text-ink-600 hover:text-ink-900")}
             >
               <Plus className="size-4" />
             </button>
