@@ -74,13 +74,10 @@ export function OrderDialog({
   const addressOk = address.trim().length >= 10;
 
   const message = buildOrderMessage({
-    product: prod,
-    size: sizeDef,
-    qty,
+    lines: [{ product: prod, size: sizeDef, qty }],
     name,
     customerWa,
     address,
-    total,
   });
   const waLink = buildWaLink(siteConfig.adminWhatsApp, message);
 

@@ -26,9 +26,11 @@ npm run build      # Production build (static / SSG)
 npm run start      # Serve the production build
 npm run lint       # ESLint
 npm run typecheck  # tsc --noEmit
+npm test           # Vitest unit tests (lib/)
 ```
 
-No test runner is configured — verify changes with `typecheck`, `lint`, and `build`, and by running the app.
+Verify changes with `npm test`, `typecheck`, `lint` and `build`, and by running the app. `npm run lint` also scans the
+gitignored `.design-extract/` folder and reports errors there; `npx eslint src` checks only the app.
 
 ## Environment
 
@@ -46,7 +48,7 @@ Don't add a new env var without asking.
 - **Icons:** `lucide-react`.
 - **State:** local `useState` + one React Context (`OrderProvider`) for the shared pre-order dialog → see [Data Fetching & Services](#data-fetching--services).
 - **Data:** static TypeScript in [lib/](lib) — no server data layer → see [Data Fetching & Services](#data-fetching--services).
-- **Testing:** none configured.
+- **Testing:** Vitest (`npm test`) for the pure helpers in `lib/`; tests sit next to the file as `*.test.ts`. No component tests: UI is checked in the browser at 390px and 1440px.
 
 **Do NOT use without asking:**
 - CSS modules, styled-components, emotion, or any non-Tailwind styling. No hardcoded hex in components — use the brand token utilities / semantic classes (raw hex lives **only** in the token definitions in [app/globals.css](app/globals.css)).
@@ -78,7 +80,8 @@ src/
   lib/                       App + domain data (no server layer):
     site.ts                  siteConfig — name, url, adminWhatsApp, location, social
     products.ts              PRODUCTS, SIZES, OCCASIONS, CURRENT_OCCASION, PRICE_FROM, SITE_IMAGES, fmtK,
-                             normalizeWaNational, buildOrderMessage, buildWaLink
+                             normalizeWaNational, OrderLine, orderTotal, nextProductKey, MAX_ORDER_LINES,
+                             buildOrderMessage, buildWaLink (tested in products.test.ts)
     schema.ts                JSON-LD builders (bakery, website, collection, single product, breadcrumb)
     utils.ts                 cn() helper
 ```

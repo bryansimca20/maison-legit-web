@@ -160,33 +160,49 @@ export function normalizeWaNational(input: string): string {
   return d.replace(/^0+/, "");
 }
 
-interface OrderDetails {
+/** Most lines one pre-order can hold. */
+export const MAX_ORDER_LINES = 8;
+
+/** One line of a pre-order: a lapis, a size and how many. */
+export interface OrderLine {
   product: Product;
   size: Size;
   qty: number;
+}
+
+/** Order total in thousands of IDR, like `prices`. */
+export function orderTotal(lines: OrderLine[]): number {
+  return lines.reduce((sum, l) => sum + l.product.prices[l.size.k] * l.qty, 0);
+}
+
+/** The lapis a new order line starts with: the first one not yet in the order. */
+export function nextProductKey(taken: ProductKey[]): ProductKey {
+  return PRODUCTS.find((p) => !taken.includes(p.k))?.k ?? "original";
+}
+
+interface OrderDetails {
+  lines: OrderLine[];
   name: string;
   customerWa: string;
   address: string;
-  total: number;
 }
 
 /** Compose the pre-order message that gets sent to the admin WhatsApp. */
 export function buildOrderMessage({
-  product,
-  size,
-  qty,
+  lines,
   name,
   customerWa,
   address,
-  total,
 }: OrderDetails): string {
   const digits = normalizeWaNational(customerWa);
   return [
     "Hello Maison Legit, I would like to pre-order:",
     "",
-    `${product.fullName}, ${size.label}`,
-    `Quantity: ${qty}`,
-    `Total: IDR ${fmtK(total)}`,
+    ...lines.map((l, i) => {
+      const unit = l.product.prices[l.size.k];
+      return `${i + 1}. ${l.product.fullName}, ${l.size.label}, ${l.qty} × IDR ${fmtK(unit)} = IDR ${fmtK(unit * l.qty)}`;
+    }),
+    `Total: IDR ${fmtK(orderTotal(lines))}`,
     "",
     `Name: ${name.trim()}`,
     `WhatsApp: +62 ${digits}`,
