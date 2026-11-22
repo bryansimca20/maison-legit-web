@@ -19,6 +19,8 @@ import {
   normalizeWaNational,
   type OrderLine,
   type ProductKey,
+  PREORDER,
+  earliestDeliveryDay,
 } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +30,7 @@ import { PriceTag } from "@/components/site/price-tag";
 import { OrderProgress, type OrderStep } from "@/components/site/order-progress";
 import { OrderLineRow, type DraftLine } from "@/components/site/order-line-row";
 import { OrderSummary } from "@/components/site/order-summary";
+import { OrderDatePicker } from "@/components/site/order-date-picker";
 import {
   loadOrderDraft,
   saveOrderDraft,
@@ -40,6 +43,7 @@ const FIELD_LABEL =
 // The title names the step the progress bar shows; "sent" means WhatsApp is open, not yet sent.
 const TITLES: Record<OrderStep, string> = {
   lapis: "Reserve your lapis",
+  date: "Choose a delivery date",
   details: "Delivery details",
   review: "Review your order",
   sent: "Finish in WhatsApp",
@@ -61,7 +65,17 @@ export function OrderDialog({
   // The provider remounts this component (via `key`) on every open, so these initializers run per open.
   // An unfinished order saved in this tab wins over the product that was pressed (owner's call).
   const [saved] = React.useState(loadOrderDraft);
-  const [step, setStep] = React.useState<OrderStep>(saved?.step ?? "lapis");
+  // First pickable day for this visit; null once the season has no day left.
+  const [earliest] = React.useState(() => earliestDeliveryDay(new Date()));
+  // A saved day that has since passed is dropped, and the form goes back to the date step for a new one.
+  const [date, setDate] = React.useState(() =>
+    saved?.date && earliest && saved.date >= earliest ? saved.date : "",
+  );
+  const [step, setStep] = React.useState<OrderStep>(() =>
+    !date && (saved?.step === "details" || saved?.step === "review")
+      ? "date"
+      : (saved?.step ?? "lapis"),
+  );
   const [name, setName] = React.useState(saved?.name ?? "");
   const [customerWa, setCustomerWa] = React.useState(saved?.customerWa ?? "");
   const [address, setAddress] = React.useState(saved?.address ?? "");
@@ -79,6 +93,7 @@ export function OrderDialog({
     name,
     customerWa,
     address,
+    date,
     step,
   });
   const openedWith = React.useRef(draftJson);
@@ -91,6 +106,8 @@ export function OrderDialog({
   const popup = React.useRef<HTMLDivElement>(null);
   // Each step starts at the top of the sheet, not where the last one was scrolled to.
   const goTo = (next: OrderStep) => {
+    // Each step shows its own errors only after its own button is pressed.
+    setTried(false);
     setStep(next);
     popup.current?.scrollTo({ top: 0 });
   };
@@ -135,14 +152,16 @@ export function OrderDialog({
   // Delivery only: we need enough of an address to send the lapis to.
   const addressOk = address.trim().length >= 10;
 
-  const message = buildOrderMessage({
-    lines: orderLines,
-    name,
-    customerWa,
-    address,
-  });
+  // Only the review step shows or sends the message, and it is reachable only with a date.
+  const message = date
+    ? buildOrderMessage({ lines: orderLines, name, customerWa, address, date })
+    : "";
   const waLink = buildWaLink(siteConfig.adminWhatsApp, message);
 
+  const toDetails = () => {
+    setTried(true);
+    if (date) goTo("details");
+  };
   const review = () => {
     setTried(true);
     if (nameOk && waOk && addressOk) goTo("review");
@@ -241,9 +260,9 @@ export function OrderDialog({
                   variant="cta"
                   size="lg"
                   fullWidth
-                  onClick={() => goTo("details")}
+                  onClick={() => goTo("date")}
                 >
-                  Next: delivery details
+                  Next: delivery date
                 </Button>
               </div>
             </div>
@@ -279,6 +298,39 @@ export function OrderDialog({
               {/* Review shows the message itself, which already lists every line and the total. */}
               {step !== "review" && <OrderSummary lines={orderLines} />}
             </>
+          )}
+
+          {step === "date" && (
+            <div className="flex flex-col gap-3">
+              {earliest ? (
+                <OrderDatePicker value={date} earliest={earliest} onChange={setDate} />
+              ) : (
+                <p className="text-base text-ink-800">
+                  {PREORDER.season} pre-orders have closed.
+                </p>
+              )}
+              {tried && !date && earliest && (
+                <span role="alert" className="text-sm text-destructive">
+                  Please choose a delivery date.
+                </span>
+              )}
+
+              {/* Pinned to the bottom of the sheet on phones, like the other steps. */}
+              <div className="sticky -bottom-7 -mx-5 -mb-7 flex gap-2.5 bg-cream-100 px-5 pt-3 pb-7 sm:static sm:m-0 sm:p-0">
+                <Button variant="ghost" size="lg" onClick={() => goTo("lapis")}>
+                  Back
+                </Button>
+                <Button
+                  variant="cta"
+                  size="lg"
+                  className="flex-1"
+                  disabled={!earliest}
+                  onClick={toDetails}
+                >
+                  Next: delivery details
+                </Button>
+              </div>
+            </div>
           )}
 
           {step === "details" && (
@@ -385,7 +437,7 @@ export function OrderDialog({
                 <Button
                   variant="ghost"
                   size="lg"
-                  onClick={() => goTo("lapis")}
+                  onClick={() => goTo("date")}
                 >
                   Back
                 </Button>

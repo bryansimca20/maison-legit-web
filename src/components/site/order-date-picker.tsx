@@ -37,7 +37,8 @@ export function OrderDatePicker({
       disabled={{ before: localDate(earliest) }}
       className="w-full bg-transparent p-0 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(11)]"
       classNames={{
-        root: "w-full",
+        // Wide sheets would stretch the square days past 70px and push Next out of view.
+        root: "w-full max-w-[360px]",
         month_caption: "flex h-11 w-full items-center",
         caption_label: "font-display text-[22px] font-semibold text-ink-900",
         weekday: "flex-1 text-sm font-normal text-ink-600 select-none",

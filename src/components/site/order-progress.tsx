@@ -1,14 +1,15 @@
 import { cn } from "@/lib/utils";
 
-export type OrderStep = "lapis" | "details" | "review" | "sent";
+export type OrderStep = "lapis" | "date" | "details" | "review" | "sent";
 
 const STEPS = [
   { step: "lapis", label: "Lapis" },
+  { step: "date", label: "Date" },
   { step: "details", label: "Delivery" },
   { step: "review", label: "Review" },
 ] as const;
 
-/** Three-segment bar showing how far through the pre-order form someone is. */
+/** Four-segment bar showing how far through the pre-order form someone is. */
 export function OrderProgress({ step }: { step: OrderStep }) {
   // "sent" counts as past the last step, so every segment is filled.
   const current =
@@ -19,7 +20,7 @@ export function OrderProgress({ step }: { step: OrderStep }) {
       <p className="sr-only">
         Step {current + 1} of {STEPS.length}
       </p>
-      <ol className="grid list-none grid-cols-3 gap-1 p-0">
+      <ol className="grid list-none grid-cols-4 gap-1 p-0">
         {STEPS.map((s, i) => (
           <li
             key={s.step}
