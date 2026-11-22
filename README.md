@@ -16,7 +16,7 @@ Coding conventions for the app live in [`src/CLAUDE.md`](src/CLAUDE.md); general
 
 ## Pages
 
-- `/` — landing: hero, how ordering works, the four-lapis collection, the "made with care" feature band
+- `/` — landing: hero, the four-lapis collection, the "made with care" feature band
 - `/story` — Our Story: mom's thirty-year recipe, the tasting-menu occasions list, photo suggestions
 - `/lapis/[slug]` — a static page per lapis (original, plum, chocolate, cheese)
 

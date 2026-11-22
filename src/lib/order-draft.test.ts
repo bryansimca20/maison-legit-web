@@ -50,4 +50,27 @@ describe("parseOrderDraft", () => {
     expect(parseOrderDraft(JSON.stringify({ ...good, step: "sent" }))).toBeNull();
     expect(parseOrderDraft(JSON.stringify({ ...good, name: 42 }))).toBeNull();
   });
+
+  it("raises a small line under 3 to 3 and leaves other sizes alone", () => {
+    const draft = {
+      ...good,
+      lines: [
+        { product: "original", size: "small", qty: 1 },
+        { product: "plum", size: "small", qty: 2 },
+        { product: "cheese", size: "whole", qty: 1 },
+      ],
+    };
+    expect(parseOrderDraft(JSON.stringify(draft))?.lines).toEqual([
+      { product: "original", size: "small", qty: 3 },
+      { product: "plum", size: "small", qty: 3 },
+      { product: "cheese", size: "whole", qty: 1 },
+    ]);
+  });
+
+  it("still rejects a small line outside 1 to 10", () => {
+    for (const qty of [0, 11]) {
+      const draft = { ...good, lines: [{ product: "original", size: "small", qty }] };
+      expect(parseOrderDraft(JSON.stringify(draft))).toBeNull();
+    }
+  });
 });

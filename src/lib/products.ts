@@ -130,7 +130,7 @@ export const OCCASIONS: Record<OccasionKey, { eyebrow: string | null }> = {
 
 export const CURRENT_OCCASION: OccasionKey = "None";
 
-/** The open pre-order window, shown in the banner, hero, how-to-order steps, CTA band and footer. */
+/** The open pre-order window, shown in the banner, hero, CTA band and footer. */
 export const PREORDER = { season: "Holiday Season", shipsFrom: "December 5, 2026" } as const;
 
 /** Lowest price on the menu, in thousands of IDR (shown as "from"). */
@@ -162,6 +162,31 @@ export function normalizeWaNational(input: string): string {
 
 /** Most lines one pre-order can hold. */
 export const MAX_ORDER_LINES = 8;
+
+/** Small boxes are sold 3 or more of the same lapis (the owners' flyer rule). */
+export const MIN_SMALL_QTY = 3;
+
+/** Lowest quantity an order line of this size can have. */
+export function minQty(size: SizeKey): number {
+  return size === "small" ? MIN_SMALL_QTY : 1;
+}
+
+interface SizedQty {
+  size: SizeKey;
+  qty: number;
+  /** The quantity before picking Small raised it; undone when the line leaves Small. */
+  qtyBeforeSmall?: number;
+}
+
+/** A line's size and quantity after the customer picks `size`. */
+export function changeSize(line: SizedQty, size: SizeKey): SizedQty {
+  if (size === line.size) return line;
+  if (line.qty < minQty(size)) {
+    return { size, qty: minQty(size), qtyBeforeSmall: line.qty };
+  }
+  // Explicit undefined, so merging this into a line clears what it remembered.
+  return { size, qty: line.qtyBeforeSmall ?? line.qty, qtyBeforeSmall: undefined };
+}
 
 /** One line of a pre-order: a lapis, a size and how many. */
 export interface OrderLine {

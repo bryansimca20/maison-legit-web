@@ -9,6 +9,9 @@ import {
   SIZES,
   getProduct,
   fmtK,
+  minQty,
+  changeSize,
+  MIN_SMALL_QTY,
   type ProductKey,
   type SizeKey,
 } from "@/lib/products";
@@ -27,6 +30,8 @@ export interface DraftLine {
   product: ProductKey;
   size: SizeKey;
   qty: number;
+  /** Set while Small has raised the quantity; see `changeSize`. */
+  qtyBeforeSmall?: number;
 }
 
 const ICON_BUTTON =
@@ -129,8 +134,8 @@ export function OrderLineRow({
                   name={`size-${line.id}`}
                   value={s.k}
                   checked={line.size === s.k}
-                  onChange={() => onChange({ size: s.k })}
-                  aria-label={`${sizeName(s.label)}, ${s.dimensions}, IDR ${fmtK(prod.prices[s.k])}`}
+                  onChange={() => onChange(changeSize(line, s.k))}
+                  aria-label={`${sizeName(s.label)}, ${s.dimensions}, IDR ${fmtK(prod.prices[s.k])}${minQty(s.k) > 1 ? `, minimum ${minQty(s.k)}` : ""}`}
                   className="peer sr-only"
                 />
                 <span className="flex min-h-12 flex-col items-center justify-center rounded-sm border-[1.5px] border-[var(--border-default)] px-1 py-1.5 text-ink-700 transition-colors hover:bg-cream-200 peer-checked:border-ink-800 peer-checked:bg-ink-800 peer-checked:text-cream-100 peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-cream-100">
@@ -146,18 +151,31 @@ export function OrderLineRow({
             ))}
           </div>
         </fieldset>
+        {line.size === "small" && (
+          <p id={`small-min-${line.id}`} className="text-sm text-ink-600">
+            Small boxes: minimum {MIN_SMALL_QTY}.
+          </p>
+        )}
 
         <div className="flex items-center justify-between gap-3">
           <div
             role="group"
             aria-label={`Quantity, line ${number}`}
+            aria-describedby={
+              line.size === "small" ? `small-min-${line.id}` : undefined
+            }
             className="-ml-3 inline-flex w-max items-center"
           >
             <button
               type="button"
               aria-label={`Decrease quantity, line ${number}`}
-              disabled={line.qty <= 1}
-              onClick={() => onChange({ qty: Math.max(1, line.qty - 1) })}
+              disabled={line.qty <= minQty(line.size)}
+              onClick={() =>
+                onChange({
+                  qty: Math.max(minQty(line.size), line.qty - 1),
+                  qtyBeforeSmall: undefined,
+                })
+              }
               className={cn(ICON_BUTTON, "text-ink-600 hover:text-ink-900")}
             >
               <Minus className="size-4" />
@@ -173,7 +191,12 @@ export function OrderLineRow({
               type="button"
               aria-label={`Increase quantity, line ${number}`}
               disabled={line.qty >= 10}
-              onClick={() => onChange({ qty: Math.min(10, line.qty + 1) })}
+              onClick={() =>
+                onChange({
+                  qty: Math.min(10, line.qty + 1),
+                  qtyBeforeSmall: undefined,
+                })
+              }
               className={cn(ICON_BUTTON, "text-ink-600 hover:text-ink-900")}
             >
               <Plus className="size-4" />
