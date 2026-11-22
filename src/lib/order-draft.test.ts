@@ -10,10 +10,31 @@ const good: OrderDraft = {
   name: "Sari Dewi",
   customerWa: "812 3456 7890",
   address: "Jl. Kemang Raya 10, Jakarta Selatan",
+  date: "2026-12-10",
   step: "details",
 };
 
 describe("parseOrderDraft", () => {
+  it("keeps a valid date and restores the date step", () => {
+    expect(parseOrderDraft(JSON.stringify({ ...good, step: "date" }))).toEqual({
+      ...good,
+      step: "date",
+    });
+  });
+
+  it("drops a missing or invalid date but keeps the rest of the draft", () => {
+    // A draft saved before dates existed has no date field at all.
+    expect(parseOrderDraft(JSON.stringify({ ...good, date: undefined }))).toEqual({
+      ...good,
+      date: "",
+    });
+    for (const date of ["2026-12-01", "2027-01-02", "2026-12-3", 5])
+      expect(parseOrderDraft(JSON.stringify({ ...good, date }))).toEqual({
+        ...good,
+        date: "",
+      });
+  });
+
   it("reads back a saved draft", () => {
     expect(parseOrderDraft(JSON.stringify(good))).toEqual(good);
   });
