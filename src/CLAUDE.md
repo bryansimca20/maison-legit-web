@@ -46,6 +46,7 @@ Don't add a new env var without asking.
 - **Styling:** Tailwind CSS **v4** (CSS-first, no `tailwind.config.js`) + shadcn/ui (**Base UI** variant) → see [UI and Design Rules](#ui-and-design-rules).
 - **Fonts:** `next/font` — Cormorant Garamond (display serif), Hanken Grotesk (UI/body), Yellowtail (script wordmark).
 - **Icons:** `lucide-react`.
+- **Dates:** `react-day-picker` (behind the shadcn `Calendar`), used only by the order form's delivery date step.
 - **State:** local `useState` + one React Context (`OrderProvider`) for the shared pre-order dialog → see [Data Fetching & Services](#data-fetching--services).
 - **Data:** static TypeScript in [lib/](lib) — no server data layer → see [Data Fetching & Services](#data-fetching--services).
 - **Testing:** Vitest (`npm test`) for the pure helpers in `lib/`; tests sit next to the file as `*.test.ts`. No component tests: UI is checked in the browser at 390px and 1440px.
@@ -72,17 +73,20 @@ src/
     sitemap.ts robots.ts manifest.ts opengraph-image.tsx   SEO route handlers / generated OG image
   components/
     ui/                      shadcn primitives (Base UI) — do not hand-edit (CLI-regenerated); button.tsx is the
-                             one intentional brand restyle (see Gotchas)
+                             one intentional brand restyle (see Gotchas); calendar.tsx imports cn from
+                             @/lib/utils (the CLI writes the separate `cn` package, which this repo does not use)
     site/                    Domain components — announcement-bar, site-header, site-footer, hero,
                              collection, product-carousel (product page only), product-badge, price-tag,
-                             feature-band, cta-band, order-dialog, order-provider, product-detail
+                             feature-band, cta-band, order-dialog, order-provider, order-date-picker (the
+                             December-only shadcn Calendar), product-detail
     seo/json-ld.tsx          <JsonLd> — renders a structured-data <script>
   lib/                       App + domain data (no server layer):
     site.ts                  siteConfig — name, url, adminWhatsApp, location, social
     products.ts              PRODUCTS, SIZES, OCCASIONS, CURRENT_OCCASION, PRICE_FROM, SITE_IMAGES, fmtK,
                              normalizeWaNational, OrderLine, orderTotal, nextProductKey, MAX_ORDER_LINES,
                              MIN_SMALL_QTY, minQty (the small box minimum, used by the order form, saved drafts
-                             and the product page),
+                             and the product page), DELIVERY, isDeliveryDay, isoDay, earliestDeliveryDay,
+                             fmtDeliveryDate (the delivery window and date helpers),
                              buildOrderMessage, buildWaLink (tested in products.test.ts)
     order-draft.ts           The unfinished pre-order in sessionStorage: parseOrderDraft (validates; tested in
                              order-draft.test.ts), loadOrderDraft, saveOrderDraft, clearOrderDraft
