@@ -131,7 +131,50 @@ export const OCCASIONS: Record<OccasionKey, { eyebrow: string | null }> = {
 export const CURRENT_OCCASION: OccasionKey = "None";
 
 /** The open pre-order window, shown in the banner, hero, CTA band and footer. */
-export const PREORDER = { season: "Holiday Season", shipsFrom: "December 5, 2026" } as const;
+export const PREORDER = { season: "Holiday Season", shipsFrom: "December 3, 2026" } as const;
+
+/** Days the owners deliver this season, as ISO days (inclusive). No day inside is off limits. */
+export const DELIVERY = { from: "2026-12-03", to: "2026-12-31" } as const;
+
+/** A `YYYY-MM-DD` string inside the delivery window. ISO days sort as strings, so compare directly. */
+export function isDeliveryDay(iso: unknown): iso is string {
+  return (
+    typeof iso === "string" &&
+    /^\d{4}-\d{2}-\d{2}$/.test(iso) &&
+    iso >= DELIVERY.from &&
+    iso <= DELIVERY.to
+  );
+}
+
+/** The local calendar day of `d` as `YYYY-MM-DD`. */
+export function isoDay(d: Date): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+/** First day a customer can pick: the later of the window's start and tomorrow; null once none is left. */
+export function earliestDeliveryDay(now: Date): string | null {
+  const tomorrow = isoDay(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1));
+  const day = tomorrow > DELIVERY.from ? tomorrow : DELIVERY.from;
+  return day <= DELIVERY.to ? day : null;
+}
+
+const DAY_PARTS = new Intl.DateTimeFormat("en-GB", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+/** "2026-12-03" → "Thursday, 3 December 2026". UTC so server, browser and tests agree. */
+export function fmtDeliveryDate(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  const parts = DAY_PARTS.formatToParts(new Date(Date.UTC(y, m - 1, d)));
+  const part = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((p) => p.type === type)?.value ?? "";
+  return `${part("weekday")}, ${part("day")} ${part("month")} ${part("year")}`;
+}
 
 /** Lowest price on the menu, in thousands of IDR (shown as "from"). */
 export const PRICE_FROM = Math.min(...PRODUCTS.flatMap((p) => Object.values(p.prices)));
@@ -210,6 +253,8 @@ interface OrderDetails {
   name: string;
   customerWa: string;
   address: string;
+  /** ISO delivery day, e.g. "2026-12-03". */
+  date: string;
 }
 
 /** Compose the pre-order message that gets sent to the admin WhatsApp. */
@@ -218,6 +263,7 @@ export function buildOrderMessage({
   name,
   customerWa,
   address,
+  date,
 }: OrderDetails): string {
   const digits = normalizeWaNational(customerWa);
   return [
@@ -228,6 +274,8 @@ export function buildOrderMessage({
       return `${i + 1}. ${l.product.fullName}, ${l.size.label}, ${l.qty} × IDR ${fmtK(unit)} = IDR ${fmtK(unit * l.qty)}`;
     }),
     `Total: IDR ${fmtK(orderTotal(lines))}`,
+    "",
+    `Delivery date: ${fmtDeliveryDate(date)}`,
     "",
     `Name: ${name.trim()}`,
     `WhatsApp: +62 ${digits}`,
