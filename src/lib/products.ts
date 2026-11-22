@@ -163,6 +163,14 @@ export function normalizeWaNational(input: string): string {
 /** Most lines one pre-order can hold. */
 export const MAX_ORDER_LINES = 8;
 
+/** Small boxes are sold 3 or more of the same lapis (the owners' flyer rule). */
+export const MIN_SMALL_QTY = 3;
+
+/** Lowest quantity an order line of this size can have. */
+export function minQty(size: SizeKey): number {
+  return size === "small" ? MIN_SMALL_QTY : 1;
+}
+
 /** One line of a pre-order: a lapis, a size and how many. */
 export interface OrderLine {
   product: Product;

@@ -6,6 +6,7 @@ import {
   buildOrderMessage,
   orderTotal,
   nextProductKey,
+  minQty,
   type OrderLine,
   type ProductKey,
   type SizeKey,
@@ -34,6 +35,14 @@ describe("orderTotal", () => {
     expect(
       orderTotal([line("original", "whole", 1), line("original", "whole", 1)]),
     ).toBe(1780);
+  });
+});
+
+describe("minQty", () => {
+  it("needs 3 small boxes and 1 of the other sizes", () => {
+    expect(minQty("small")).toBe(3);
+    expect(minQty("half")).toBe(1);
+    expect(minQty("whole")).toBe(1);
   });
 });
 
