@@ -137,7 +137,7 @@ export function OrderLineRow({
                       qty: Math.max(line.qty, minQty(s.k)),
                     })
                   }
-                  aria-label={`${sizeName(s.label)}, ${s.dimensions}, IDR ${fmtK(prod.prices[s.k])}`}
+                  aria-label={`${sizeName(s.label)}, ${s.dimensions}, IDR ${fmtK(prod.prices[s.k])}${minQty(s.k) > 1 ? `, minimum ${minQty(s.k)}` : ""}`}
                   className="peer sr-only"
                 />
                 <span className="flex min-h-12 flex-col items-center justify-center rounded-sm border-[1.5px] border-[var(--border-default)] px-1 py-1.5 text-ink-700 transition-colors hover:bg-cream-200 peer-checked:border-ink-800 peer-checked:bg-ink-800 peer-checked:text-cream-100 peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-cream-100">
