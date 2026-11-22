@@ -23,7 +23,7 @@ export function Collection() {
 
       <ul className="mt-6 grid list-none grid-cols-1 gap-x-[22px] gap-y-10 p-0 sm:grid-cols-2 xl:grid-cols-4">
         {PRODUCTS.map((p, idx) => {
-          const photo = p.photos[0];
+          const photo = p.seasonalPhoto ?? p.photos[0];
           return (
             <li key={p.k} className="flex">
               {/* The title link stretches over the whole tile; the button sits above it. */}

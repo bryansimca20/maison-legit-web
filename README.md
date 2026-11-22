@@ -52,7 +52,7 @@ Other content lives in plain TypeScript:
 
 Product photos are in [`public/assets/photography/`](public/assets/photography). The Our Story
 page uses close-up product shots (`SITE_IMAGES.story*` in `src/lib/products.ts`) until the
-family photos are taken (Mom at the griddle, the family table, an old family photo); swap the
+family photos are taken (Mom at the oven, the family table, an old family photo); swap the
 entries when they exist. Photo rules are in [`DESIGN.md`](DESIGN.md).
 
 ## SEO
