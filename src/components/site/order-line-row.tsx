@@ -9,6 +9,8 @@ import {
   SIZES,
   getProduct,
   fmtK,
+  minQty,
+  MIN_SMALL_QTY,
   type ProductKey,
   type SizeKey,
 } from "@/lib/products";
@@ -129,7 +131,12 @@ export function OrderLineRow({
                   name={`size-${line.id}`}
                   value={s.k}
                   checked={line.size === s.k}
-                  onChange={() => onChange({ size: s.k })}
+                  onChange={() =>
+                    onChange({
+                      size: s.k,
+                      qty: Math.max(line.qty, minQty(s.k)),
+                    })
+                  }
                   aria-label={`${sizeName(s.label)}, ${s.dimensions}, IDR ${fmtK(prod.prices[s.k])}`}
                   className="peer sr-only"
                 />
@@ -146,18 +153,28 @@ export function OrderLineRow({
             ))}
           </div>
         </fieldset>
+        {line.size === "small" && (
+          <p id={`small-min-${line.id}`} className="text-sm text-ink-600">
+            Small boxes: minimum {MIN_SMALL_QTY}.
+          </p>
+        )}
 
         <div className="flex items-center justify-between gap-3">
           <div
             role="group"
             aria-label={`Quantity, line ${number}`}
+            aria-describedby={
+              line.size === "small" ? `small-min-${line.id}` : undefined
+            }
             className="-ml-3 inline-flex w-max items-center"
           >
             <button
               type="button"
               aria-label={`Decrease quantity, line ${number}`}
-              disabled={line.qty <= 1}
-              onClick={() => onChange({ qty: Math.max(1, line.qty - 1) })}
+              disabled={line.qty <= minQty(line.size)}
+              onClick={() =>
+                onChange({ qty: Math.max(minQty(line.size), line.qty - 1) })
+              }
               className={cn(ICON_BUTTON, "text-ink-600 hover:text-ink-900")}
             >
               <Minus className="size-4" />
