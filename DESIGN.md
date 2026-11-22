@@ -80,7 +80,8 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 - **Max content width:** 1200px, side gutters 20px phone / 48px desktop. Left and right edges match on every section.
 - **Grid:** 1 column under 640px, 2 columns from 640px, 4 product columns from 1280px.
 - **Hero:** full-height photo of the cake, h1 names the product and the city, one fact line (price from, lead
-  time), one button. Nothing else.
+  time), one button. Nothing else. During a seasonal pre-order the photo may be the campaign shot with its own
+  lettering; crop its logo and tagline off so they don't sit behind the h1 on phones.
 - **Order of the home page:** hero → the collection → the craft (one large type moment over the cross-section) → footer.
 - **Products:** photo on the cream ground, name, one factual line, price, button. No white box, no shadow
   around the product. The whole tile is one link to `/lapis/[slug]`; the button opens the dialog.
@@ -96,7 +97,7 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 - Real photographs of the real cake only. No stock passed off as ours.
 - Never use a social-media export (baked-in border, drop shadow, text) as a page photo.
 - No photo twice on the same page.
-- Shots still needed: Mom at the griddle, the family table, an old family photo, a clean cross-section
+- Shots still needed: Mom at the oven, the family table, an old family photo, a clean cross-section
   close-up. Until they exist, use the product shots; never ship a placeholder frame.
 - Every image through `next/image` with a `sizes` that matches its rendered width, descriptive `alt`.
 
@@ -160,3 +161,4 @@ Full findings: `~/.gstack/projects/maison-legit/designs/design-audit-20261117/de
 | 2026-11-21 | "How ordering works" section removed from the home page | Owners' call; ship date, delivery area and fee still show in the banner, hero, footer and order form |
 | 2026-11-21 | Pre-orders hold several lapis lines; a three-step progress bar replaces "Step N of 2" | Gift buyers order for several people in one message; the bar shows how far through the form they are |
 | 2026-11-22 | Delivery date is its own order step (Lapis, Date, Delivery, Review: a four-segment bar); its calendar shows December 2026 only, 3 to 31 December pickable; first delivery moves to 3 December | Owners' call: every order names a day the owners deliver on, so dates are no longer settled by hand in the chat |
+| 2026-11-21 | Christmas campaign shot as the hero; banner and order copy name Christmas | Owners' call for the Christmas pre-order; revert to the cross-section photo after the season |

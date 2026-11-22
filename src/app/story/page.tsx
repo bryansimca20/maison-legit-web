@@ -68,7 +68,7 @@ export default function StoryPage() {
       <section className="mx-auto max-w-[640px] px-5 md:px-12">
         <p className="mb-[22px] text-base leading-[1.8] text-ink-800">
           Lapis legit is not something you hurry. Each of its forty layers is
-          poured, griddled and pressed by hand, one at a time. A single lapis
+          poured, baked and pressed by hand, one at a time. A single lapis
           means a whole afternoon at the oven. That is how Mom learned it, and
           that is still the only way she will make it.
         </p>

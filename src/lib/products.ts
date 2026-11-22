@@ -48,7 +48,7 @@ export const PRODUCTS: Product[] = [
     fullName: "Lapis Legit Original",
     tag: "The house classic: forty layers of butter and warm spice.",
     description:
-      "Our house lapis legit: forty-plus layers of butter, egg yolk and warm spice, each one griddled and pressed by hand.",
+      "Our house lapis legit: forty-plus layers of butter, egg yolk and warm spice, each one baked and pressed by hand.",
     badge: null,
     prices: { whole: 890, half: 530, small: 325 },
     photos: [
@@ -76,9 +76,9 @@ export const PRODUCTS: Product[] = [
     k: "chocolate",
     name: "Valrhona Chocolate",
     fullName: "Lapis Legit Valrhona Chocolate",
-    tag: "Deep Valrhona chocolate, griddled layer by layer.",
+    tag: "Deep Valrhona chocolate, baked layer by layer.",
     description:
-      "Each layer brushed with Valrhona dark couverture. Bittersweet, and still griddled one layer at a time.",
+      "Each layer brushed with Valrhona dark couverture. Bittersweet, and still baked one layer at a time.",
     badge: null,
     prices: { whole: 1200, half: 720, small: 480 },
     photos: [
@@ -110,10 +110,10 @@ export function getProduct(key: ProductKey): Product {
 
 /** Imagery for page sections outside the product carousels. */
 export const SITE_IMAGES = {
-  hero: { src: `${PHOTO_BASE}/lapis-legit-original-1.jpg`, alt: "A forkful of Lapis Legit Original lifted from a freshly baked slab, showing its fine golden layers" },
+  hero: { src: `${PHOTO_BASE}/lapis-legit-christmas-hero.jpg`, alt: "Christmas lapis legit, pre-order yours now: a whole lapis legit topped with dark Christmas medallions, set among red-and-white stripes and baubles" },
   feature: { src: `${PHOTO_BASE}/lapis-legit-original-3.jpg`, alt: "A close cross-section of lapis legit showing its fine golden layers" },
   storyWhole: { src: `${PHOTO_BASE}/lapis-legit-original-2.jpg`, alt: "A whole lapis legit on the family serving tray" },
-  storyLayers: { src: `${PHOTO_BASE}/lapis-legit-original-3.jpg`, alt: "The layers of a lapis legit up close, each one griddled by hand" },
+  storyLayers: { src: `${PHOTO_BASE}/lapis-legit-original-3.jpg`, alt: "The layers of a lapis legit up close, each one baked by hand" },
   storyPlum: { src: `${PHOTO_BASE}/lapis-legit-plum-3.jpg`, alt: "Prunes set between the layers of a plum lapis" },
   storyChocolate: { src: `${PHOTO_BASE}/lapis-legit-chocolate-3.jpg`, alt: "Alternating chocolate and butter layers of a chocolate lapis" },
 } as const;
@@ -131,7 +131,7 @@ export const OCCASIONS: Record<OccasionKey, { eyebrow: string | null }> = {
 export const CURRENT_OCCASION: OccasionKey = "None";
 
 /** The open pre-order window, shown in the banner, hero, CTA band and footer. */
-export const PREORDER = { season: "Holiday Season", shipsFrom: "December 3, 2026" } as const;
+export const PREORDER = { season: "Christmas", shipsFrom: "December 3, 2026" } as const;
 
 /** Days the owners deliver this season, as ISO days (inclusive). No day inside is off limits. */
 export const DELIVERY = { from: "2026-12-03", to: "2026-12-31" } as const;

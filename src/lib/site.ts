@@ -10,7 +10,7 @@ export const siteConfig = {
   legalName: "Maison Legit",
   tagline: "A family recipe, baked in layers.",
   description:
-    "Homemade lapis legit from a thirty-year family recipe: the Indonesian thousand-layer cake, hand-griddled in small batches with no preservatives. Pre-order in Jakarta via WhatsApp.",
+    "Homemade lapis legit from a thirty-year family recipe: the Indonesian thousand-layer cake, baked by hand in small batches with no preservatives. Pre-order in Jakarta via WhatsApp.",
   /** Canonical, absolute base URL (no trailing slash). */
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://maisonlegit.com").replace(
     /\/$/,

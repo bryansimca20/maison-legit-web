@@ -9,7 +9,7 @@ const POINTS = [
   },
   {
     h: "Baked by hand",
-    p: "Each layer is griddled one at a time. A whole lapis takes an afternoon.",
+    p: "Each layer is baked one at a time. A whole lapis takes an afternoon.",
   },
   {
     h: "No preservatives, ever",
