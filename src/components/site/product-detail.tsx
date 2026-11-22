@@ -7,7 +7,7 @@ import { useOrder } from "@/components/site/order-provider";
 import { ProductCarousel } from "@/components/site/product-carousel";
 import { ProductBadge } from "@/components/site/product-badge";
 import { PriceTag } from "@/components/site/price-tag";
-import { SIZES, fmtK, type Product } from "@/lib/products";
+import { SIZES, fmtK, minQty, type Product } from "@/lib/products";
 
 export function ProductDetail({ product }: { product: Product }) {
   const { open } = useOrder();
@@ -67,7 +67,10 @@ export function ProductDetail({ product }: { product: Product }) {
                 key={s.k}
                 className="flex items-center justify-between gap-4 border-t border-[var(--border-soft)] py-3.5"
               >
-                <dt className="text-sm text-ink-700">{s.label}</dt>
+                <dt className="text-sm text-ink-700">
+                  {s.label}
+                  {minQty(s.k) > 1 && `, minimum ${minQty(s.k)}`}
+                </dt>
                 <dd>
                   <PriceTag amount={fmtK(product.prices[s.k])} size="sm" />
                 </dd>

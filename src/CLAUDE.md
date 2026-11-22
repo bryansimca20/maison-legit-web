@@ -81,6 +81,8 @@ src/
     site.ts                  siteConfig — name, url, adminWhatsApp, location, social
     products.ts              PRODUCTS, SIZES, OCCASIONS, CURRENT_OCCASION, PRICE_FROM, SITE_IMAGES, fmtK,
                              normalizeWaNational, OrderLine, orderTotal, nextProductKey, MAX_ORDER_LINES,
+                             MIN_SMALL_QTY, minQty (the small box minimum, used by the order form, saved drafts
+                             and the product page),
                              buildOrderMessage, buildWaLink (tested in products.test.ts)
     order-draft.ts           The unfinished pre-order in sessionStorage: parseOrderDraft (validates; tested in
                              order-draft.test.ts), loadOrderDraft, saveOrderDraft, clearOrderDraft
