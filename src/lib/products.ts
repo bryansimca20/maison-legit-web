@@ -171,6 +171,23 @@ export function minQty(size: SizeKey): number {
   return size === "small" ? MIN_SMALL_QTY : 1;
 }
 
+interface SizedQty {
+  size: SizeKey;
+  qty: number;
+  /** The quantity before picking Small raised it; undone when the line leaves Small. */
+  qtyBeforeSmall?: number;
+}
+
+/** A line's size and quantity after the customer picks `size`. */
+export function changeSize(line: SizedQty, size: SizeKey): SizedQty {
+  if (size === line.size) return line;
+  if (line.qty < minQty(size)) {
+    return { size, qty: minQty(size), qtyBeforeSmall: line.qty };
+  }
+  // Explicit undefined, so merging this into a line clears what it remembered.
+  return { size, qty: line.qtyBeforeSmall ?? line.qty, qtyBeforeSmall: undefined };
+}
+
 /** One line of a pre-order: a lapis, a size and how many. */
 export interface OrderLine {
   product: Product;

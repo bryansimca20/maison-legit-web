@@ -10,6 +10,7 @@ import {
   getProduct,
   fmtK,
   minQty,
+  changeSize,
   MIN_SMALL_QTY,
   type ProductKey,
   type SizeKey,
@@ -29,6 +30,8 @@ export interface DraftLine {
   product: ProductKey;
   size: SizeKey;
   qty: number;
+  /** Set while Small has raised the quantity; see `changeSize`. */
+  qtyBeforeSmall?: number;
 }
 
 const ICON_BUTTON =
@@ -131,12 +134,7 @@ export function OrderLineRow({
                   name={`size-${line.id}`}
                   value={s.k}
                   checked={line.size === s.k}
-                  onChange={() =>
-                    onChange({
-                      size: s.k,
-                      qty: Math.max(line.qty, minQty(s.k)),
-                    })
-                  }
+                  onChange={() => onChange(changeSize(line, s.k))}
                   aria-label={`${sizeName(s.label)}, ${s.dimensions}, IDR ${fmtK(prod.prices[s.k])}${minQty(s.k) > 1 ? `, minimum ${minQty(s.k)}` : ""}`}
                   className="peer sr-only"
                 />
@@ -173,7 +171,10 @@ export function OrderLineRow({
               aria-label={`Decrease quantity, line ${number}`}
               disabled={line.qty <= minQty(line.size)}
               onClick={() =>
-                onChange({ qty: Math.max(minQty(line.size), line.qty - 1) })
+                onChange({
+                  qty: Math.max(minQty(line.size), line.qty - 1),
+                  qtyBeforeSmall: undefined,
+                })
               }
               className={cn(ICON_BUTTON, "text-ink-600 hover:text-ink-900")}
             >
@@ -190,7 +191,12 @@ export function OrderLineRow({
               type="button"
               aria-label={`Increase quantity, line ${number}`}
               disabled={line.qty >= 10}
-              onClick={() => onChange({ qty: Math.min(10, line.qty + 1) })}
+              onClick={() =>
+                onChange({
+                  qty: Math.min(10, line.qty + 1),
+                  qtyBeforeSmall: undefined,
+                })
+              }
               className={cn(ICON_BUTTON, "text-ink-600 hover:text-ink-900")}
             >
               <Plus className="size-4" />

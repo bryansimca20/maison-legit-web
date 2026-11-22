@@ -7,6 +7,7 @@ import {
   orderTotal,
   nextProductKey,
   minQty,
+  changeSize,
   type OrderLine,
   type ProductKey,
   type SizeKey,
@@ -43,6 +44,39 @@ describe("minQty", () => {
     expect(minQty("small")).toBe(3);
     expect(minQty("half")).toBe(1);
     expect(minQty("whole")).toBe(1);
+  });
+});
+
+describe("changeSize", () => {
+  it("raises a line to 3 when Small is picked and remembers the old quantity", () => {
+    expect(changeSize({ size: "whole", qty: 1 }, "small")).toEqual({
+      size: "small",
+      qty: 3,
+      qtyBeforeSmall: 1,
+    });
+  });
+
+  it("puts the old quantity back when leaving Small", () => {
+    const small = changeSize({ size: "whole", qty: 2 }, "small");
+    expect(changeSize(small, "half")).toEqual({ size: "half", qty: 2 });
+  });
+
+  it("keeps the quantity when Small did not raise it", () => {
+    const small = changeSize({ size: "whole", qty: 4 }, "small");
+    expect(small).toEqual({ size: "small", qty: 4 });
+    expect(changeSize(small, "whole")).toEqual({ size: "whole", qty: 4 });
+  });
+
+  it("changes nothing when the same size is picked again", () => {
+    const small = changeSize({ size: "whole", qty: 1 }, "small");
+    expect(changeSize(small, "small")).toEqual(small);
+  });
+
+  it("keeps a quantity the customer set while on Small", () => {
+    expect(changeSize({ size: "small", qty: 5 }, "whole")).toEqual({
+      size: "whole",
+      qty: 5,
+    });
   });
 });
 
