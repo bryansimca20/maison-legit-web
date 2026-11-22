@@ -43,7 +43,15 @@ export function ProductDetail({ product }: { product: Product }) {
 
       <div className="mt-6 grid grid-cols-1 gap-8 md:mt-8 md:grid-cols-2 md:gap-12">
         <div className="relative aspect-[4/3] overflow-hidden rounded-xs bg-amber-200 md:aspect-square">
-          <ProductCarousel photos={product.photos} label={product.fullName} priority />
+          <ProductCarousel
+            photos={
+              product.seasonalPhoto
+                ? [product.seasonalPhoto, ...product.photos]
+                : product.photos
+            }
+            label={product.fullName}
+            priority
+          />
           {product.badge && (
             <div className="absolute left-3 top-3 z-[2] inline-flex rounded-xs bg-cream-50">
               <ProductBadge tone={product.badge.tone}>
