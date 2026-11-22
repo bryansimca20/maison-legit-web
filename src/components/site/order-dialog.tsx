@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import dynamic from "next/dynamic";
 import { flushSync } from "react-dom";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { X, Plus } from "lucide-react";
@@ -31,8 +32,8 @@ import { PriceTag } from "@/components/site/price-tag";
 import { OrderProgress, type OrderStep } from "@/components/site/order-progress";
 import { OrderLineRow, type DraftLine } from "@/components/site/order-line-row";
 import { OrderSummary } from "@/components/site/order-summary";
-import { OrderDatePicker } from "@/components/site/order-date-picker";
 import {
+  restoreStep,
   loadOrderDraft,
   saveOrderDraft,
   clearOrderDraft,
@@ -49,6 +50,11 @@ const TITLES: Record<OrderStep, string> = {
   review: "Review your order",
   sent: "Finish in WhatsApp",
 };
+
+// The dialog is mounted on every page; load the calendar library only when the date step first shows.
+const OrderDatePicker = dynamic(() =>
+  import("@/components/site/order-date-picker").then((m) => m.OrderDatePicker),
+);
 
 const CONTROL = "h-11 w-full rounded-sm text-base md:text-base";
 
@@ -72,11 +78,7 @@ export function OrderDialog({
   const [date, setDate] = React.useState(() =>
     pickableDeliveryDay(saved?.date ?? "", new Date()),
   );
-  const [step, setStep] = React.useState<OrderStep>(() =>
-    !date && (saved?.step === "details" || saved?.step === "review")
-      ? "date"
-      : (saved?.step ?? "lapis"),
-  );
+  const [step, setStep] = React.useState<OrderStep>(() => restoreStep(saved?.step, date));
   const [name, setName] = React.useState(saved?.name ?? "");
   const [customerWa, setCustomerWa] = React.useState(saved?.customerWa ?? "");
   const [address, setAddress] = React.useState(saved?.address ?? "");
@@ -335,7 +337,8 @@ export function OrderDialog({
                 <Button
                   variant="cta"
                   size="lg"
-                  className="flex-1"
+                  // Wraps rather than overflowing the sheet beside Back on 320px phones.
+                  className="min-w-0 flex-1 whitespace-normal"
                   disabled={!earliest}
                   onClick={toDetails}
                 >

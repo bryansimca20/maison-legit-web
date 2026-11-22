@@ -35,7 +35,7 @@ export function OrderDatePicker({
       showOutsideDays={false}
       weekStartsOn={1}
       disabled={{ before: localDate(earliest) }}
-      className="w-full bg-transparent p-0 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(11)]"
+      className="w-full bg-transparent p-0 [--cell-size:--spacing(11)]"
       classNames={{
         // Wide sheets would stretch the square days past 70px and push Next out of view.
         root: "w-full max-w-[360px]",
@@ -44,11 +44,10 @@ export function OrderDatePicker({
         weekday: "flex-1 text-sm font-normal text-ink-600 select-none",
         day: [
           "group/day relative aspect-square h-full w-full p-0 text-center select-none",
-          "[&_button]:text-base [&_button]:text-ink-800",
+          // min-w-0 lets the days shrink below 44px on 320px phones instead of overflowing the sheet.
+          "[&_button]:min-w-0 [&_button]:text-base [&_button]:text-ink-800",
           "[&_button[data-selected-single=true]]:bg-ink-800 [&_button[data-selected-single=true]]:text-cream-100",
         ].join(" "),
-        today: "font-semibold",
-        disabled: "[&_button]:text-ink-400",
       }}
     />
   );

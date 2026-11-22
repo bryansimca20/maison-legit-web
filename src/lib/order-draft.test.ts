@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parseOrderDraft, type OrderDraft } from "./order-draft";
+import { parseOrderDraft, restoreStep, type OrderDraft } from "./order-draft";
 
 const good: OrderDraft = {
   lines: [
@@ -93,5 +93,19 @@ describe("parseOrderDraft", () => {
       const draft = { ...good, lines: [{ product: "original", size: "small", qty }] };
       expect(parseOrderDraft(JSON.stringify(draft))).toBeNull();
     }
+  });
+});
+
+describe("restoreStep", () => {
+  it("sends a draft past the date step back to it when the date is gone", () => {
+    expect(restoreStep("details", "")).toBe("date");
+    expect(restoreStep("review", "")).toBe("date");
+  });
+
+  it("keeps the saved step otherwise, and starts new orders on lapis", () => {
+    expect(restoreStep("review", "2026-12-10")).toBe("review");
+    expect(restoreStep("lapis", "")).toBe("lapis");
+    expect(restoreStep("date", "")).toBe("date");
+    expect(restoreStep(undefined, "")).toBe("lapis");
   });
 });

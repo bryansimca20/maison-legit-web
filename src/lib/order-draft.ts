@@ -83,6 +83,12 @@ export function parseOrderDraft(raw: string | null): OrderDraft | null {
   };
 }
 
+/** The step to reopen on: a draft past the date step whose date is gone goes back to pick one. */
+export function restoreStep(step: DraftStep | undefined, date: string): DraftStep {
+  if (!date && (step === "details" || step === "review")) return "date";
+  return step ?? "lapis";
+}
+
 // Browser-only helpers. Storage can throw (private mode, blocked site data); the form then just
 // works without a saved draft.
 
