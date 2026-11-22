@@ -5,6 +5,7 @@
 import {
   MAX_ORDER_LINES,
   PRODUCTS,
+  minQty,
   SIZES,
   type ProductKey,
   type SizeKey,
@@ -64,7 +65,12 @@ export function parseOrderDraft(raw: string | null): OrderDraft | null {
     return null;
   }
   return {
-    lines: v.lines.map(({ product, size, qty }) => ({ product, size, qty })),
+    // A draft saved before the small box minimum reopens at the minimum, not thrown away.
+    lines: v.lines.map(({ product, size, qty }) => ({
+      product,
+      size,
+      qty: Math.max(qty, minQty(size)),
+    })),
     name: v.name,
     customerWa: v.customerWa,
     address: v.address,
