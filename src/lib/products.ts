@@ -130,7 +130,7 @@ export const OCCASIONS: Record<OccasionKey, { eyebrow: string | null }> = {
 
 export const CURRENT_OCCASION: OccasionKey = "None";
 
-/** The open pre-order window, shown in the banner, hero, how-to-order steps, CTA band and footer. */
+/** The open pre-order window, shown in the banner, hero, CTA band and footer. */
 export const PREORDER = { season: "Holiday Season", shipsFrom: "December 5, 2026" } as const;
 
 /** Lowest price on the menu, in thousands of IDR (shown as "from"). */

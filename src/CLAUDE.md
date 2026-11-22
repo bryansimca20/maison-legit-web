@@ -65,7 +65,7 @@ src/
     layout.tsx               Root layout — next/font, sitewide Metadata + Viewport, sitewide JSON-LD
                              (bakery + website), wraps chrome in <OrderProvider>: AnnouncementBar,
                              SiteHeader, <main>{children}</main>, SiteFooter
-    page.tsx                 Landing — Hero, HowToOrder, Collection, FeatureBand + collection JSON-LD
+    page.tsx                 Landing — Hero, Collection, FeatureBand + collection JSON-LD
     story/page.tsx           Our Story — prose, occasions list, close-up photos, CTA band + breadcrumb JSON-LD
     lapis/[slug]/page.tsx    Per-product page (generateStaticParams, generateMetadata, Product + breadcrumb JSON-LD)
     globals.css              Tailwind v4 theme: brand tokens, shadcn semantic mapping, base layer, brand utilities
@@ -73,7 +73,7 @@ src/
   components/
     ui/                      shadcn primitives (Base UI) — do not hand-edit (CLI-regenerated); button.tsx is the
                              one intentional brand restyle (see Gotchas)
-    site/                    Domain components — announcement-bar, site-header, site-footer, hero, how-to-order,
+    site/                    Domain components — announcement-bar, site-header, site-footer, hero,
                              collection, product-carousel (product page only), product-badge, price-tag,
                              feature-band, cta-band, order-dialog, order-provider, product-detail
     seo/json-ld.tsx          <JsonLd> — renders a structured-data <script>
