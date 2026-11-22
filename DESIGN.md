@@ -61,7 +61,7 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
   The feature band moves to `ink-900` or `blue-500`.
 - **One accent per screen:** red appears only on buttons. Blue appears only as the logo, one band, and links.
 - **Progress and choice:** `ink-800` fills the order form's progress bar (upcoming steps `--border-default`) and the
-  chosen size in an order line. Neither is an action, so neither is red, and neither is a link, so neither is blue.
+  chosen size in an order line and the chosen delivery day. None is an action, so none is red, and none is a link, so none is blue.
 - **Semantic:** error `red-600` (`--destructive`) with a text message, success `green-700` on the order
   confirmation only. Never colour alone.
 - **Contrast:** body 4.5:1 minimum. On `blue-500`, text is `cream-100` (not `blue-200`).
@@ -159,3 +159,4 @@ Full findings: `~/.gstack/projects/maison-legit/designs/design-audit-20261117/de
 | 2026-11-21 | Delivery only, within Jakarta; fee confirmed on WhatsApp; no payments on the site | Owners' call; the order form requires an address |
 | 2026-11-21 | "How ordering works" section removed from the home page | Owners' call; ship date, delivery area and fee still show in the banner, hero, footer and order form |
 | 2026-11-21 | Pre-orders hold several lapis lines; a three-step progress bar replaces "Step N of 2" | Gift buyers order for several people in one message; the bar shows how far through the form they are |
+| 2026-11-22 | Delivery date is its own order step (Lapis, Date, Delivery, Review: a four-segment bar); its calendar shows December 2026 only, 3 to 31 December pickable; first delivery moves to 3 December | Owners' call: every order names a day the owners deliver on, so dates are no longer settled by hand in the chat |

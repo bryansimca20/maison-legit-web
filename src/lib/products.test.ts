@@ -8,6 +8,10 @@ import {
   nextProductKey,
   minQty,
   changeSize,
+  isDeliveryDay,
+  earliestDeliveryDay,
+  fmtDeliveryDate,
+  pickableDeliveryDay,
   type OrderLine,
   type ProductKey,
   type SizeKey,
@@ -23,6 +27,7 @@ const base = {
   name: " Sari Dewi ",
   customerWa: "0812 3456 7890",
   address: " Jl. Kemang Raya 10, Jakarta Selatan ",
+  date: "2026-12-03",
 };
 
 describe("orderTotal", () => {
@@ -118,6 +123,8 @@ describe("buildOrderMessage", () => {
         "2. Lapis Legit Plum, Half (10 × 20 cm), 1 × IDR 660k = IDR 660k",
         "Total: IDR 2.440k",
         "",
+        "Delivery date: Thursday, 3 December 2026",
+        "",
         "Name: Sari Dewi",
         "WhatsApp: +62 81234567890",
         "",
@@ -141,5 +148,37 @@ describe("buildOrderMessage", () => {
       "2. Lapis Legit Plum, Half (10 × 20 cm), 2 × IDR 660k = IDR 1.320k",
     );
     expect(msg).toContain("Total: IDR 1.980k");
+  });
+});
+
+describe("delivery dates", () => {
+  it("accepts only YYYY-MM-DD days inside 3–31 December 2026", () => {
+    expect(isDeliveryDay("2026-12-03")).toBe(true);
+    expect(isDeliveryDay("2026-12-31")).toBe(true);
+    for (const bad of ["2026-12-02", "2027-01-01", "2026-12-3", "", 5, null])
+      expect(isDeliveryDay(bad)).toBe(false);
+  });
+
+  it("earliest day is 3 December before the season, tomorrow during it, null after", () => {
+    expect(earliestDeliveryDay(new Date(2026, 10, 22, 9))).toBe("2026-12-03");
+    expect(earliestDeliveryDay(new Date(2026, 11, 2, 23, 59))).toBe("2026-12-03");
+    expect(earliestDeliveryDay(new Date(2026, 11, 10, 0, 5))).toBe("2026-12-11");
+    expect(earliestDeliveryDay(new Date(2026, 11, 30, 18))).toBe("2026-12-31");
+    expect(earliestDeliveryDay(new Date(2026, 11, 31, 8))).toBeNull();
+  });
+
+  it("keeps a chosen day only while it can still be picked", () => {
+    const nov22 = new Date(2026, 10, 22, 9);
+    expect(pickableDeliveryDay("2026-12-10", nov22)).toBe("2026-12-10");
+    expect(pickableDeliveryDay("", nov22)).toBe("");
+    // Picked 10 Dec late on the 9th; it is now past midnight, so the 10th is same-day.
+    expect(pickableDeliveryDay("2026-12-10", new Date(2026, 11, 10, 0, 5))).toBe("");
+    expect(pickableDeliveryDay("2026-12-11", new Date(2026, 11, 10, 0, 5))).toBe("2026-12-11");
+    expect(pickableDeliveryDay("2026-12-31", new Date(2026, 11, 31, 8))).toBe("");
+  });
+
+  it("formats a day for the message", () => {
+    expect(fmtDeliveryDate("2026-12-03")).toBe("Thursday, 3 December 2026");
+    expect(fmtDeliveryDate("2026-12-25")).toBe("Friday, 25 December 2026");
   });
 });

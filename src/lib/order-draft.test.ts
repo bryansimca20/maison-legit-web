@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parseOrderDraft, type OrderDraft } from "./order-draft";
+import { parseOrderDraft, restoreStep, type OrderDraft } from "./order-draft";
 
 const good: OrderDraft = {
   lines: [
@@ -10,10 +10,31 @@ const good: OrderDraft = {
   name: "Sari Dewi",
   customerWa: "812 3456 7890",
   address: "Jl. Kemang Raya 10, Jakarta Selatan",
+  date: "2026-12-10",
   step: "details",
 };
 
 describe("parseOrderDraft", () => {
+  it("keeps a valid date and restores the date step", () => {
+    expect(parseOrderDraft(JSON.stringify({ ...good, step: "date" }))).toEqual({
+      ...good,
+      step: "date",
+    });
+  });
+
+  it("drops a missing or invalid date but keeps the rest of the draft", () => {
+    // A draft saved before dates existed has no date field at all.
+    expect(parseOrderDraft(JSON.stringify({ ...good, date: undefined }))).toEqual({
+      ...good,
+      date: "",
+    });
+    for (const date of ["2026-12-01", "2027-01-02", "2026-12-3", 5])
+      expect(parseOrderDraft(JSON.stringify({ ...good, date }))).toEqual({
+        ...good,
+        date: "",
+      });
+  });
+
   it("reads back a saved draft", () => {
     expect(parseOrderDraft(JSON.stringify(good))).toEqual(good);
   });
@@ -72,5 +93,19 @@ describe("parseOrderDraft", () => {
       const draft = { ...good, lines: [{ product: "original", size: "small", qty }] };
       expect(parseOrderDraft(JSON.stringify(draft))).toBeNull();
     }
+  });
+});
+
+describe("restoreStep", () => {
+  it("sends a draft past the date step back to it when the date is gone", () => {
+    expect(restoreStep("details", "")).toBe("date");
+    expect(restoreStep("review", "")).toBe("date");
+  });
+
+  it("keeps the saved step otherwise, and starts new orders on lapis", () => {
+    expect(restoreStep("review", "2026-12-10")).toBe("review");
+    expect(restoreStep("lapis", "")).toBe("lapis");
+    expect(restoreStep("date", "")).toBe("date");
+    expect(restoreStep(undefined, "")).toBe("lapis");
   });
 });

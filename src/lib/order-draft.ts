@@ -4,6 +4,7 @@
  */
 import {
   MAX_ORDER_LINES,
+  isDeliveryDay,
   PRODUCTS,
   minQty,
   SIZES,
@@ -14,17 +15,19 @@ import {
 export const ORDER_DRAFT_KEY = "maison-legit:order-draft";
 
 /** Steps a draft can be restored to; a sent order is never saved. */
-export type DraftStep = "lapis" | "details" | "review";
+export type DraftStep = "lapis" | "date" | "details" | "review";
 
 export interface OrderDraft {
   lines: { product: ProductKey; size: SizeKey; qty: number }[];
   name: string;
   customerWa: string;
   address: string;
+  /** ISO delivery day, or "" when none is picked yet. */
+  date: string;
   step: DraftStep;
 }
 
-const STEPS: readonly string[] = ["lapis", "details", "review"];
+const STEPS: readonly string[] = ["lapis", "date", "details", "review"];
 const PRODUCT_KEYS: readonly string[] = PRODUCTS.map((p) => p.k);
 const SIZE_KEYS: readonly string[] = SIZES.map((s) => s.k);
 
@@ -74,8 +77,16 @@ export function parseOrderDraft(raw: string | null): OrderDraft | null {
     name: v.name,
     customerWa: v.customerWa,
     address: v.address,
+    // A missing (saved before dates existed) or invalid date is dropped, not the whole draft.
+    date: isDeliveryDay(v.date) ? v.date : "",
     step: v.step as DraftStep,
   };
+}
+
+/** The step to reopen on: a draft past the date step whose date is gone goes back to pick one. */
+export function restoreStep(step: DraftStep | undefined, date: string): DraftStep {
+  if (!date && (step === "details" || step === "review")) return "date";
+  return step ?? "lapis";
 }
 
 // Browser-only helpers. Storage can throw (private mode, blocked site data); the form then just
