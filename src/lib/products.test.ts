@@ -11,6 +11,7 @@ import {
   isDeliveryDay,
   earliestDeliveryDay,
   fmtDeliveryDate,
+  pickableDeliveryDay,
   type OrderLine,
   type ProductKey,
   type SizeKey,
@@ -164,6 +165,16 @@ describe("delivery dates", () => {
     expect(earliestDeliveryDay(new Date(2026, 11, 10, 0, 5))).toBe("2026-12-11");
     expect(earliestDeliveryDay(new Date(2026, 11, 30, 18))).toBe("2026-12-31");
     expect(earliestDeliveryDay(new Date(2026, 11, 31, 8))).toBeNull();
+  });
+
+  it("keeps a chosen day only while it can still be picked", () => {
+    const nov22 = new Date(2026, 10, 22, 9);
+    expect(pickableDeliveryDay("2026-12-10", nov22)).toBe("2026-12-10");
+    expect(pickableDeliveryDay("", nov22)).toBe("");
+    // Picked 10 Dec late on the 9th; it is now past midnight, so the 10th is same-day.
+    expect(pickableDeliveryDay("2026-12-10", new Date(2026, 11, 10, 0, 5))).toBe("");
+    expect(pickableDeliveryDay("2026-12-11", new Date(2026, 11, 10, 0, 5))).toBe("2026-12-11");
+    expect(pickableDeliveryDay("2026-12-31", new Date(2026, 11, 31, 8))).toBe("");
   });
 
   it("formats a day for the message", () => {

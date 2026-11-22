@@ -73,8 +73,9 @@ src/
     sitemap.ts robots.ts manifest.ts opengraph-image.tsx   SEO route handlers / generated OG image
   components/
     ui/                      shadcn primitives (Base UI) — do not hand-edit (CLI-regenerated); button.tsx is the
-                             one intentional brand restyle (see Gotchas); calendar.tsx imports cn from
-                             @/lib/utils (the CLI writes the separate `cn` package, which this repo does not use)
+                             one intentional brand restyle (see Gotchas); calendar.tsx has two hand fixes to
+                             keep if it is ever re-added: cn from @/lib/utils (the CLI writes the separate `cn`
+                             package), and `ref={ref}` on CalendarDayButton's Button (arrow keys need it)
     site/                    Domain components — announcement-bar, site-header, site-footer, hero,
                              collection, product-carousel (product page only), product-badge, price-tag,
                              feature-band, cta-band, order-dialog, order-provider, order-date-picker (the
@@ -86,7 +87,7 @@ src/
                              normalizeWaNational, OrderLine, orderTotal, nextProductKey, MAX_ORDER_LINES,
                              MIN_SMALL_QTY, minQty (the small box minimum, used by the order form, saved drafts
                              and the product page), DELIVERY, isDeliveryDay, isoDay, earliestDeliveryDay,
-                             fmtDeliveryDate (the delivery window and date helpers),
+                             pickableDeliveryDay, fmtDeliveryDate (the delivery window and date helpers),
                              buildOrderMessage, buildWaLink (tested in products.test.ts)
     order-draft.ts           The unfinished pre-order in sessionStorage: parseOrderDraft (validates; tested in
                              order-draft.test.ts), loadOrderDraft, saveOrderDraft, clearOrderDraft

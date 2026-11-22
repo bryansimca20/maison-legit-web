@@ -159,6 +159,12 @@ export function earliestDeliveryDay(now: Date): string | null {
   return day <= DELIVERY.to ? day : null;
 }
 
+/** `iso` if a customer could still pick it at `now`, else "" (passed, same-day, or season over). */
+export function pickableDeliveryDay(iso: string, now: Date): string {
+  const earliest = earliestDeliveryDay(now);
+  return iso && earliest && iso >= earliest ? iso : "";
+}
+
 const DAY_PARTS = new Intl.DateTimeFormat("en-GB", {
   weekday: "long",
   day: "numeric",

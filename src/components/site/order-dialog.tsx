@@ -21,6 +21,7 @@ import {
   type ProductKey,
   PREORDER,
   earliestDeliveryDay,
+  pickableDeliveryDay,
 } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -66,10 +67,10 @@ export function OrderDialog({
   // An unfinished order saved in this tab wins over the product that was pressed (owner's call).
   const [saved] = React.useState(loadOrderDraft);
   // First pickable day for this visit; null once the season has no day left.
-  const [earliest] = React.useState(() => earliestDeliveryDay(new Date()));
+  const [earliest, setEarliest] = React.useState(() => earliestDeliveryDay(new Date()));
   // A saved day that has since passed is dropped, and the form goes back to the date step for a new one.
   const [date, setDate] = React.useState(() =>
-    saved?.date && earliest && saved.date >= earliest ? saved.date : "",
+    pickableDeliveryDay(saved?.date ?? "", new Date()),
   );
   const [step, setStep] = React.useState<OrderStep>(() =>
     !date && (saved?.step === "details" || saved?.step === "review")
@@ -158,15 +159,26 @@ export function OrderDialog({
     : "";
   const waLink = buildWaLink(siteConfig.adminWhatsApp, message);
 
+  // The sheet can stay open past midnight, so the day is checked again before moving on or sending.
+  const dateStillOpen = () => {
+    const now = new Date();
+    if (pickableDeliveryDay(date, now)) return true;
+    setEarliest(earliestDeliveryDay(now));
+    setDate("");
+    goTo("date");
+    setTried(true);
+    return false;
+  };
   const toDetails = () => {
     setTried(true);
-    if (date) goTo("details");
+    if (date && dateStillOpen()) goTo("details");
   };
   const review = () => {
     setTried(true);
-    if (nameOk && waOk && addressOk) goTo("review");
+    if (nameOk && waOk && addressOk && dateStillOpen()) goTo("review");
   };
   const send = () => {
+    if (!dateStillOpen()) return;
     window.open(waLink, "_blank", "noopener,noreferrer");
     goTo("sent");
   };
