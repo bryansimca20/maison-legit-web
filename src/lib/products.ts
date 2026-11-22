@@ -53,7 +53,7 @@ export const PRODUCTS: Product[] = [
       "Our house lapis legit: forty-plus layers of butter, egg yolk and warm spice, each one baked and pressed by hand.",
     badge: null,
     prices: { whole: 890, half: 530, small: 325 },
-    seasonalPhoto: { src: `${PHOTO_BASE}/lapis-legit-original-christmas.jpg`, alt: "A whole Lapis Legit Original on a Christmas table of red-and-white stripes and baubles" },
+    seasonalPhoto: { src: `${PHOTO_BASE}/lapis-legit-original-christmas.webp`, alt: "A whole Lapis Legit Original on a Christmas table of red-and-white stripes and baubles" },
     photos: [
       { src: `${PHOTO_BASE}/lapis-legit-original-2.jpg`, alt: "A whole Lapis Legit Original on a serving tray" },
       { src: `${PHOTO_BASE}/lapis-legit-original-1.jpg`, alt: "A forkful of Lapis Legit Original showing its many fine layers" },
@@ -69,7 +69,7 @@ export const PRODUCTS: Product[] = [
       "The Original's layers with whole prunes set between them, for a deep, jammy sweetness.",
     badge: null,
     prices: { whole: 1100, half: 660, small: 400 },
-    seasonalPhoto: { src: `${PHOTO_BASE}/lapis-legit-plum-christmas.jpg`, alt: "A whole Lapis Legit Plum topped with prunes, on a Christmas table" },
+    seasonalPhoto: { src: `${PHOTO_BASE}/lapis-legit-plum-christmas.webp`, alt: "A whole Lapis Legit Plum topped with prunes, on a Christmas table" },
     photos: [
       { src: `${PHOTO_BASE}/lapis-legit-plum-1.jpg`, alt: "Lapis Legit Plum with whole prunes set into the layers" },
       { src: `${PHOTO_BASE}/lapis-legit-plum-2.jpg`, alt: "A slice of Lapis Legit Plum on a plate" },
@@ -85,7 +85,7 @@ export const PRODUCTS: Product[] = [
       "Each layer brushed with Valrhona dark couverture. Bittersweet, and still baked one layer at a time.",
     badge: null,
     prices: { whole: 1200, half: 720, small: 480 },
-    seasonalPhoto: { src: `${PHOTO_BASE}/lapis-legit-chocolate-christmas.jpg`, alt: "A whole Lapis Legit Valrhona Chocolate, its dark and golden layers showing, on a Christmas table" },
+    seasonalPhoto: { src: `${PHOTO_BASE}/lapis-legit-chocolate-christmas.webp`, alt: "A whole Lapis Legit Valrhona Chocolate, its dark and golden layers showing, on a Christmas table" },
     photos: [
       { src: `${PHOTO_BASE}/lapis-legit-chocolate-2.jpg`, alt: "A whole Lapis Legit Valrhona Chocolate" },
       { src: `${PHOTO_BASE}/lapis-legit-chocolate-1.jpg`, alt: "A slice of Lapis Legit Valrhona Chocolate showing dark layers" },
@@ -101,7 +101,7 @@ export const PRODUCTS: Product[] = [
       "Our buttery layers with a tangy baked cheesecake cream between them, finished with a golden lattice top.",
     badge: null,
     prices: { whole: 1200, half: 720, small: 480 },
-    seasonalPhoto: { src: `${PHOTO_BASE}/lapis-legit-cheese-christmas.jpg`, alt: "A whole Lapis Legit Cheesecake with its lattice top, on a Christmas table" },
+    seasonalPhoto: { src: `${PHOTO_BASE}/lapis-legit-cheese-christmas.webp`, alt: "A whole Lapis Legit Cheesecake with its lattice top, on a Christmas table" },
     photos: [
       { src: `${PHOTO_BASE}/lapis-legit-cheese-3.jpg`, alt: "A whole Lapis Legit Cheesecake with a golden lattice top" },
       { src: `${PHOTO_BASE}/lapis-legit-cheese-4.jpg`, alt: "A slice of Lapis Legit Cheesecake" },
@@ -116,8 +116,8 @@ export function getProduct(key: ProductKey): Product {
 
 /** Imagery for page sections outside the product carousels. */
 export const SITE_IMAGES = {
-  hero: { src: `${PHOTO_BASE}/lapis-legit-christmas-hero.jpg`, alt: "Christmas lapis legit, pre-order yours now: a whole lapis legit topped with dark Christmas medallions, set among red-and-white stripes and baubles" },
-  heroTall: { src: `${PHOTO_BASE}/lapis-legit-christmas-hero-tall.jpg` },
+  hero: { src: `${PHOTO_BASE}/lapis-legit-christmas-hero.webp`, alt: "Christmas lapis legit, pre-order yours now: a whole lapis legit topped with dark Christmas medallions, set among red-and-white stripes and baubles" },
+  heroTall: { src: `${PHOTO_BASE}/lapis-legit-christmas-hero-tall.webp` },
   feature: { src: `${PHOTO_BASE}/lapis-legit-original-3.jpg`, alt: "A close cross-section of lapis legit showing its fine golden layers" },
   storyWhole: { src: `${PHOTO_BASE}/lapis-legit-original-2.jpg`, alt: "A whole lapis legit on the family serving tray" },
   storyLayers: { src: `${PHOTO_BASE}/lapis-legit-original-3.jpg`, alt: "The layers of a lapis legit up close, each one baked by hand" },
