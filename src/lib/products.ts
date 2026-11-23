@@ -127,18 +127,6 @@ export const SITE_IMAGES = {
   storyChocolate: { src: `${PHOTO_BASE}/lapis-legit-chocolate-3.jpg`, alt: "Alternating chocolate and butter layers of a chocolate lapis" },
 } as const;
 
-/** Seasonal occasion copy. Switch CURRENT_OCCASION to show a line above the hero heading. */
-export type OccasionKey = "Eid Al-Fitr" | "Lunar New Year" | "Christmas" | "None";
-
-export const OCCASIONS: Record<OccasionKey, { eyebrow: string | null }> = {
-  "Eid Al-Fitr": { eyebrow: "Welcoming Eid Al-Fitr" },
-  "Lunar New Year": { eyebrow: "Welcoming the Year of the Fire Horse" },
-  Christmas: { eyebrow: "Welcoming Christmas" },
-  None: { eyebrow: null },
-};
-
-export const CURRENT_OCCASION: OccasionKey = "None";
-
 /** The open pre-order window, shown in the banner, hero, CTA band and footer. */
 export const PREORDER = { season: "Christmas", shipsFrom: "December 3, 2026" } as const;
 

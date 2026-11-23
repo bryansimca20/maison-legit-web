@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+/* Seasonal themes: each redefines the roles below under :root[data-occasion="<slug>"] (lib/occasion.ts). */
+@import "./themes/christmas.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -88,7 +90,6 @@
   /* Semantic surfaces */
   --surface-canvas: var(--cream-200);
   --surface-feature: var(--green-800);
-  --surface-inverse: var(--blue-500);
 
   /* Hairlines */
   --border-soft: color-mix(in srgb, var(--ink-900) 8%, transparent);
@@ -120,6 +121,50 @@
   --border: var(--border-default);
   --input: var(--border-default);
   --ring: var(--blue-700); /* high-contrast focus ring on cream + white */
+
+  /* ---- Seasonal roles (DESIGN.md "Seasonal themes") ----
+     Seasonal surfaces use these roles, never brand ramps. The values here are the default theme;
+     an occasion's file in app/themes/ redefines them under :root[data-occasion="<slug>"]. */
+  --header: var(--cream-100);
+  --bar: var(--ink-900);
+  --bar-fg: var(--cream-200);
+  --bar-accent: var(--gold-300);
+  --hero-panel: var(--cream-100);
+  --hero-panel-heading: var(--ink-900);
+  --hero-panel-text: var(--ink-600);
+  --hero-panel-fact: var(--ink-800);
+  --hero-panel-eyebrow: var(--gold-800);
+  --action: var(--red-500);
+  --action-hover: var(--red-600);
+  --action-fg: var(--cream-100);
+  --action-on-block: var(--red-500);
+  --action-on-block-hover: var(--red-600);
+  --action-on-block-fg: var(--cream-100);
+  --products: var(--cream-200);
+  --products-heading: var(--ink-900);
+  --products-name: var(--ink-900);
+  --products-name-hover: var(--blue-700);
+  --products-text: var(--ink-600);
+  --products-price: var(--ink-900);
+  --products-unit: var(--ink-600);
+  --band: var(--blue-500);
+  --band-heading: var(--cream-100);
+  --band-text: var(--blue-100);
+  --band-rule: var(--hairline-on-dark);
+  --cta-band-heading: var(--cream-200);
+  --cta-band-text: var(--cream-100);
+  --footer: var(--ink-900);
+  --footer-text: var(--cream-500);
+  --footer-strong: var(--cream-200);
+  --brand-text: var(--blue-700);
+  --nav-underline: var(--gold-500);
+  --selection: var(--gold-300);
+  /* Focus rings per block, applied on the block itself (e.g. [--ring:var(--band-ring)]); a ring must show on its
+     own ground. Keep examples here concrete: Tailwind scans comments, and a placeholder becomes a broken rule. */
+  --hero-panel-ring: var(--blue-700);
+  --products-ring: var(--blue-700);
+  --band-ring: var(--cream-100);
+  --footer-ring: var(--cream-100);
 }
 
 /* ============================================================
@@ -218,6 +263,41 @@
   --color-canvas: var(--surface-canvas);
   --color-feature: var(--surface-feature);
 
+  /* Seasonal roles → utilities (bg-band, text-footer-text, …) */
+  --color-header: var(--header);
+  --color-bar: var(--bar);
+  --color-bar-fg: var(--bar-fg);
+  --color-bar-accent: var(--bar-accent);
+  --color-hero-panel: var(--hero-panel);
+  --color-hero-panel-heading: var(--hero-panel-heading);
+  --color-hero-panel-text: var(--hero-panel-text);
+  --color-hero-panel-fact: var(--hero-panel-fact);
+  --color-hero-panel-eyebrow: var(--hero-panel-eyebrow);
+  --color-action: var(--action);
+  --color-action-hover: var(--action-hover);
+  --color-action-fg: var(--action-fg);
+  --color-action-on-block: var(--action-on-block);
+  --color-action-on-block-hover: var(--action-on-block-hover);
+  --color-action-on-block-fg: var(--action-on-block-fg);
+  --color-products: var(--products);
+  --color-products-heading: var(--products-heading);
+  --color-products-name: var(--products-name);
+  --color-products-name-hover: var(--products-name-hover);
+  --color-products-text: var(--products-text);
+  --color-products-price: var(--products-price);
+  --color-products-unit: var(--products-unit);
+  --color-band: var(--band);
+  --color-band-heading: var(--band-heading);
+  --color-band-text: var(--band-text);
+  --color-band-rule: var(--band-rule);
+  --color-cta-band-heading: var(--cta-band-heading);
+  --color-cta-band-text: var(--cta-band-text);
+  --color-footer: var(--footer);
+  --color-footer-text: var(--footer-text);
+  --color-footer-strong: var(--footer-strong);
+  --color-brand-text: var(--brand-text);
+  --color-nav-underline: var(--nav-underline);
+
   /* Brand radii (also drives shadcn primitives) */
   --radius-xs: 4px;
   --radius-sm: 8px;
@@ -264,7 +344,7 @@
     text-wrap: balance;
   }
   ::selection {
-    background: var(--gold-300);
+    background: var(--selection);
     color: var(--ink-900);
   }
 }
