@@ -47,7 +47,7 @@ export function Collection() {
           {stars && (
             <span aria-hidden className="hidden items-center gap-3.5 sm:flex">
               <Starburst size={14} className="text-products-heading" />
-              <Starburst size={9} className="text-bar-accent" />
+              <Starburst size={9} className="text-[var(--decor-star-light)]" />
               <Starburst size={18} className="text-products-heading" />
               <Starburst size={10} className="text-products-heading" />
             </span>
