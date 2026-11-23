@@ -14,7 +14,7 @@ export function SiteHeader() {
   const storyActive = pathname?.startsWith("/story");
 
   return (
-    <header className="flex items-center justify-between gap-3 border-b border-[var(--border-soft)] bg-cream-100 px-5 py-3 md:px-12 md:py-3.5">
+    <header className="flex items-center justify-between gap-3 border-b border-[var(--border-soft)] bg-header px-5 py-3 md:px-12 md:py-3.5">
       <Link href="/" title="Home" className="flex items-center gap-3">
         <Image
           src="/assets/logo/maison-legit-logo-blue.jpg"
@@ -35,9 +35,9 @@ export function SiteHeader() {
           <Link
             href="/story"
             className={cn(
-              "py-3.5 text-sm font-semibold transition-colors hover:text-blue-700",
+              "py-3.5 text-sm font-semibold transition-colors hover:text-brand-text",
               storyActive
-                ? "border-b-2 border-gold-500 pb-[3px] text-blue-700"
+                ? "border-b-2 border-nav-underline pb-[3px] text-brand-text"
                 : "text-foreground",
             )}
           >

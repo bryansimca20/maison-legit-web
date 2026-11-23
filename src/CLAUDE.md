@@ -52,7 +52,7 @@ Don't add a new env var without asking.
 - **Testing:** Vitest (`npm test`) for the pure helpers in `lib/`; tests sit next to the file as `*.test.ts`. No component tests: UI is checked in the browser at 390px and 1440px.
 
 **Do NOT use without asking:**
-- CSS modules, styled-components, emotion, or any non-Tailwind styling. No hardcoded hex in components — use the brand token utilities / semantic classes (raw hex lives **only** in the token definitions in [app/globals.css](app/globals.css)).
+- CSS modules, styled-components, emotion, or any non-Tailwind styling. No hardcoded hex in components — use the brand token utilities / semantic classes (raw hex lives **only** in the token definitions in [app/globals.css](app/globals.css) and the theme files in [app/themes/](app/themes); the one exception is each occasion's `themeColor` in `lib/occasion.ts`, because Next's viewport needs a literal).
 - Redux/Zustand/Jotai, or a new app-level Context beyond `OrderProvider` — local `useState`/`useEffect` is for ephemeral UI state.
 - A data-fetching library (TanStack Query, SWR) or HTTP client (Axios/`fetch`-in-component) — there is no backend. If server data is ever needed, use Next.js full-stack primitives (see [Data Fetching & Services](#data-fetching--services)).
 - A form/validation library — the one form uses local state today; propose `react-hook-form` + `zod` first if forms grow.
@@ -69,7 +69,10 @@ src/
     page.tsx                 Landing — Hero, Collection, FeatureBand + collection JSON-LD
     story/page.tsx           Our Story — prose, occasions list, close-up photos, CTA band + breadcrumb JSON-LD
     lapis/[slug]/page.tsx    Per-product page (generateStaticParams, generateMetadata, Product + breadcrumb JSON-LD)
-    globals.css              Tailwind v4 theme: brand tokens, shadcn semantic mapping, base layer, brand utilities
+    globals.css              Tailwind v4 theme: brand tokens, shadcn semantic mapping, seasonal roles, base layer,
+                             brand utilities; imports the theme files below
+    themes/<slug>.css        One file per seasonal theme (christmas.css): its palette and the seasonal roles,
+                             all under :root[data-occasion="<slug>"] (a test in lib/occasion.test.ts checks)
     sitemap.ts robots.ts manifest.ts opengraph-image.tsx   SEO route handlers / generated OG image
   components/
     ui/                      shadcn primitives (Base UI) — do not hand-edit (CLI-regenerated); button.tsx is the
@@ -80,10 +83,17 @@ src/
                              hero-slideshow (the home hero's crossfading photos + pause button), collection, product-carousel (product page only), product-badge, price-tag,
                              feature-band, cta-band, order-dialog, order-provider, order-date-picker (the
                              December-only shadcn Calendar), product-detail
+    site/decor/              Seasonal decorations (aria-hidden SVG/CSS, no motion): starburst, line-bow,
+                             gift-ribbon, stripe-strip, card-frame. Sections render one only when
+                             hasDecor("<name>") is true for the current occasion (lib/occasion.ts); colours come
+                             from the theme file's --decor-* tokens or a role utility
     seo/json-ld.tsx          <JsonLd> — renders a structured-data <script>
   lib/                       App + domain data (no server layer):
     site.ts                  siteConfig — name, url, adminWhatsApp, location, social
-    products.ts              PRODUCTS, SIZES, OCCASIONS, CURRENT_OCCASION, PRICE_FROM, SITE_IMAGES, fmtK,
+    occasion.ts              The seasonal switch: OccasionKey, OCCASIONS (hero line, theme slug, theme-color,
+                             decorations per occasion), CURRENT_OCCASION, currentOccasion, hasDecor
+                             (tested in occasion.test.ts). See DESIGN.md "Seasonal themes"
+    products.ts              PRODUCTS, SIZES, PRICE_FROM, SITE_IMAGES, fmtK,
                              normalizeWaNational, OrderLine, orderTotal, nextProductKey, MAX_ORDER_LINES,
                              MIN_SMALL_QTY, minQty (the small box minimum, used by the order form, saved drafts
                              and the product page), DELIVERY, isDeliveryDay, isoDay, earliestDeliveryDay,
@@ -105,7 +115,7 @@ Structural rules:
 
 **TypeScript**
 - Strict mode on. No `any`. Avoid the non-null assertion `!` — handle `null`/`undefined` explicitly (early return, guard, default — see `getProduct`).
-- Prefer inferred types; annotate at module boundaries. Domain types live in [lib/products.ts](lib/products.ts) (`Product`, `SizeKey`, `ProductKey`, `BadgeTone`, `OccasionKey`).
+- Prefer inferred types; annotate at module boundaries. Domain types live in [lib/products.ts](lib/products.ts) (`Product`, `SizeKey`, `ProductKey`, `BadgeTone`) and [lib/occasion.ts](lib/occasion.ts) (`OccasionKey`, `Occasion`, `Decor`).
 - `type` for unions/aliases; **no `I` prefix**. Use `import type { … }` for type-only imports.
 
 **Component patterns**
@@ -144,6 +154,14 @@ Structural rules:
 **Styling**
 - Tailwind utilities in JSX; use `cn()` from [lib/utils.ts](lib/utils.ts) for conditional/merged classes. No inline `style={}` unless the value is dynamic (e.g. the carousel `translateX`).
 - Brand color utilities only — `bg-cream-100`, `text-ink-800`, `bg-blue-500`, `text-gold-800`, `bg-feature`, etc. — plus the shadcn semantic classes the primitives use. Raw hex appears only in the token definitions in `globals.css`.
+- **Seasonal surfaces use role utilities, never brand ramps.** The top bar, header, hero panel, home product section,
+  feature band, CTA band, footer, actions, link accents and selection read the "Seasonal roles" in `globals.css`
+  (`bg-bar`, `bg-header`, `bg-hero-panel`, `bg-products`, `bg-band`, `bg-footer`, `text-brand-text`, …), whose
+  defaults are today's colours, so a theme can repaint them. Each coloured block sets its own focus ring with
+  `[--ring:var(--<block>-ring)]`. Buttons: `cta` on light grounds, `ctaOnBlock` on the hero panel and product tiles.
+  **A role used on a coloured block belongs to that block:** `text-brand-text` (link hover) is for light grounds
+  only; on the product section the name's hover is `text-products-name-hover`. A new pair goes in `READABLE` in
+  `lib/occasion.test.ts`, which checks every text and ring role against its ground in every theme.
 
 **Icons & assets** — Icons: `lucide-react` only (`size-4`, etc.). All imagery goes through `next/image`; product photos live in [public/assets/photography/](../public/assets/photography). Keep `alt` text descriptive (SEO + a11y).
 
@@ -165,10 +183,16 @@ Structural rules:
 - **shadcn here is the Base UI variant, not Radix.** Primitives in `components/ui/` import from `@base-ui/react`. Match that when adding components, and note Base UI prop names differ (`Dialog` uses `open`/`onOpenChange`; `Select` uses `value`/`onValueChange` + `items`, and `Select.Value` can take a function child).
 - **Tailwind v4 is CSS-first — there is no `tailwind.config.js`.** Theme customization lives in the `@theme` block in [app/globals.css](app/globals.css).
 - **Brand color scales intentionally override Tailwind defaults.** `bg-blue-500`, `bg-red-500`, `bg-green-800`, `bg-amber-500` are the Maison Legit palette, not Tailwind's. New brand scales are added too: `cream-*`, `gold-*`, `ink-*`, `burgundy-*`, plus `bg-canvas` / `bg-feature`. Use **`gold-800`** (not `gold-500`/`600`) for small text on light surfaces — it's the AA-contrast gilded tone.
-- **`components/ui/button.tsx` is hand-restyled to the brand** (8px radius, `active:scale-[0.97]` press; variants `primary`/`cta`/`gold`/`secondary`/`ghost`/`outline`; sizes `sm`/`md`/`lg`/`icon`/`icon-sm`). It's the one `ui/` primitive that deviates from CLI output — preserve its variants; if you ever re-add it via the CLI, re-apply them.
+- **`components/ui/button.tsx` is hand-restyled to the brand** (8px radius, `active:scale-[0.97]` press; variants `primary`/`cta`/`ctaOnBlock`/`gold`/`secondary`/`ghost`/`outline`, where `cta` and `ctaOnBlock` read the seasonal action roles; sizes `sm`/`md`/`lg`/`icon`/`icon-sm`). It's the one `ui/` primitive that deviates from CLI output — preserve its variants; if you ever re-add it via the CLI, re-apply them.
 - **The pre-order dialog re-initializes via remount.** `order-provider.tsx` passes a changing `key` to `<OrderDialog>` on each open, so its `useState` initializers run per open — don't reintroduce a `useEffect` reset (it trips the React 19 set-state-in-effect lint). The initializers read the unfinished order from `sessionStorage` (`lib/order-draft.ts`) first: a saved order reopens as it was, ignoring the product pressed; with none, the product preselects. The dialog saves the draft once the customer changes something and clears it on send.
 - **Each lapis has a lead `heroPhoto`** in [lib/products.ts](lib/products.ts): its home tile, its slide in the home hero slideshow, and the first photo on its product page. Order thumbnails and link previews use `photos[0]`. Keep a hero photo out of `photos`, or the product page shows it twice (a test checks). Its `focus` is the CSS `object-position` for the hero's wide crop.
-- **Seasonal hero line** is `CURRENT_OCCASION` in [lib/products.ts](lib/products.ts) (`"None"` by default, which shows no line).
+- **The seasonal switch** is `CURRENT_OCCASION` in [lib/occasion.ts](lib/occasion.ts). It picks the hero line, puts
+  `data-occasion="<slug>"` on `<html>` when the occasion has a theme, and sets the viewport `themeColor`
+  (`"None"` is the default site: no line, no theme). **Turning a season off:** set `"None"` and deploy; keep the
+  theme file for next year. **Adding an occasion's look:** add `app/themes/<slug>.css` (palette + roles under
+  `:root[data-occasion="<slug>"]`), `@import` it in `globals.css`, set the occasion's `theme`, `themeColor` and
+  `decor` in `lib/occasion.ts`, and add its subsection to DESIGN.md "Seasonal themes". No component edits needed
+  unless it brings a new decoration.
 - **Our Story uses product close-ups** (`SITE_IMAGES.story*`) where the family photos will go; swap the entries in `lib/products.ts` when the shots exist. Never ship a placeholder frame (`DESIGN.md`).
 
 ## Safety Rules

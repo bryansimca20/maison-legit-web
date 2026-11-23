@@ -10,10 +10,13 @@ const buttonVariants = cva(
       variant: {
         primary:
           "border-transparent bg-primary text-cream-100 shadow-xs hover:bg-blue-600 hover:shadow-sm",
-        cta: "border-transparent bg-red-500 text-cream-100 shadow-xs hover:bg-red-600 hover:shadow-sm",
+        cta: "border-transparent bg-action text-action-fg shadow-xs hover:bg-action-hover hover:shadow-sm",
+        /* the action on a coloured block (hero panel, product section) */
+        ctaOnBlock:
+          "border-transparent bg-action-on-block text-action-on-block-fg shadow-xs hover:bg-action-on-block-hover hover:shadow-sm",
         gold: "border-transparent bg-gold-500 text-ink-900 shadow-xs hover:bg-gold-600 hover:shadow-sm",
         secondary:
-          "border-[var(--border-strong)] bg-transparent text-blue-700 hover:bg-cream-200",
+          "border-[var(--border-strong)] bg-transparent text-brand-text hover:bg-cream-200",
         ghost:
           "border-transparent bg-transparent text-foreground hover:bg-cream-300",
         outline:

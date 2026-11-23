@@ -17,7 +17,7 @@ export function ProductDetail({ product }: { product: Product }) {
       <nav aria-label="Breadcrumb" className="text-sm text-ink-600">
         <ol className="flex flex-wrap items-center gap-2">
           <li>
-            <Link href="/" className="transition-colors hover:text-blue-700">
+            <Link href="/" className="transition-colors hover:text-brand-text">
               Home
             </Link>
           </li>
@@ -27,7 +27,7 @@ export function ProductDetail({ product }: { product: Product }) {
           <li>
             <Link
               href="/#collection"
-              className="transition-colors hover:text-blue-700"
+              className="transition-colors hover:text-brand-text"
             >
               The collection
             </Link>

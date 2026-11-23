@@ -44,8 +44,11 @@ Copy `.env.example` to `.env.local` and set:
 Other content lives in plain TypeScript:
 
 - **Products, prices, sizes, photos** — [`src/lib/products.ts`](src/lib/products.ts)
-- **Seasonal occasion** — set `CURRENT_OCCASION` in [`src/lib/products.ts`](src/lib/products.ts)
-  (`"Eid Al-Fitr" | "Lunar New Year" | "Christmas" | "None"`); shows a line above the hero heading (none for `"None"`)
+- **Seasonal occasion and theme** — set `CURRENT_OCCASION` in [`src/lib/occasion.ts`](src/lib/occasion.ts)
+  (`"Eid Al-Fitr" | "Lunar New Year" | "Christmas" | "None"`) and deploy. It picks the line above the hero heading
+  and, for an occasion with a theme (today: `"Christmas"`), the site's seasonal colours, browser bar colour and
+  decorations. `"None"` is the everyday site. To end the Christmas look after the season, set `"None"`. See
+  `DESIGN.md` "Seasonal themes".
 - **Brand / location / socials** — [`src/lib/site.ts`](src/lib/site.ts)
 
 ## Photography

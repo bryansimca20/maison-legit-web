@@ -3,14 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { useOrder } from "@/components/site/order-provider";
 import { HeroSlideshow } from "@/components/site/hero-slideshow";
-import {
-  PRODUCTS,
-  OCCASIONS,
-  CURRENT_OCCASION,
-  PRICE_FROM,
-  PREORDER,
-  fmtK,
-} from "@/lib/products";
+import { PRODUCTS, PRICE_FROM, PREORDER, fmtK } from "@/lib/products";
+import { currentOccasion, hasDecor } from "@/lib/occasion";
+import { cn } from "@/lib/utils";
+import { Starburst } from "@/components/site/decor/starburst";
+import { LineBow } from "@/components/site/decor/line-bow";
 
 // One entrance on load; reduced motion is handled globally in globals.css.
 const ENTER =
@@ -20,7 +17,8 @@ const SLIDES = PRODUCTS.map((p) => p.heroPhoto);
 
 export function Hero() {
   const { open } = useOrder();
-  const occasion = OCCASIONS[CURRENT_OCCASION].eyebrow;
+  const occasion = currentOccasion.eyebrow;
+  const stars = hasDecor("starbursts");
 
   return (
     // The hero is the first screen below the bar and header (8rem on phones, 7rem from md), so its button always shows.
@@ -29,35 +27,46 @@ export function Hero() {
         <HeroSlideshow slides={SLIDES} />
       </div>
 
-      <div className="relative z-10 mx-5 -mt-11 mb-4 rounded-xs bg-cream-100 p-5 md:absolute md:bottom-16 md:left-[max(48px,calc((100vw-1200px)/2+48px))] md:m-0 md:w-[580px] md:p-11">
+      <div className="relative z-10 mx-5 -mt-11 mb-4 rounded-xs bg-hero-panel p-5 [--ring:var(--hero-panel-ring)] md:absolute md:bottom-16 md:left-[max(48px,calc((100vw-1200px)/2+48px))] md:m-0 md:w-[580px] md:p-11">
         {occasion && (
-          <p className={`text-sm font-semibold text-gold-800 ${ENTER}`}>
+          <p
+            className={cn(
+              "text-sm font-semibold text-hero-panel-eyebrow",
+              stars && "flex items-center gap-2",
+              ENTER,
+            )}
+          >
+            {stars && <Starburst size={12} />}
             {occasion}
           </p>
         )}
         <h1
-          className={`mt-3.5 font-display text-[42px] leading-[1.04] font-semibold tracking-[-0.02em] text-ink-900 first:mt-0 md:text-[64px] ${ENTER}`}
+          className={`mt-3.5 font-display text-[42px] leading-[1.04] font-semibold tracking-[-0.02em] text-hero-panel-heading first:mt-0 md:text-[64px] ${ENTER}`}
         >
           Lapis legit, baked by hand in Jakarta.
         </h1>
         <p
-          className={`mt-4 max-w-[52ch] text-base leading-[1.7] text-ink-600 md:text-[17px] ${ENTER} delay-[60ms]`}
+          className={`mt-4 max-w-[52ch] text-base leading-[1.7] text-hero-panel-text md:text-[17px] ${ENTER} delay-[60ms]`}
         >
           Mom&apos;s thirty-year family recipe, baked one layer at a time.
           Small batch, no preservatives, made to order.
         </p>
         <p
-          className={`mt-3 text-sm font-semibold text-ink-800 ${ENTER} delay-[60ms]`}
+          className={`mt-3 text-sm font-semibold text-hero-panel-fact ${ENTER} delay-[60ms]`}
         >
           From IDR {fmtK(PRICE_FROM)}. Ships from {PREORDER.shipsFrom}.
         </p>
         <div
           className={`mt-5 flex flex-wrap items-center gap-4 md:mt-7 ${ENTER} delay-[120ms]`}
         >
-          <Button variant="cta" size="lg" onClick={() => open()}>
+          <Button variant="ctaOnBlock" size="lg" onClick={() => open()}>
             Pre-order now
           </Button>
         </div>
+        {/* Last child, so the heading's first:mt-0 still works; absolute, so its place in the order doesn't show. */}
+        {hasDecor("heroBow") && (
+          <LineBow className="absolute top-4 right-4 w-[46px] text-hero-panel-text md:top-6 md:right-[30px] md:w-[72px]" />
+        )}
       </div>
     </section>
   );

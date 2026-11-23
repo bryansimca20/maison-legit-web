@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Hanken_Grotesk, Yellowtail } from "next/font/google
 
 import "./globals.css";
 import { siteConfig } from "@/lib/site";
+import { currentOccasion } from "@/lib/occasion";
 import { bakerySchema, websiteSchema } from "@/lib/schema";
 import { JsonLd } from "@/components/seo/json-ld";
 import { OrderProvider } from "@/components/site/order-provider";
@@ -92,7 +93,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fcf9f1",
+  themeColor: currentOccasion.themeColor,
   colorScheme: "light",
 };
 
@@ -102,6 +103,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-occasion={currentOccasion.theme ?? undefined}
       className={`${hanken.variable} ${cormorant.variable} ${yellowtail.variable} h-full`}
     >
       <body className="flex min-h-full flex-col bg-canvas">
