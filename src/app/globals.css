@@ -159,7 +159,8 @@
   --brand-text: var(--blue-700);
   --nav-underline: var(--gold-500);
   --selection: var(--gold-300);
-  /* Focus rings per block (applied as [--ring:var(--<block>-ring)]); a ring must show on its own ground. */
+  /* Focus rings per block, applied on the block itself (e.g. [--ring:var(--band-ring)]); a ring must show on its
+     own ground. Keep examples here concrete: Tailwind scans comments, and a placeholder becomes a broken rule. */
   --hero-panel-ring: var(--blue-700);
   --products-ring: var(--blue-700);
   --band-ring: var(--cream-100);

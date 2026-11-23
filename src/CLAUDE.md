@@ -157,8 +157,12 @@ Structural rules:
 - **Seasonal surfaces use role utilities, never brand ramps.** The top bar, header, hero panel, home product section,
   feature band, CTA band, footer, actions, link accents and selection read the "Seasonal roles" in `globals.css`
   (`bg-bar`, `bg-header`, `bg-hero-panel`, `bg-products`, `bg-band`, `bg-footer`, `text-brand-text`, …), whose
-  defaults are today's colours, so a theme can repaint them. Each coloured block sets its own focus ring with
-  `[--ring:var(--<block>-ring)]`. Buttons: `cta` on light grounds, `ctaOnBlock` on the hero panel and product tiles.
+  defaults are today's colours, so a theme can repaint them. Each coloured block sets its own focus ring with an
+  arbitrary property naming its ring role, e.g. `[--ring:var(--band-ring)]`. Buttons: `cta` on light grounds,
+  `ctaOnBlock` on the hero panel and product tiles. **Tailwind v4 scans every file here, comments and Markdown
+  included:** a bracketed class example must be a real, valid one. A placeholder in it (an angle-bracket name or an
+  ellipsis) becomes a real CSS rule, and `npm run dev` then fails to parse the CSS (the production build silently
+  drops it).
   **A role used on a coloured block belongs to that block:** `text-brand-text` (link hover) is for light grounds
   only; on the product section the name's hover is `text-products-name-hover`. A new pair goes in `READABLE` in
   `lib/occasion.test.ts`, which checks every text and ring role against its ground in every theme.
