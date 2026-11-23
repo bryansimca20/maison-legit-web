@@ -11,7 +11,7 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 - **Who it's for:** people in Jakarta buying a lapis for a celebration or as a gift, mostly on a phone.
 - **Space:** home bakery / small-batch kue. A **place**-kind site: photographs lead, no effects.
 - **Project type:** marketing site with one transaction (the pre-order dialog).
-- **The one thing to remember:** *Mom's forty-layer lapis, made by hand in Jakarta.* Every decision serves this.
+- **The one thing to remember:** *Mom's lapis, made by hand in Jakarta, one layer at a time.* Every decision serves this.
 
 ## Aesthetic Direction
 
@@ -98,7 +98,8 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 
 - Real photographs of the real cake only. No stock passed off as ours.
 - Never use a social-media export (baked-in border, drop shadow, text) as a page photo.
-- No photo twice on the same page.
+- No photo twice on the same page. One exception: the home hero slideshow shows each lapis's hero photo, which
+  is also that lapis's tile just below (owners' call).
 - Shots still needed: Mom at the oven, the family table, an old family photo, a clean cross-section
   close-up. Until they exist, use the product shots; never ship a placeholder frame.
 - Every image through `next/image` with a `sizes` that matches its rendered width, descriptive `alt`.
@@ -169,5 +170,6 @@ Full findings: `~/.gstack/projects/maison-legit/designs/design-audit-20261117/de
 | 2026-11-22 | Delivery date is its own order step (Lapis, Date, Delivery, Review: a four-segment bar); its calendar shows December 2026 only, 3 to 31 December pickable; first delivery moves to 3 December | Owners' call: every order names a day the owners deliver on, so dates are no longer settled by hand in the chat |
 | 2026-11-21 | Christmas campaign shot as the hero; banner and order copy name Christmas | Owners' call for the Christmas pre-order; revert to the cross-section photo after the season |
 | 2026-11-22 | Christmas lapis shots lead each product page and home tile (`seasonalPhoto`), cropped to the cake without logo or tagline | Owners' call; order thumbnails and link previews keep the plain photos, which read better small. Delete the entries after the season |
-| 2026-11-23 | Christmas photos removed from the hero, home tiles and product pages; each lapis has a close-up hero photo that opens its page (new shots for Original, Plum, Cheesecake; the forkful for Chocolate), and the tiles go back to the whole cakes | Owners' call: the striped Christmas set looked like a circus. Christmas copy stays |
+| 2026-11-23 | Christmas photos removed from the hero, home tiles and product pages; each lapis has a hero photo that leads its tile, its hero slide and its page (new close-ups for Original, Plum, Cheesecake; the whole cake for Chocolate, which has no new shot) | Owners' call: the striped Christmas set looked like a circus. Christmas copy stays. The hero photos show twice on the home page (slide and tile), an accepted exception |
+| 2026-11-23 | "Forty layers" removed from the copy (Original tile and description, Our Story, this file) | Owners' call: they don't know the exact count. "Thousand-layer cake" stays as the cake's common name |
 | 2026-11-23 | Hero is a full-width slideshow of the lapis close-ups (crossfade every 5s, slow zoom, pause button, still under reduced motion) with the text on a cream panel; the hero photo fade is gone. On phones the hero fits the first screen so its button always shows; the paragraph shows on phones too, and the photo gives up the height | Owners' call: a moving hero makes the site feel alive, and the phone button must be visible without scrolling. Chosen over a crossfading split layout and a sliding row of tall photos |

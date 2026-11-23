@@ -190,7 +190,7 @@ describe("delivery dates", () => {
 describe("hero photos", () => {
   const plain = PRODUCTS.flatMap((p) => p.photos.map((x) => x.src));
 
-  it("are never one of the plain photos, so no page shows a photo twice", () => {
+  it("are never one of the plain photos, so a product page never shows one twice", () => {
     for (const p of PRODUCTS) expect(plain).not.toContain(p.heroPhoto.src);
   });
 

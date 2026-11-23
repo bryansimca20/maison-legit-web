@@ -36,7 +36,7 @@ export interface Product {
   badge: { tone: BadgeTone; label: string } | null;
   prices: Record<SizeKey, number>;
   photos: Photo[];
-  /** Close-up that opens the product page and plays in the home hero. Tiles, order thumbnails and link previews use photos[0]. */
+  /** Lead photo: the home tile, a home hero slide and the first photo on the product page. Order thumbnails and link previews use photos[0]. */
   heroPhoto: HeroPhoto;
 }
 
@@ -53,9 +53,9 @@ export const PRODUCTS: Product[] = [
     k: "original",
     name: "Original",
     fullName: "Lapis Legit Original",
-    tag: "The house classic: forty layers of butter and warm spice.",
+    tag: "The house classic: butter and warm spice in every layer.",
     description:
-      "Our house lapis legit: forty-plus layers of butter, egg yolk and warm spice, each one baked and pressed by hand.",
+      "Our house lapis legit: fine layers of butter, egg yolk and warm spice, each one baked and pressed by hand.",
     badge: null,
     prices: { whole: 890, half: 530, small: 325 },
     heroPhoto: { src: `${PHOTO_BASE}/lapis-legit-original-4.webp`, alt: "Lapis Legit Original on a gold-handled tray, three slices cut to show its fine layers", focus: "50% 62%" },
@@ -90,9 +90,9 @@ export const PRODUCTS: Product[] = [
       "Each layer brushed with Valrhona dark couverture. Bittersweet, and still baked one layer at a time.",
     badge: null,
     prices: { whole: 1200, half: 720, small: 480 },
-    heroPhoto: { src: `${PHOTO_BASE}/lapis-legit-chocolate-1.jpg`, alt: "A slice of Lapis Legit Valrhona Chocolate showing dark layers", focus: "50% 55%" },
+    heroPhoto: { src: `${PHOTO_BASE}/lapis-legit-chocolate-2.jpg`, alt: "A whole Lapis Legit Valrhona Chocolate", focus: "50% 60%" },
     photos: [
-      { src: `${PHOTO_BASE}/lapis-legit-chocolate-2.jpg`, alt: "A whole Lapis Legit Valrhona Chocolate" },
+      { src: `${PHOTO_BASE}/lapis-legit-chocolate-1.jpg`, alt: "A slice of Lapis Legit Valrhona Chocolate showing dark layers" },
       { src: `${PHOTO_BASE}/lapis-legit-chocolate-3.jpg`, alt: "Close detail of the chocolate layers" },
     ],
   },
