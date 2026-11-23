@@ -77,7 +77,7 @@ src/
                              keep if it is ever re-added: cn from @/lib/utils (the CLI writes the separate `cn`
                              package), and `ref={ref}` on CalendarDayButton's Button (arrow keys need it)
     site/                    Domain components — announcement-bar, site-header, site-footer, hero,
-                             collection, product-carousel (product page only), product-badge, price-tag,
+                             hero-slideshow (the home hero's crossfading photos + pause button), collection, product-carousel (product page only), product-badge, price-tag,
                              feature-band, cta-band, order-dialog, order-provider, order-date-picker (the
                              December-only shadcn Calendar), product-detail
     seo/json-ld.tsx          <JsonLd> — renders a structured-data <script>
@@ -111,7 +111,7 @@ Structural rules:
 **Component patterns**
 - Functional components only.
 - Compose shadcn primitives (`Button`, `Dialog`, `Input`, `Select`, `Label`, `Badge`, `Textarea`) — wrap, don't rewrite. The `ui/` primitives use `cva` + `VariantProps` with `defaultVariants` and a `data-slot` attribute (Base UI) — match that if you extend one.
-- Add `"use client"` only when needed (interactivity / hooks) and keep it as deep in the tree as possible. Pages stay server components; the interactive bits (`order-*`, `hero`, `collection`, `cta-band`, `product-detail`, `product-carousel`, `site-header`) are client.
+- Add `"use client"` only when needed (interactivity / hooks) and keep it as deep in the tree as possible. Pages stay server components; the interactive bits (`order-*`, `hero`, `hero-slideshow`, `collection`, `cta-band`, `product-detail`, `product-carousel`, `site-header`) are client.
 - Presentational components don't hold business logic — static data comes from `lib/`, dialog actions come from `useOrder()`.
 - Module-level `const` for static data (e.g. `POINTS` in `feature-band.tsx`, `OCCASION_ROWS` in `story/page.tsx`); the real catalogue is in `lib/products.ts`.
 
@@ -167,7 +167,7 @@ Structural rules:
 - **Brand color scales intentionally override Tailwind defaults.** `bg-blue-500`, `bg-red-500`, `bg-green-800`, `bg-amber-500` are the Maison Legit palette, not Tailwind's. New brand scales are added too: `cream-*`, `gold-*`, `ink-*`, `burgundy-*`, plus `bg-canvas` / `bg-feature`. Use **`gold-800`** (not `gold-500`/`600`) for small text on light surfaces — it's the AA-contrast gilded tone.
 - **`components/ui/button.tsx` is hand-restyled to the brand** (8px radius, `active:scale-[0.97]` press; variants `primary`/`cta`/`gold`/`secondary`/`ghost`/`outline`; sizes `sm`/`md`/`lg`/`icon`/`icon-sm`). It's the one `ui/` primitive that deviates from CLI output — preserve its variants; if you ever re-add it via the CLI, re-apply them.
 - **The pre-order dialog re-initializes via remount.** `order-provider.tsx` passes a changing `key` to `<OrderDialog>` on each open, so its `useState` initializers run per open — don't reintroduce a `useEffect` reset (it trips the React 19 set-state-in-effect lint). The initializers read the unfinished order from `sessionStorage` (`lib/order-draft.ts`) first: a saved order reopens as it was, ignoring the product pressed; with none, the product preselects. The dialog saves the draft once the customer changes something and clears it on send.
-- **Seasonal lapis photos** are each product's optional `seasonalPhoto` in [lib/products.ts](lib/products.ts): shown first in the product page carousel and on the home tile, never in order thumbnails or link previews. Delete the entries when the season ends.
+- **Each lapis has a lead `heroPhoto`** in [lib/products.ts](lib/products.ts): its home tile, its slide in the home hero slideshow, and the first photo on its product page. Order thumbnails and link previews use `photos[0]`. Keep a hero photo out of `photos`, or the product page shows it twice (a test checks). Its `focus` is the CSS `object-position` for the hero's wide crop.
 - **Seasonal hero line** is `CURRENT_OCCASION` in [lib/products.ts](lib/products.ts) (`"None"` by default, which shows no line).
 - **Our Story uses product close-ups** (`SITE_IMAGES.story*`) where the family photos will go; swap the entries in `lib/products.ts` when the shots exist. Never ship a placeholder frame (`DESIGN.md`).
 

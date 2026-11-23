@@ -11,13 +11,13 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 - **Who it's for:** people in Jakarta buying a lapis for a celebration or as a gift, mostly on a phone.
 - **Space:** home bakery / small-batch kue. A **place**-kind site: photographs lead, no effects.
 - **Project type:** marketing site with one transaction (the pre-order dialog).
-- **The one thing to remember:** *Mom's forty-layer lapis, made by hand in Jakarta.* Every decision serves this.
+- **The one thing to remember:** *Mom's lapis, made by hand in Jakarta, one layer at a time.* Every decision serves this.
 
 ## Aesthetic Direction
 
 - **Direction:** family bakery ledger. Cream paper, espresso ink, one lacquer-red action, the cake's
   photographs doing the talking.
-- **Decoration level:** minimal. No gradients beyond the hero photo fade, no blobs, no patterns, no icons
+- **Decoration level:** minimal. No gradients, no blobs, no patterns, no icons
   as decoration, no emoji.
 - **Mood:** warm, plain-spoken, proud of the craft. A family handing you a slice, not a luxury brand selling one.
 - **Signature:** the cross-section of the layers. Use that photograph where a wine site would use its label.
@@ -79,15 +79,17 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 - **Approach:** grid-disciplined, photograph-led.
 - **Max content width:** 1200px, side gutters 20px phone / 48px desktop. Left and right edges match on every section.
 - **Grid:** 1 column under 640px, 2 columns from 640px, 4 product columns from 1280px.
-- **Hero:** full-height photo of the cake, h1 names the product and the city, one fact line (price from, lead
-  time), one button. Nothing else. During a seasonal pre-order the photo may be the campaign shot with its own
-  lettering; crop its logo and tagline off so they don't sit behind the h1 on phones.
+- **Hero:** a full-width slideshow of the lapis close-ups (each product's hero photo, one per lapis; photo only,
+  no caption or link), with the text on a `cream-100` panel over it: h1 names the product and the city, one fact
+  line (price from, lead time), one button, with the short paragraph between the h1 and the fact line. On phones
+  the hero fills the first screen below the bar and header and its button is always on that screen: the photo
+  gives up height, the button never moves. Desktop panel sits at the content's left edge, 64px from the bottom.
 - **Order of the home page:** hero → the collection → the craft (one large type moment over the cross-section) → footer.
 - **Products:** photo on the cream ground, name, one factual line, price, button. No white box, no shadow
   around the product. The whole tile is one link to `/lapis/[slug]`; the button opens the dialog.
 - **Cards:** only where the card is the thing you click. No decorative card grids.
 - **Centred text:** only the footer and a single pull quote. Headings and body align left.
-- **Border radius:** photos 4px, buttons 8px, inputs 8px, dialog 16px, badges 4px. No pill shapes on new work.
+- **Border radius:** photos and the hero panel 4px, buttons 8px, inputs 8px, dialog 16px, badges 4px. No pill shapes on new work.
 - **Shadows:** none on photos or products. `shadow-xl` on the dialog only.
 - **Touch targets:** 44px minimum for every link and control outside running text (carousel dots included, via the hit area).
 - **Footer:** wordmark, WhatsApp link, lead time, delivery area, Instagram. Facts, not a tagline.
@@ -96,7 +98,8 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 
 - Real photographs of the real cake only. No stock passed off as ours.
 - Never use a social-media export (baked-in border, drop shadow, text) as a page photo.
-- No photo twice on the same page.
+- No photo twice on the same page. One exception: the home hero slideshow shows each lapis's hero photo, which
+  is also that lapis's tile just below (owners' call).
 - Shots still needed: Mom at the oven, the family table, an old family photo, a clean cross-section
   close-up. Until they exist, use the product shots; never ship a placeholder frame.
 - Every image through `next/image` with a `sizes` that matches its rendered width, descriptive `alt`.
@@ -111,10 +114,14 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 
 ## Motion
 
-- **Approach:** minimal-functional, plus one entrance on load.
+- **Approach:** minimal-functional, plus one entrance on load and the hero slideshow.
 - **Easing:** `--ease-out` (`cubic-bezier(0.16, 1, 0.3, 1)`) for everything entering or responding.
   `--ease-gentle` is legacy; do not use it on new work. Never `ease-in` on UI.
-- **Durations:** press 120-160ms · hover 150-200ms · carousel slide 200ms · dialog 200ms · hero entrance 400-700ms.
+- **Durations:** press 120-160ms · hover 150-200ms · carousel slide 200ms · dialog 200ms · hero entrance 400-700ms ·
+  hero crossfade 1200ms, a new photo every 5s.
+- **Hero slideshow:** the showing photo zooms 1 to 1.05 over its 5s, linear (ambient, so not `--ease-out`). A
+  pause/play button sits over the photo (44px hit area); pausing freezes the zoom too. Reduced motion: the slideshow starts paused on the first
+  photo and plays only if the visitor presses play.
 - **Buttons:** `active:scale-[0.97]`.
 - **Product tile (linked):** photo `scale-[1.03]` inside its frame on hover, no lift.
 - **Hero entrance:** h1, text, button fade in with an 8px rise, 60ms apart, once on load (`animate-in` from tw-animate-css).
@@ -163,3 +170,6 @@ Full findings: `~/.gstack/projects/maison-legit/designs/design-audit-20261117/de
 | 2026-11-22 | Delivery date is its own order step (Lapis, Date, Delivery, Review: a four-segment bar); its calendar shows December 2026 only, 3 to 31 December pickable; first delivery moves to 3 December | Owners' call: every order names a day the owners deliver on, so dates are no longer settled by hand in the chat |
 | 2026-11-21 | Christmas campaign shot as the hero; banner and order copy name Christmas | Owners' call for the Christmas pre-order; revert to the cross-section photo after the season |
 | 2026-11-22 | Christmas lapis shots lead each product page and home tile (`seasonalPhoto`), cropped to the cake without logo or tagline | Owners' call; order thumbnails and link previews keep the plain photos, which read better small. Delete the entries after the season |
+| 2026-11-23 | Christmas photos removed from the hero, home tiles and product pages; each lapis has a hero photo that leads its tile, its hero slide and its page (the new close-ups for Original, Plum, Cheesecake; the forkful close-up for Chocolate) | Owners' call: the striped Christmas set looked like a circus. Christmas copy stays. The hero photos show twice on the home page (slide and tile), an accepted exception |
+| 2026-11-23 | "Forty layers" removed from the copy (Original tile and description, Our Story, this file) | Owners' call: they don't know the exact count. "Thousand-layer cake" stays as the cake's common name |
+| 2026-11-23 | Hero is a full-width slideshow of the lapis close-ups (crossfade every 5s, slow zoom, pause button, still under reduced motion) with the text on a cream panel; the hero photo fade is gone. On phones the hero fits the first screen so its button always shows; the paragraph shows on phones too, and the photo gives up the height | Owners' call: a moving hero makes the site feel alive, and the phone button must be visible without scrolling. Chosen over a crossfading split layout and a sliding row of tall photos |
