@@ -24,6 +24,8 @@ export function Collection() {
       id="collection"
       className={cn(
         "scroll-mt-24 bg-products [--ring:var(--products-ring)]",
+        // This block's own button colours (the tile buttons use the plain cta variant).
+        "[--action:var(--products-action)] [--action-hover:var(--products-action-hover)] [--action-fg:var(--products-action-fg)]",
         card && "decor-giftwrap relative",
       )}
     >
@@ -45,7 +47,7 @@ export function Collection() {
           {stars && (
             <span aria-hidden className="hidden items-center gap-3.5 sm:flex">
               <Starburst size={14} className="text-products-heading" />
-              <Starburst size={9} className="text-bar-accent" />
+              <Starburst size={9} className="text-[var(--decor-star-light)]" />
               <Starburst size={18} className="text-products-heading" />
               <Starburst size={10} className="text-products-heading" />
             </span>
@@ -91,7 +93,7 @@ export function Collection() {
                     <div className="mt-auto flex items-center justify-between gap-2.5 pt-3">
                       <PriceTag amount={fmtK(p.prices.whole)} size="md" tone="products" note="/ whole" />
                       <Button
-                        variant="ctaOnBlock"
+                        variant="cta"
                         size="sm"
                         className="z-10"
                         onClick={() => open(p.k)}

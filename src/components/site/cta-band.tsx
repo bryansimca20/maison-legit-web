@@ -7,7 +7,7 @@ import { PREORDER } from "@/lib/products";
 export function CtaBand() {
   const { open } = useOrder();
   return (
-    <section className="bg-band [--ring:var(--band-ring)]">
+    <section className="bg-band [--ring:var(--band-ring)] [--action:var(--band-action)] [--action-hover:var(--band-action-hover)] [--action-fg:var(--band-action-fg)]">
       <div className="mx-auto max-w-[1200px] px-5 pt-13 pb-14 md:px-12">
         <h2 className="font-display text-[30px] leading-[1.1] font-semibold tracking-[-0.015em] text-cta-band-heading md:text-[40px]">
           Order a lapis from Mom&apos;s kitchen.

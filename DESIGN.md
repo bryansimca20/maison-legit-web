@@ -37,7 +37,7 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 - **Italic:** allowed for a whole short line (a pull quote), never for one word inside a heading, and never coloured.
 - **Loading:** self-hosted via `next/font/google` in `src/app/layout.tsx`, `display: swap`.
 - **Numbers:** prices in Hanken Grotesk 700 with `tabular-nums`.
-- **Scale (mobile / desktop, px):** h1 42 / 64 · h2 30 / 40 · h3 22 · body 16 / 17 · small 14 · fine print 12 (legal and footer only).
+- **Scale (mobile / desktop, px):** h1 42 / 64 (the home hero's h1 is 36 on phones, see Layout "Hero") · h2 30 / 40 · h3 22 · body 16 / 17 · small 14 · fine print 12 (legal and footer only).
 - Body text never below 16px. Product blurbs 15px minimum.
 - Line height: body 1.6-1.7, headings 1.04-1.16. Measure 45-70ch. `text-wrap: balance` on headings (set in the base layer).
 - No letter-spacing on lowercase. Uppercase is for the product badge only, if it stays.
@@ -89,6 +89,10 @@ occasion with a theme is set, that theme's roles replace these colours; see [Sea
   line (price from, lead time), one button, with the short paragraph between the h1 and the fact line. On phones
   the hero fills the first screen below the bar and header and its button is always on that screen: the photo
   gives up height, the button never moves. Desktop panel sits at the content's left edge, 64px from the bottom.
+  **Below 768px the card is compact** so the photo stays bigger than the card: h1 36px, no paragraph (it shows from
+  768px up), fact line 8px under the h1, button 14px under the fact line (13 × 26px padding, 15px text). The top
+  bar's second sentence shortens to "Ships from Dec 3." below 640px so the bar is one line, and the phone hero height
+  reserves the one-line bar plus the header (about 6.375rem).
 - **Order of the home page:** hero → the collection → the craft (one large type moment over the cross-section) → footer.
 - **Products:** photo on the cream ground, name, one factual line, price, button. No white box, no shadow
   around the product. The whole tile is one link to `/lapis/[slug]`; the button opens the dialog.
@@ -167,12 +171,12 @@ directions on 2026-11-23. Hanging ornaments were tried and removed.
 
 | Name | Hex | Used for |
 | --- | --- | --- |
-| Oxblood | `#7a2421` | top bar, hero panel, product section, footer, buttons on light grounds, ribbon and bow |
-| Deep oxblood | `#5c1a18` | headings on dusty blue, button hover, focus ring on light grounds |
+| Oxblood | `#7a2421` | top bar, hero panel, brand bands (feature band, Our Story CTA band), buttons on light grounds and on blue, ribbon and bow |
+| Deep oxblood | `#5c1a18` | footer, headings and prices on dusty blue, button hover, focus ring on light grounds and on blue |
 | Cream | `#f4ebdf` | page ground |
-| Light cream | `#f9f3ea` | header, type on oxblood, buttons on oxblood, ribbon edge lines |
+| Light cream | `#f9f3ea` | header, type on oxblood, buttons on oxblood, ribbon edge lines, gift-wrap stars and frame line |
 | Rose cream | `#ecd9d2` | secondary text on oxblood, the hero's line-drawn bow |
-| Dusty blue | `#9fb6d1` | feature band, Our Story's CTA band, stripe strip |
+| Dusty blue | `#9fb6d1` | home product section, stripe strip |
 | Frost | `#d3deeb` | small accents on oxblood: bar fact text, hero line, starbursts on oxblood, text selection |
 
 **Roles:**
@@ -183,20 +187,23 @@ directions on 2026-11-23. Hanging ornaments were tried and removed.
 | Header ground | `cream-100` | Light cream |
 | Announcement bar: ground / text / second sentence | `ink-900` / `cream-200` / `gold-300` | Oxblood / Light cream / Frost |
 | Hero panel: ground / heading / paragraph / fact line / seasonal line | `cream-100` / `ink-900` / `ink-600` / `ink-800` / `gold-800` | Oxblood / Light cream / Rose cream / Light cream / Frost |
-| Action on a light ground (header, product page, order dialog, Our Story CTA band): fill / hover | `red-500` / `red-600` | Oxblood / Deep oxblood |
-| Action on a coloured block (hero panel button, product tile buttons): fill / text | `red-500` / `cream-100` | Light cream / Oxblood |
-| Product section: ground / heading / name / description / price / "/ whole" | page / `ink-900` / `ink-900` / `ink-600` / `ink-900` / `ink-600` | Oxblood / Light cream / Light cream / Rose cream / Light cream / Rose cream |
-| Brand band (feature band, Our Story CTA band): ground / heading / body / hairlines | `blue-500` / `cream-100` / `blue-100` (CTA: `cream-100`) / `hairline-on-dark` | Dusty blue / Deep oxblood / Ink `#2c231a` / Deep oxblood at 25% |
-| Footer: ground / text / wordmark | `ink-900` / `cream-500` / `cream-200` | Oxblood / Rose cream / Light cream |
+| Action on a light ground (header, product page, order dialog): fill / hover | `red-500` / `red-600` | Oxblood / Deep oxblood |
+| Hero panel button: fill / text | `red-500` / `cream-100` | Light cream / Oxblood |
+| Product tile buttons (the section sets its own): fill / hover / text | `red-500` / `red-600` / `cream-100` | Oxblood / Deep oxblood / Light cream |
+| Our Story CTA band button (the band sets its own): fill / hover / text | `red-500` / `red-600` / `cream-100` | Light cream / Rose cream / Oxblood |
+| Product section: ground / heading / name / description / price / "/ whole" | page / `ink-900` / `ink-900` / `ink-600` / `ink-900` / `ink-600` | Dusty blue / Deep oxblood / Deep oxblood / Ink / Deep oxblood / Ink |
+| Brand band (feature band, Our Story CTA band): ground / heading / body / hairlines | `blue-500` / `cream-100` / `blue-100` (CTA: `cream-100`) / `hairline-on-dark` | Oxblood / Light cream / Rose cream / Light cream at 22% |
+| Footer: ground / text / wordmark | `ink-900` / `cream-500` / `cream-200` | Deep oxblood / Rose cream / Light cream |
 | Link hover, active nav text and underline (light grounds only) | `blue-700`, `gold-500` underline | Oxblood |
-| Product name hover (on the product section's ground) | `blue-700` | Frost |
+| Product name hover (on the product section's ground) | `blue-700` | Oxblood |
 | Focus ring on light grounds / on oxblood / on dusty blue | `blue-700` / n/a / `cream-100` | Deep oxblood / Light cream / Deep oxblood |
 | Text selection | `gold-300` | Frost |
 
 **Contrast, measured:** Light cream on Oxblood 9.06:1 · Rose cream or Frost on Oxblood 7.34:1 · Oxblood on Cream
 8.47:1 · Deep oxblood on Dusty blue 6.24:1 · Ink on Dusty blue 7.40:1 · Oxblood button against Dusty blue 4.80:1 ·
-`ink-600` on Cream 6.49:1 · rings: Deep oxblood on Cream 11.01:1, Light cream on Oxblood 9.06:1, Deep oxblood on
-Dusty blue 6.24:1.
+`ink-600` on Cream 6.49:1 · Oxblood name hover on Dusty blue 4.80:1 · Rose cream on Deep oxblood 9.54:1 · rings: Deep
+oxblood on Cream 11.01:1, Light cream on Oxblood 9.06:1, Deep oxblood on Dusty blue 6.24:1. The oxblood band and the
+deep oxblood footer sit next to each other at only 1.30:1: different colours, close in value (accepted with E2).
 
 **Decorations:**
 
@@ -205,7 +212,7 @@ Dusty blue 6.24:1.
 | Starburst (8 points) | either side of the top bar text (from 640px); before "Welcoming Christmas"; a cluster of four beside "Four lapis, made to order" (from 640px); before each feature-band point heading; either side of the footer wordmark; four scattered on the feature band (desktop) | Frost or Light cream on oxblood, Deep oxblood or Light cream on dusty blue. 9 to 22px |
 | Line-drawn bow | top-right corner of the hero panel | Rose cream, 72px desktop / 46px phone, clear of the heading |
 | Gift ribbon and bow | across the feature band's cross-section photo | Oxblood ribbons (26px / 20px) at 24% from the right and 30% from the top, Light cream edge lines, a solid oxblood bow (132px / 90px) at the crossing |
-| Card frame and gift-wrap | the home product section | 1.5px Light cream frame line inset 18px (10px on phones) at 60%. A repeating starburst pattern (330px tile, Light cream at 40%) never sits under text: the heading and each tile's text block sit on solid oxblood. Padding grows to 64/88px (desktop) and 44/28/56px (phones) to clear the frame |
+| Card frame and gift-wrap | the home product section | 1.5px Light cream frame line inset 18px (10px on phones) at 85%. A repeating starburst pattern (330px tile, Light cream at 60%) never sits under text: the heading and each tile's text block sit on the solid dusty blue. The heading cluster's small star is Light cream. Padding grows to 64/88px (desktop) and 44/28/56px (phones) to clear the frame |
 | Stripe strip | between the product section and the feature band | Dusty blue and Cream stripes 30px wide, 52px tall, 5px oxblood rule above and below |
 
 Colours only, no decorations: the Our Story body, the product pages and the order dialog. The bar and footer
@@ -258,3 +265,5 @@ Full findings: `~/.gstack/projects/maison-legit/designs/design-audit-20261117/de
 | 2026-11-23 | Hero is a full-width slideshow of the lapis close-ups (crossfade every 5s, slow zoom, pause button, still under reduced motion) with the text on a cream panel; the hero photo fade is gone. On phones the hero fits the first screen so its button always shows; the paragraph shows on phones too, and the photo gives up the height | Owners' call: a moving hero makes the site feel alive, and the phone button must be visible without scrolling. Chosen over a crossfading split layout and a sliding row of tall photos |
 | 2026-11-23 | Seasonal theme system: one occasion switch (`CURRENT_OCCASION`), role colour tokens with today's colours as defaults, one CSS block per occasion, decorations listed per occasion | Swap looks for Christmas, Lunar New Year and Eid without touching components; the default look returns untouched when the occasion is "None" |
 | 2026-11-23 | "Christmas card" theme live for the Christmas pre-order: oxblood, cream and dusty blue; starbursts, a line-drawn bow, a gift ribbon on the cross-section, a card frame with starburst gift-wrap, a stripe strip. Hanging ornaments rejected | Owners' call after two rounds of browser mockups: bolder than cream and unmistakably Christmas, without the circus of the striped photo set. Buttons are oxblood for the season |
+| 2026-11-23 | Christmas theme ("E2"): the home product section moves to dusty blue (deep oxblood type, oxblood buttons), the brand bands to oxblood (light cream type, light cream button on Our Story), the footer to deep oxblood; gift-wrap stars 60%, frame line 85%. The product section and brand bands now set their own button colours | Team feedback: on phones the lapis list was a long column of oxblood and wanted more of the band's blue. Owner picked E2 from mockups (over blue details, blue mounts, alternating panels, stripe dividers, and blue products beside a blue band) because it keeps the page alternating |
+| 2026-11-23 | Phone hero: below 768px the card is compact (h1 36px, no paragraph, tighter spacing) and below 640px the top bar is one line ("Ships from Dec 3."); the phone hero reserves the one-line bar. Reverses "the paragraph shows on phones too" | On an iPhone 18 Pro in Safari the card (367px) was taller than the photo (203px). The owner picked option C from real-site screenshots: photo 356px on that phone, 190px on an iPhone SE (was 37px). The button stays on the first screen |

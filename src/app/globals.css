@@ -140,6 +140,13 @@
   --action-on-block: var(--red-500);
   --action-on-block-hover: var(--red-600);
   --action-on-block-fg: var(--cream-100);
+  /* Buttons per block, applied on the block itself (e.g. [--action:var(--products-action)]), like the rings below. */
+  --products-action: var(--red-500);
+  --products-action-hover: var(--red-600);
+  --products-action-fg: var(--cream-100);
+  --band-action: var(--red-500);
+  --band-action-hover: var(--red-600);
+  --band-action-fg: var(--cream-100);
   --products: var(--cream-200);
   --products-heading: var(--ink-900);
   --products-name: var(--ink-900);

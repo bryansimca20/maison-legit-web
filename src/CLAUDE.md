@@ -158,8 +158,10 @@ Structural rules:
   feature band, CTA band, footer, actions, link accents and selection read the "Seasonal roles" in `globals.css`
   (`bg-bar`, `bg-header`, `bg-hero-panel`, `bg-products`, `bg-band`, `bg-footer`, `text-brand-text`, …), whose
   defaults are today's colours, so a theme can repaint them. Each coloured block sets its own focus ring with an
-  arbitrary property naming its ring role, e.g. `[--ring:var(--band-ring)]`. Buttons: `cta` on light grounds,
-  `ctaOnBlock` on the hero panel and product tiles. **Tailwind v4 scans every file here, comments and Markdown
+  arbitrary property naming its ring role, e.g. `[--ring:var(--band-ring)]`. Buttons work the same way: the product
+  section and the Our Story CTA band set their own `--action`, `--action-hover` and `--action-fg` from their block roles
+  (e.g. `[--action:var(--products-action)]`), and their buttons use the plain `cta` variant; the hero panel's button
+  is `ctaOnBlock`. **Tailwind v4 scans every file here, comments and Markdown
   included:** a bracketed class example must be a real, valid one. A placeholder in it (an angle-bracket name or an
   ellipsis) becomes a real CSS rule, and `npm run dev` then fails to parse the CSS (the production build silently
   drops it).

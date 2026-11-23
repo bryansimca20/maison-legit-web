@@ -38,20 +38,27 @@
   --action-on-block: var(--xmas-cream-light);
   --action-on-block-hover: var(--xmas-rose);
   --action-on-block-fg: var(--xmas-oxblood);
-  --products: var(--xmas-oxblood);
-  --products-heading: var(--xmas-cream-light);
-  --products-name: var(--xmas-cream-light);
-  --products-name-hover: var(--xmas-frost);
-  --products-text: var(--xmas-rose);
-  --products-price: var(--xmas-cream-light);
-  --products-unit: var(--xmas-rose);
-  --band: var(--xmas-blue);
-  --band-heading: var(--xmas-oxblood-deep);
-  --band-text: var(--ink-800);
-  --band-rule: color-mix(in srgb, var(--xmas-oxblood-deep) 25%, transparent);
-  --cta-band-heading: var(--xmas-oxblood-deep);
-  --cta-band-text: var(--ink-800);
-  --footer: var(--xmas-oxblood);
+  /* "E2": the product section on dusty blue, the brand bands on oxblood, the footer on deep oxblood */
+  --products-action: var(--xmas-oxblood);
+  --products-action-hover: var(--xmas-oxblood-deep);
+  --products-action-fg: var(--xmas-cream-light);
+  --band-action: var(--xmas-cream-light);
+  --band-action-hover: var(--xmas-rose);
+  --band-action-fg: var(--xmas-oxblood);
+  --products: var(--xmas-blue);
+  --products-heading: var(--xmas-oxblood-deep);
+  --products-name: var(--xmas-oxblood-deep);
+  --products-name-hover: var(--xmas-oxblood);
+  --products-text: var(--ink-800);
+  --products-price: var(--xmas-oxblood-deep);
+  --products-unit: var(--ink-800);
+  --band: var(--xmas-oxblood);
+  --band-heading: var(--xmas-cream-light);
+  --band-text: var(--xmas-rose);
+  --band-rule: color-mix(in srgb, var(--xmas-cream-light) 22%, transparent);
+  --cta-band-heading: var(--xmas-cream-light);
+  --cta-band-text: var(--xmas-rose);
+  --footer: var(--xmas-oxblood-deep);
   --footer-text: var(--xmas-rose);
   --footer-strong: var(--xmas-cream-light);
   --brand-text: var(--xmas-oxblood);
@@ -59,8 +66,8 @@
 
   /* Focus rings per block */
   --hero-panel-ring: var(--xmas-cream-light);
-  --products-ring: var(--xmas-cream-light);
-  --band-ring: var(--xmas-oxblood-deep);
+  --products-ring: var(--xmas-oxblood-deep);
+  --band-ring: var(--xmas-cream-light);
   --footer-ring: var(--xmas-cream-light);
 
   /* Decorations (components/site/decor/) */
@@ -70,13 +77,13 @@
   --decor-stripe-a: var(--xmas-blue);
   --decor-stripe-b: var(--xmas-cream);
   --decor-stripe-rule: var(--xmas-oxblood);
-  --decor-frame: color-mix(in srgb, var(--xmas-cream-light) 60%, transparent);
+  --decor-frame: color-mix(in srgb, var(--xmas-cream-light) 85%, transparent);
   --decor-star-light: var(--xmas-cream-light);
 }
 
-/* Product section gift-wrap: five Light cream starbursts at 40% on a 330px tile (decor "cardFrame"). */
+/* Product section gift-wrap: five Light cream starbursts at 60% on a 330px tile (decor "cardFrame"). */
 :root[data-occasion="christmas"] .decor-giftwrap {
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22330%22%20height%3D%22330%22%3E%3Cg%20fill%3D%22%23f9f3ea%22%20opacity%3D%22.4%22%3E%3Cpath%20transform%3D%22translate(24.5%2036.5)%20scale(0.625)%22%20d%3D%22M12.00%200.00L13.22%209.04L20.49%203.51L14.96%2010.78L24.00%2012.00L14.96%2013.22L20.49%2020.49L13.22%2014.96L12.00%2024.00L10.78%2014.96L3.51%2020.49L9.04%2013.22L0.00%2012.00L9.04%2010.78L3.51%203.51L10.78%209.04Z%22%2F%3E%3Cpath%20transform%3D%22translate(171.5%2025.5)%20scale(0.375)%22%20d%3D%22M12.00%200.00L13.22%209.04L20.49%203.51L14.96%2010.78L24.00%2012.00L14.96%2013.22L20.49%2020.49L13.22%2014.96L12.00%2024.00L10.78%2014.96L3.51%2020.49L9.04%2013.22L0.00%2012.00L9.04%2010.78L3.51%203.51L10.78%209.04Z%22%2F%3E%3Cpath%20transform%3D%22translate(112.5%20130.5)%20scale(0.7917)%22%20d%3D%22M12.00%200.00L13.22%209.04L20.49%203.51L14.96%2010.78L24.00%2012.00L14.96%2013.22L20.49%2020.49L13.22%2014.96L12.00%2024.00L10.78%2014.96L3.51%2020.49L9.04%2013.22L0.00%2012.00L9.04%2010.78L3.51%203.51L10.78%209.04Z%22%2F%3E%3Cpath%20transform%3D%22translate(208.5%20200.5)%20scale(0.4583)%22%20d%3D%22M12.00%200.00L13.22%209.04L20.49%203.51L14.96%2010.78L24.00%2012.00L14.96%2013.22L20.49%2020.49L13.22%2014.96L12.00%2024.00L10.78%2014.96L3.51%2020.49L9.04%2013.22L0.00%2012.00L9.04%2010.78L3.51%203.51L10.78%209.04Z%22%2F%3E%3Cpath%20transform%3D%22translate(48%20202)%20scale(0.3333)%22%20d%3D%22M12.00%200.00L13.22%209.04L20.49%203.51L14.96%2010.78L24.00%2012.00L14.96%2013.22L20.49%2020.49L13.22%2014.96L12.00%2024.00L10.78%2014.96L3.51%2020.49L9.04%2013.22L0.00%2012.00L9.04%2010.78L3.51%203.51L10.78%209.04Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22330%22%20height%3D%22330%22%3E%3Cg%20fill%3D%22%23f9f3ea%22%20opacity%3D%22.6%22%3E%3Cpath%20transform%3D%22translate(24.5%2036.5)%20scale(0.625)%22%20d%3D%22M12.00%200.00L13.22%209.04L20.49%203.51L14.96%2010.78L24.00%2012.00L14.96%2013.22L20.49%2020.49L13.22%2014.96L12.00%2024.00L10.78%2014.96L3.51%2020.49L9.04%2013.22L0.00%2012.00L9.04%2010.78L3.51%203.51L10.78%209.04Z%22%2F%3E%3Cpath%20transform%3D%22translate(171.5%2025.5)%20scale(0.375)%22%20d%3D%22M12.00%200.00L13.22%209.04L20.49%203.51L14.96%2010.78L24.00%2012.00L14.96%2013.22L20.49%2020.49L13.22%2014.96L12.00%2024.00L10.78%2014.96L3.51%2020.49L9.04%2013.22L0.00%2012.00L9.04%2010.78L3.51%203.51L10.78%209.04Z%22%2F%3E%3Cpath%20transform%3D%22translate(112.5%20130.5)%20scale(0.7917)%22%20d%3D%22M12.00%200.00L13.22%209.04L20.49%203.51L14.96%2010.78L24.00%2012.00L14.96%2013.22L20.49%2020.49L13.22%2014.96L12.00%2024.00L10.78%2014.96L3.51%2020.49L9.04%2013.22L0.00%2012.00L9.04%2010.78L3.51%203.51L10.78%209.04Z%22%2F%3E%3Cpath%20transform%3D%22translate(208.5%20200.5)%20scale(0.4583)%22%20d%3D%22M12.00%200.00L13.22%209.04L20.49%203.51L14.96%2010.78L24.00%2012.00L14.96%2013.22L20.49%2020.49L13.22%2014.96L12.00%2024.00L10.78%2014.96L3.51%2020.49L9.04%2013.22L0.00%2012.00L9.04%2010.78L3.51%203.51L10.78%209.04Z%22%2F%3E%3Cpath%20transform%3D%22translate(48%20202)%20scale(0.3333)%22%20d%3D%22M12.00%200.00L13.22%209.04L20.49%203.51L14.96%2010.78L24.00%2012.00L14.96%2013.22L20.49%2020.49L13.22%2014.96L12.00%2024.00L10.78%2014.96L3.51%2020.49L9.04%2013.22L0.00%2012.00L9.04%2010.78L3.51%203.51L10.78%209.04Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
   background-size: 330px 330px;
   /* Measured at 390-1440px: this offset keeps stars off the text blocks' edges (2 grazing, from 26 at 0 0). */
   background-position: 87px 51px;

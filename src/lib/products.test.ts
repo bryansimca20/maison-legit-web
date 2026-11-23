@@ -16,6 +16,9 @@ import {
   earliestDeliveryDay,
   fmtDeliveryDate,
   pickableDeliveryDay,
+  PREORDER,
+  DELIVERY,
+  isoDay,
   type OrderLine,
   type ProductKey,
   type SizeKey,
@@ -204,5 +207,22 @@ describe("hero photos", () => {
       const dir = join(process.cwd(), "public", dirname(p.heroPhoto.src));
       expect(readdirSync(dir)).toContain(basename(p.heroPhoto.src));
     }
+  });
+});
+
+describe("PREORDER", () => {
+  it("names the first delivery day, in both the long and the short form", () => {
+    expect(isoDay(new Date(PREORDER.shipsFrom))).toBe(DELIVERY.from);
+    const firstDay = new Date(`${DELIVERY.from}T00:00:00`);
+    const short = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(firstDay);
+    expect(PREORDER.shipsFromShort).toBe(short);
+  });
+
+  it("keeps the phone top bar to one line (the phone hero reserves one line for it)", () => {
+    // The same sentence announcement-bar.tsx shows below 640px. At 48 characters it fits one line from 345px; under
+    // 350px the hero already reserves two lines. Longer copy wraps on most phones and can push the hero's button
+    // off the first screen (DESIGN.md "Hero"): shorten the copy or raise the hero's phone reserve.
+    const phoneLine = `${PREORDER.season} pre-orders are open. Ships from ${PREORDER.shipsFromShort}.`;
+    expect(phoneLine.length).toBeLessThanOrEqual(48);
   });
 });

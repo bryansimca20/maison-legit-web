@@ -59,6 +59,9 @@ const READABLE: [fg: string, ground: string, min: number][] = [
   ["hero-panel-eyebrow", "hero-panel", 4.5],
   ["action-fg", "action", 4.5],
   ["action-on-block-fg", "action-on-block", 4.5],
+  ["products-action-fg", "products-action", 4.5],
+  ["band-action-fg", "band-action", 4.5],
+  ["products-action", "products", 3],
   ["products-heading", "products", 4.5],
   ["products-name", "products", 4.5],
   ["products-name-hover", "products", 4.5],
@@ -79,7 +82,18 @@ const READABLE: [fg: string, ground: string, min: number][] = [
   ["products-ring", "products", 3],
   ["band-ring", "band", 3],
   ["footer-ring", "footer", 3],
+  // Each button against the ground it sits on (3:1, a UI part).
+  ["action", "background", 3],
+  ["action", "header", 3],
+  ["action-on-block", "hero-panel", 3],
 ];
+
+/**
+ * Pairs checked in seasonal themes only. The default theme is a known exception: its red Our Story button sits on
+ * the blue band at about 1.2:1 and its cream label carries it. A seasonal theme must not repeat that, or the button
+ * can vanish into a band of the same colour.
+ */
+const THEMED_READABLE: [fg: string, ground: string, min: number][] = [["band-action", "band", 3]];
 
 const KEYS: OccasionKey[] = ["Eid Al-Fitr", "Lunar New Year", "Christmas", "None"];
 
@@ -141,8 +155,9 @@ describe("every role is readable on its own ground", () => {
     ]),
   ];
 
-  describe.each(themes)("%s theme", (_name, vars) => {
-    it.each(READABLE)("--%s on --%s reaches %s:1", (fg, ground, min) => {
+  describe.each(themes)("%s theme", (name, vars) => {
+    const pairs = name === "default" ? READABLE : [...READABLE, ...THEMED_READABLE];
+    it.each(pairs)("--%s on --%s reaches %s:1", (fg, ground, min) => {
       expect(contrast(hexOf(vars, fg), hexOf(vars, ground))).toBeGreaterThanOrEqual(min);
     });
   });

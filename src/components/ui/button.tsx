@@ -11,7 +11,7 @@ const buttonVariants = cva(
         primary:
           "border-transparent bg-primary text-cream-100 shadow-xs hover:bg-blue-600 hover:shadow-sm",
         cta: "border-transparent bg-action text-action-fg shadow-xs hover:bg-action-hover hover:shadow-sm",
-        /* the action on a coloured block (hero panel, product section) */
+        /* the action on the hero panel (the product section and CTA band reset `--action` for plain cta) */
         ctaOnBlock:
           "border-transparent bg-action-on-block text-action-on-block-fg shadow-xs hover:bg-action-on-block-hover hover:shadow-sm",
         gold: "border-transparent bg-gold-500 text-ink-900 shadow-xs hover:bg-gold-600 hover:shadow-sm",
