@@ -16,6 +16,9 @@ import {
   earliestDeliveryDay,
   fmtDeliveryDate,
   pickableDeliveryDay,
+  PREORDER,
+  DELIVERY,
+  isoDay,
   type OrderLine,
   type ProductKey,
   type SizeKey,
@@ -204,5 +207,14 @@ describe("hero photos", () => {
       const dir = join(process.cwd(), "public", dirname(p.heroPhoto.src));
       expect(readdirSync(dir)).toContain(basename(p.heroPhoto.src));
     }
+  });
+});
+
+describe("PREORDER", () => {
+  it("names the first delivery day, in both the long and the short form", () => {
+    expect(isoDay(new Date(PREORDER.shipsFrom))).toBe(DELIVERY.from);
+    const firstDay = new Date(`${DELIVERY.from}T00:00:00`);
+    const short = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(firstDay);
+    expect(PREORDER.shipsFromShort).toBe(short);
   });
 });

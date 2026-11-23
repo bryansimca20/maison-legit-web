@@ -128,7 +128,12 @@ export const SITE_IMAGES = {
 } as const;
 
 /** The open pre-order window, shown in the banner, hero, CTA band and footer. */
-export const PREORDER = { season: "Christmas", shipsFrom: "December 3, 2026" } as const;
+export const PREORDER = {
+  season: "Christmas",
+  shipsFrom: "December 3, 2026",
+  /** The same day, short, for the one-line top bar on phones. A test checks both match DELIVERY.from. */
+  shipsFromShort: "Dec 3",
+} as const;
 
 /** Days the owners deliver this season, as ISO days (inclusive). No day inside is off limits. */
 export const DELIVERY = { from: "2026-12-03", to: "2026-12-31" } as const;
