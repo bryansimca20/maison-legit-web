@@ -38,6 +38,12 @@
   --action-on-block: var(--xmas-cream-light);
   --action-on-block-hover: var(--xmas-rose);
   --action-on-block-fg: var(--xmas-oxblood);
+  --products-action: var(--xmas-cream-light);
+  --products-action-hover: var(--xmas-rose);
+  --products-action-fg: var(--xmas-oxblood);
+  --band-action: var(--xmas-oxblood);
+  --band-action-hover: var(--xmas-oxblood-deep);
+  --band-action-fg: var(--xmas-cream-light);
   --products: var(--xmas-oxblood);
   --products-heading: var(--xmas-cream-light);
   --products-name: var(--xmas-cream-light);

@@ -24,6 +24,8 @@ export function Collection() {
       id="collection"
       className={cn(
         "scroll-mt-24 bg-products [--ring:var(--products-ring)]",
+        // This block's own button colours (the tile buttons use the plain cta variant).
+        "[--action:var(--products-action)] [--action-hover:var(--products-action-hover)] [--action-fg:var(--products-action-fg)]",
         card && "decor-giftwrap relative",
       )}
     >
@@ -91,7 +93,7 @@ export function Collection() {
                     <div className="mt-auto flex items-center justify-between gap-2.5 pt-3">
                       <PriceTag amount={fmtK(p.prices.whole)} size="md" tone="products" note="/ whole" />
                       <Button
-                        variant="ctaOnBlock"
+                        variant="cta"
                         size="sm"
                         className="z-10"
                         onClick={() => open(p.k)}
