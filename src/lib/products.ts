@@ -90,9 +90,9 @@ export const PRODUCTS: Product[] = [
       "Each layer brushed with Valrhona dark couverture. Bittersweet, and still baked one layer at a time.",
     badge: null,
     prices: { whole: 1200, half: 720, small: 480 },
-    heroPhoto: { src: `${PHOTO_BASE}/lapis-legit-chocolate-2.jpg`, alt: "A whole Lapis Legit Valrhona Chocolate", focus: "50% 60%" },
+    heroPhoto: { src: `${PHOTO_BASE}/lapis-legit-chocolate-1.jpg`, alt: "A forkful of Lapis Legit Valrhona Chocolate lifted from the cake, its dark and golden layers showing", focus: "50% 55%" },
     photos: [
-      { src: `${PHOTO_BASE}/lapis-legit-chocolate-1.jpg`, alt: "A slice of Lapis Legit Valrhona Chocolate showing dark layers" },
+      { src: `${PHOTO_BASE}/lapis-legit-chocolate-2.jpg`, alt: "A whole Lapis Legit Valrhona Chocolate" },
       { src: `${PHOTO_BASE}/lapis-legit-chocolate-3.jpg`, alt: "Close detail of the chocolate layers" },
     ],
   },
