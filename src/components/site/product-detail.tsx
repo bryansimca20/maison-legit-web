@@ -44,11 +44,7 @@ export function ProductDetail({ product }: { product: Product }) {
       <div className="mt-6 grid grid-cols-1 gap-8 md:mt-8 md:grid-cols-2 md:gap-12">
         <div className="relative aspect-[4/3] overflow-hidden rounded-xs bg-amber-200 md:aspect-square">
           <ProductCarousel
-            photos={
-              product.seasonalPhoto
-                ? [product.seasonalPhoto, ...product.photos]
-                : product.photos
-            }
+            photos={[product.heroPhoto, ...product.photos]}
             label={product.fullName}
             priority
           />

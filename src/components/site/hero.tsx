@@ -1,11 +1,10 @@
 "use client";
 
-import Image, { getImageProps } from "next/image";
-
 import { Button } from "@/components/ui/button";
 import { useOrder } from "@/components/site/order-provider";
+import { HeroSlideshow } from "@/components/site/hero-slideshow";
 import {
-  SITE_IMAGES,
+  PRODUCTS,
   OCCASIONS,
   CURRENT_OCCASION,
   PRICE_FROM,
@@ -17,30 +16,27 @@ import {
 const ENTER =
   "animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-500 ease-[var(--ease-out)]";
 
-const HERO_SIZES = "(min-width: 768px) 55vw, 100vw";
-
-// From md to lg the photo column is tall and narrow, so the landscape crop cuts the poster's lettering.
-const { srcSet: TALL_SRCSET } = getImageProps({
-  src: SITE_IMAGES.heroTall.src,
-  alt: "",
-  fill: true,
-  sizes: HERO_SIZES,
-}).props;
+const SLIDES = PRODUCTS.map((p) => p.heroPhoto);
 
 export function Hero() {
   const { open } = useOrder();
   const occasion = OCCASIONS[CURRENT_OCCASION].eyebrow;
 
   return (
-    <section className="relative flex flex-col-reverse md:grid md:min-h-[580px] md:grid-cols-[0.95fr_1.05fr] md:items-stretch">
-      <div className="relative z-10 px-5 pb-13 md:self-center md:py-24 md:pr-6 md:pl-[max(48px,calc((100vw-1200px)/2+48px))]">
+    // The hero is the first screen below the bar and header (8rem on phones, 7rem from md), so its button always shows.
+    <section className="relative flex h-[calc(100svh-8rem)] min-h-100 flex-col md:block md:h-[calc(100svh-7rem)] md:min-h-140">
+      <div className="relative min-h-0 flex-1 bg-amber-200 md:absolute md:inset-0">
+        <HeroSlideshow slides={SLIDES} />
+      </div>
+
+      <div className="relative z-10 mx-5 -mt-11 mb-4 rounded-xs bg-cream-100 p-5 md:absolute md:bottom-16 md:left-[max(48px,calc((100vw-1200px)/2+48px))] md:m-0 md:w-[580px] md:p-11">
         {occasion && (
           <p className={`text-sm font-semibold text-gold-800 ${ENTER}`}>
             {occasion}
           </p>
         )}
         <h1
-          className={`mt-3.5 font-display text-[42px] leading-[1.04] font-semibold tracking-[-0.02em] text-ink-900 md:text-[64px] ${ENTER}`}
+          className={`mt-3.5 font-display text-[42px] leading-[1.04] font-semibold tracking-[-0.02em] text-ink-900 first:mt-0 md:text-[64px] ${ENTER}`}
         >
           Lapis legit, baked by hand in Jakarta.
         </h1>
@@ -56,32 +52,12 @@ export function Hero() {
           From IDR {fmtK(PRICE_FROM)}. Ships from {PREORDER.shipsFrom}.
         </p>
         <div
-          className={`mt-7 flex flex-wrap items-center gap-4 ${ENTER} delay-[120ms]`}
+          className={`mt-5 flex flex-wrap items-center gap-4 md:mt-7 ${ENTER} delay-[120ms]`}
         >
           <Button variant="cta" size="lg" onClick={() => open()}>
             Pre-order now
           </Button>
         </div>
-      </div>
-
-      <div className="relative h-[370px] md:h-auto">
-        <picture>
-          <source
-            media="(min-width: 768px) and (max-width: 1023px)"
-            srcSet={TALL_SRCSET}
-            sizes={HERO_SIZES}
-          />
-          <Image
-            src={SITE_IMAGES.hero.src}
-            alt={SITE_IMAGES.hero.alt}
-            fill
-            priority
-            sizes={HERO_SIZES}
-            className="object-cover"
-          />
-        </picture>
-        {/* -bottom-px: the frame sits on a fractional y, so the photo's last row can peek out as a line */}
-        <div className="hero-fade pointer-events-none absolute inset-x-0 top-0 -bottom-px" />
       </div>
     </section>
   );

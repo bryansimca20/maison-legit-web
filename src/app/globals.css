@@ -281,25 +281,14 @@
     border-bottom: 1.5px dotted var(--gold-400);
     transform: translateY(-4px);
   }
+}
 
-  /* hero photo blend — fades down into the canvas on mobile,
-     left into the text panel on desktop */
-  .hero-fade {
-    background: linear-gradient(
-      to bottom,
-      transparent 34%,
-      color-mix(in srgb, var(--surface-canvas) 55%, transparent) 68%,
-      var(--surface-canvas) 100%
-    );
+/* hero slideshow: the showing photo zooms slowly; `scale` matches Tailwind v4's scale-* utilities */
+@keyframes hero-zoom {
+  from {
+    scale: 1;
   }
-  @media (min-width: 768px) {
-    .hero-fade {
-      background: linear-gradient(
-        to right,
-        var(--surface-canvas) 0%,
-        color-mix(in srgb, var(--surface-canvas) 45%, transparent) 20%,
-        transparent 48%
-      );
-    }
+  to {
+    scale: 1.05;
   }
 }

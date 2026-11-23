@@ -1,6 +1,10 @@
+import { readdirSync } from "node:fs";
+import { basename, dirname, join } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import {
+  PRODUCTS,
   SIZES,
   getProduct,
   buildOrderMessage,
@@ -180,5 +184,25 @@ describe("delivery dates", () => {
   it("formats a day for the message", () => {
     expect(fmtDeliveryDate("2026-12-03")).toBe("Thursday, 3 December 2026");
     expect(fmtDeliveryDate("2026-12-25")).toBe("Friday, 25 December 2026");
+  });
+});
+
+describe("hero photos", () => {
+  const plain = PRODUCTS.flatMap((p) => p.photos.map((x) => x.src));
+
+  it("are never one of the plain photos, so no page shows a photo twice", () => {
+    for (const p of PRODUCTS) expect(plain).not.toContain(p.heroPhoto.src);
+  });
+
+  it("are a different photo for each lapis", () => {
+    expect(new Set(PRODUCTS.map((p) => p.heroPhoto.src)).size).toBe(PRODUCTS.length);
+  });
+
+  // Exact names, not existsSync: macOS disks ignore case, Linux hosts do not.
+  it("exist on disk with the exact file name", () => {
+    for (const p of PRODUCTS) {
+      const dir = join(process.cwd(), "public", dirname(p.heroPhoto.src));
+      expect(readdirSync(dir)).toContain(basename(p.heroPhoto.src));
+    }
   });
 });
