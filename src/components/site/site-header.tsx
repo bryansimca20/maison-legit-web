@@ -15,19 +15,16 @@ export function SiteHeader() {
 
   return (
     <header className="flex items-center justify-between gap-3 border-b border-[var(--border-soft)] bg-header px-5 py-3 md:px-12 md:py-3.5">
-      <Link href="/" title="Home" className="flex items-center gap-3">
+      <Link href="/" title="Home" className="flex items-center">
         <Image
-          src="/assets/logo/maison-legit-logo-blue.jpg"
+          src="/assets/logo/maison-legit-wordmark-blue.png"
           alt="Maison Legit"
-          width={46}
-          height={46}
+          width={879}
+          height={502}
           priority
-          className="size-10 rounded-xs md:size-[46px]"
+          sizes="98px"
+          className="h-12 w-auto md:h-14"
         />
-        {/* Wordmark text from sm up; on phones the hero heading carries the name of the product. */}
-        <span aria-hidden className="hidden font-script text-[26px] leading-none text-blue-700 sm:inline">
-          Maison Legit
-        </span>
       </Link>
 
       <div className="flex items-center gap-4 md:gap-[22px]">

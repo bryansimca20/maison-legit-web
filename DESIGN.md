@@ -32,7 +32,7 @@ The code does not fully match this file yet; see [Gaps to close](#gaps-to-close)
 | --- | --- | --- |
 | Display | Cormorant Garamond 500/600, **roman** | h1-h3, the one large type moment |
 | Body / UI | Hanken Grotesk 400/500/700 | paragraphs, buttons, labels, prices |
-| Wordmark | Yellowtail 400 | the "Maison Legit" logotype only. Never a heading or tagline |
+| Wordmark | none: an image | the "Maison Legit" logotype is the logo file (`public/assets/logo/maison-legit-wordmark-*.png`), never set in type. No script font on the site |
 
 - **Italic:** allowed for a whole short line (a pull quote), never for one word inside a heading, and never coloured.
 - **Loading:** self-hosted via `next/font/google` in `src/app/layout.tsx`, `display: swap`.
@@ -57,7 +57,7 @@ occasion with a theme is set, that theme's roles replace these colours; see [Sea
 | `ink-800` (`--foreground`) | `#2c231a` | body text |
 | `ink-600` | `#5f5142` | secondary text on cream (use instead of `ink-500` for anything under 18px) |
 | `red-500` | `#c23a2b` | **actions only**: the pre-order buttons. Nothing else is red |
-| `blue-500` (`--primary`) | `#3f5e96` | brand: logo tile, the one brand band (CTA band), focus ring (`blue-700`) |
+| `blue-500` (`--primary`) | `#3f5e96` | brand: the header wordmark, the one brand band (CTA band), focus ring (`blue-700`) |
 | `gold-800` | `#7a601f` | small text on cream when a gold tone is needed |
 | `gold-300`-`gold-500` | `#e2cd8e`-`#c2a04c` | 1px rules and hairlines only, never fills or text |
 | `amber-200` | `#f4dba6` | image frame background while a photo loads (the cake's colour) |
@@ -92,7 +92,7 @@ occasion with a theme is set, that theme's roles replace these colours; see [Sea
   **Below 768px the card is compact** so the photo stays bigger than the card: h1 36px, no paragraph (it shows from
   768px up), fact line 8px under the h1, button 14px under the fact line (13 × 26px padding, 15px text). The top
   bar's second sentence shortens to "Ships from Dec 3." below 640px so the bar is one line, and the phone hero height
-  reserves the one-line bar plus the header (about 6.375rem).
+  reserves the one-line bar plus the header (about 6.875rem).
 - **Order of the home page:** hero → the collection → the craft (one large type moment over the cross-section) → footer.
 - **Products:** photo on the cream ground, name, one factual line, price, button. No white box, no shadow
   around the product. The whole tile is one link to `/lapis/[slug]`; the button opens the dialog.
@@ -101,7 +101,7 @@ occasion with a theme is set, that theme's roles replace these colours; see [Sea
 - **Border radius:** photos and the hero panel 4px, buttons 8px, inputs 8px, dialog 16px, badges 4px. No pill shapes on new work.
 - **Shadows:** none on photos or products. `shadow-xl` on the dialog only.
 - **Touch targets:** 44px minimum for every link and control outside running text (carousel dots included, via the hit area).
-- **Footer:** wordmark, WhatsApp link, lead time, delivery area, Instagram. Facts, not a tagline.
+- **Footer:** wordmark, then two contact links: the WhatsApp logo with the admin number, the Instagram logo with the @ handle. No sentence copy; ship date and delivery area live in the banner, hero and order form.
 
 ## Photography
 
@@ -149,7 +149,7 @@ default afterwards. Design: `docs/superpowers/specs/2026-11-23-seasonal-themes-d
   footer, actions, link accents, focus rings, selection) use role utilities such as `bg-band` and `bg-footer`.
   Their defaults in `globals.css` are the colours above. A theme file (`src/app/themes/<slug>.css`) redefines
   only those roles, under `:root[data-occasion="<slug>"]`.
-- **Never themed:** the logo tile, the header wordmark (`blue-700`), every photograph, the photo loading ground
+- **Never themed:** the header wordmark (the blue logo file), every photograph, the photo loading ground
   (`amber-200`), typography, radii, shadows, spacing (except padding a decoration needs while it is on), error red
   (`red-600`), success green (`green-700`), the order form's progress and chosen-option colour (`ink-800`), and the
   order dialog's cream surfaces.
@@ -193,7 +193,7 @@ directions on 2026-11-23. Hanging ornaments were tried and removed.
 | Our Story CTA band button (the band sets its own): fill / hover / text | `red-500` / `red-600` / `cream-100` | Light cream / Rose cream / Oxblood |
 | Product section: ground / heading / name / description / price / "/ whole" | page / `ink-900` / `ink-900` / `ink-600` / `ink-900` / `ink-600` | Dusty blue / Deep oxblood / Deep oxblood / Ink / Deep oxblood / Ink |
 | Brand band (feature band, Our Story CTA band): ground / heading / body / hairlines | `blue-500` / `cream-100` / `blue-100` (CTA: `cream-100`) / `hairline-on-dark` | Oxblood / Light cream / Rose cream / Light cream at 22% |
-| Footer: ground / text / wordmark | `ink-900` / `cream-500` / `cream-200` | Deep oxblood / Rose cream / Light cream |
+| Footer: ground / links / wordmark | `ink-900` / `cream-200` / cream logo file | Deep oxblood / Light cream / cream logo file |
 | Link hover, active nav text and underline (light grounds only) | `blue-700`, `gold-500` underline | Oxblood |
 | Product name hover (on the product section's ground) | `blue-700` | Oxblood |
 | Focus ring on light grounds / on oxblood / on dusty blue | `blue-700` / n/a / `cream-100` | Deep oxblood / Light cream / Deep oxblood |
@@ -227,11 +227,11 @@ design backlog; strike each when fixed.
 2. ~~Blue italic word in headings.~~
 3. ~~Uppercase gold labels above headings.~~ The seasonal hero line remains, sentence case, only when an occasion is set.
 4. ~~"Small batch" repeated.~~ Once, in the hero.
-5. ~~No ordering or delivery info.~~ The footer and the address field say it: delivery
+5. ~~No ordering or delivery info.~~ The banner, hero and address field say it: delivery
    only, within Jakarta (`siteConfig.deliveryArea`), fee confirmed on WhatsApp. No payments on the site.
 6. ~~Placeholder frames on `/story`.~~ Product close-ups stand in until the family photos exist.
 7. ~~Invented badges.~~ No product carries a badge now.
-8. ~~H1 does not name the product or Jakarta; brand name not shown as text.~~ Wordmark text shows from 640px up.
+8. ~~H1 does not name the product or Jakarta; brand name not shown as text.~~ The header shows the wordmark logo at every width.
 9. ~~White product cards; lift without a link.~~ Tiles show one photo; the carousel stays on the product page.
 10. ~~Green feature band; four accents.~~ Feature band is `blue-500`.
 11. ~~Low-contrast CTA subtitle; 13px blurbs.~~
@@ -267,3 +267,4 @@ Full findings: `~/.gstack/projects/maison-legit/designs/design-audit-20261117/de
 | 2026-11-23 | "Christmas card" theme live for the Christmas pre-order: oxblood, cream and dusty blue; starbursts, a line-drawn bow, a gift ribbon on the cross-section, a card frame with starburst gift-wrap, a stripe strip. Hanging ornaments rejected | Owners' call after two rounds of browser mockups: bolder than cream and unmistakably Christmas, without the circus of the striped photo set. Buttons are oxblood for the season |
 | 2026-11-23 | Christmas theme ("E2"): the home product section moves to dusty blue (deep oxblood type, oxblood buttons), the brand bands to oxblood (light cream type, light cream button on Our Story), the footer to deep oxblood; gift-wrap stars 60%, frame line 85%. The product section and brand bands now set their own button colours | Team feedback: on phones the lapis list was a long column of oxblood and wanted more of the band's blue. Owner picked E2 from mockups (over blue details, blue mounts, alternating panels, stripe dividers, and blue products beside a blue band) because it keeps the page alternating |
 | 2026-11-23 | Phone hero: below 768px the card is compact (h1 36px, no paragraph, tighter spacing) and below 640px the top bar is one line ("Ships from Dec 3."); the phone hero reserves the one-line bar. Reverses "the paragraph shows on phones too" | On an iPhone 18 Pro in Safari the card (367px) was taller than the photo (203px). The owner picked option C from real-site screenshots: photo 356px on that phone, 190px on an iPhone SE (was 37px). The button stays on the first screen |
+| 2026-11-25 | The owners' logo files replace the typed wordmark: blue transparent logo in the header (no blue tile), cream logo in the footer; Yellowtail retired. Footer copy ("Baked in Jakarta…", delivery and ship-date line) removed; WhatsApp and Instagram become brand-logo links showing the number and the @ handle | Owners' call: the real logo instead of an approximation in Yellowtail, and contact details visitors can read and copy. Delivery facts still show in the banner, hero and order form |

@@ -44,7 +44,7 @@ Don't add a new env var without asking.
 
 - **Framework:** Next.js 16 (App Router, Turbopack, RSC) · React 19 · TypeScript (strict).
 - **Styling:** Tailwind CSS **v4** (CSS-first, no `tailwind.config.js`) + shadcn/ui (**Base UI** variant) → see [UI and Design Rules](#ui-and-design-rules).
-- **Fonts:** `next/font` — Cormorant Garamond (display serif), Hanken Grotesk (UI/body), Yellowtail (script wordmark).
+- **Fonts:** `next/font` — Cormorant Garamond (display serif), Hanken Grotesk (UI/body). The wordmark is an image (`public/assets/logo/maison-legit-wordmark-*.png`), not a font.
 - **Icons:** `lucide-react`.
 - **Dates:** `react-day-picker` (behind the shadcn `Calendar`), used only by the order form's delivery date step.
 - **State:** local `useState` + one React Context (`OrderProvider`) for the shared pre-order dialog → see [Data Fetching & Services](#data-fetching--services).
@@ -143,7 +143,7 @@ Structural rules:
 **[DESIGN.md](../DESIGN.md) decides which tokens to use and where** (red for actions only, blue for brand only, roman display type, 4-8px radius, motion timings). Read it before any visual change; its "Gaps to close" list is where the current code still differs.
 
 **Design system — brand tokens + Tailwind v4**
-- The theme is **CSS-first** in [app/globals.css](app/globals.css). `:root` holds the raw brand palette (Legit Blue, Almond Cream, Gilded Gold, Lacquer Red, Heritage Green, Spice Burgundy, Lapis Amber, warm Ink neutrals) and maps the **shadcn semantic tokens** (`--background`, `--primary`, `--ring`, `--destructive`, …) onto it. The `@theme inline` block exposes brand scales as Tailwind utilities and overrides the radius/shadow scales. Fonts come from `next/font` variables (`--font-cormorant`/`--font-hanken`/`--font-yellowtail`).
+- The theme is **CSS-first** in [app/globals.css](app/globals.css). `:root` holds the raw brand palette (Legit Blue, Almond Cream, Gilded Gold, Lacquer Red, Heritage Green, Spice Burgundy, Lapis Amber, warm Ink neutrals) and maps the **shadcn semantic tokens** (`--background`, `--primary`, `--ring`, `--destructive`, …) onto it. The `@theme inline` block exposes brand scales as Tailwind utilities and overrides the radius/shadow scales. Fonts come from `next/font` variables (`--font-cormorant`/`--font-hanken`).
 - There is **no `tailwind.config.js`** (Tailwind v4 is CSS-first); theme changes go in the `@theme` block, not a JS config.
 - **Rule:** don't edit the `@theme` block / token `:root` / base layers in `globals.css` without asking (see [Safety Rules](#safety-rules)). Use the brand utilities everywhere — never hardcode hex in a component.
 
@@ -169,7 +169,7 @@ Structural rules:
   only; on the product section the name's hover is `text-products-name-hover`. A new pair goes in `READABLE` in
   `lib/occasion.test.ts`, which checks every text and ring role against its ground in every theme.
 
-**Icons & assets** — Icons: `lucide-react` only (`size-4`, etc.). All imagery goes through `next/image`; product photos live in [public/assets/photography/](../public/assets/photography). Keep `alt` text descriptive (SEO + a11y).
+**Icons & assets** — Icons: `lucide-react` only (`size-4`, etc.); the one exception is the WhatsApp and Instagram marks in `site-footer.tsx` (inline Simple Icons paths, since lucide has no brand logos). All imagery goes through `next/image`; product photos live in [public/assets/photography/](../public/assets/photography). Keep `alt` text descriptive (SEO + a11y).
 
 **Accessibility** — Semantic HTML and a single `<h1>` per page; labelled inputs (`<Label htmlFor>`), errors wired with `aria-describedby` + `role="alert"`; visible focus rings (the brand ring is `--ring` = blue, ≥3:1 — don't strip outlines); the carousel and stepper are keyboard-operable; `prefers-reduced-motion` is honored in `globals.css`. Preserve these when editing.
 
