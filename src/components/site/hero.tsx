@@ -23,7 +23,7 @@ export function Hero() {
   return (
     // The hero is the first screen below the bar and header, so its button always shows: on phones the bar is one
     // line (about 6.375rem with the header), under 350px it wraps to two (8rem), from md 7rem.
-    <section className="relative flex h-[calc(100svh-6.375rem)] min-h-100 flex-col max-[349px]:h-[calc(100svh-8rem)] md:block md:h-[calc(100svh-7rem)] md:min-h-140">
+    <section className="relative flex h-[calc(100svh-6.875rem)] min-h-100 flex-col max-[349px]:h-[calc(100svh-8.5rem)] md:block md:h-[calc(100svh-7.625rem)] md:min-h-140">
       <div className="relative min-h-0 flex-1 bg-amber-200 md:absolute md:inset-0">
         <HeroSlideshow slides={SLIDES} />
       </div>

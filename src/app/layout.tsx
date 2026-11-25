@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Hanken_Grotesk, Yellowtail } from "next/font/google";
+import { Cormorant_Garamond, Hanken_Grotesk } from "next/font/google";
 
 import "./globals.css";
 import { siteConfig } from "@/lib/site";
@@ -23,13 +23,6 @@ const hanken = Hanken_Grotesk({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-hanken",
-  display: "swap",
-});
-
-const yellowtail = Yellowtail({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-yellowtail",
   display: "swap",
 });
 
@@ -104,7 +97,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-occasion={currentOccasion.theme ?? undefined}
-      className={`${hanken.variable} ${cormorant.variable} ${yellowtail.variable} h-full`}
+      className={`${hanken.variable} ${cormorant.variable} h-full`}
     >
       <body className="flex min-h-full flex-col bg-canvas">
         <OrderProvider>
